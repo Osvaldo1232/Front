@@ -17,10 +17,20 @@ export class Login {
   password = '';
   errorMessage = '';
 
+
+
+
+
+
+
+
+
+  
   constructor(private loginService: LoginService, private router: Router) {
   }
 
 login() {
+  console.log("lihgoiughoi")
   const credentials = {
     email: this.email,
     password: this.password
