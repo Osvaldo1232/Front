@@ -3,10 +3,10 @@ import { LoginService } from '../../services/login-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { AutoCompleteModule } from 'primeng/autocomplete';
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutoCompleteModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

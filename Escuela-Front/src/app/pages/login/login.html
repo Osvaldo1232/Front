@@ -1,11 +1,27 @@
+<header class="page-header">
+  <div class="logo-container">
+    <img src="https://framework-gb.cdn.gob.mx/gn/images/gob-mx-logo.svg" alt="Gobierno de México" class="logo-gob">
+  </div>
+  <div class="logo-container">
+    <img src="https://framework-gb.cdn.gob.mx/assets/images/escudo-de-mexico.svg" alt="Escudo de México" class="logo-escudo">
+  </div>
+</header>
+
 <div class="login-container">
-  <h2>Iniciar sesión Erika</h2>
-
-  <form>
-    <input type="email" [(ngModel)]="email" name="email" required placeholder="Correo" />
-    <input type="password" [(ngModel)]="password" name="password" required placeholder="Contraseña" />
-    <button type="button" (click)="login()">Entrar</button>
-  </form>
-
+  <h2>Iniciar Sesión</h2>
+  <div class="input-group">
+    <label for="username">Usuario</label>
+    <input type="email" id="username" [(ngModel)]="email" name="email" required placeholder="Correo" />
+  </div>
+  <div class="input-group">
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" [(ngModel)]="password" name="password" required placeholder="Contraseña" />
+  </div>
+  <button type="button" (click)="login()">Continuar</button>
+ 
   <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
 </div>
+<div class="logo-container">José Maria Morelos
+
+</div>
+
