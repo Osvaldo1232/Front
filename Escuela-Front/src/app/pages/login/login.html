@@ -23,6 +23,7 @@
     <label for="password">Contraseña</label>
     <input type="password" id="password" [(ngModel)]="password" name="password" required placeholder="" />
   </div>
+   
   <button type="button" (click)="login()">Continuar</button>
  
   <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
