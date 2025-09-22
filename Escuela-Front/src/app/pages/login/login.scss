@@ -6,7 +6,7 @@ body {
 }
 
 .page-header {
-  background-color: #320312; /* Guinda oscuro */
+  background-color: #fefefe; /* Guinda oscuro */
   color: white;
   padding: 70px 50px;
   display: flex;
@@ -14,7 +14,35 @@ body {
   align-items: center;
 
 }
-
+.title{
+  background-color: #3a0b1e; 
+  color: #ffffff;
+  padding: 30px 50px;
+  box-shadow: 0 4px 15px rgba(95, 95, 95, 0.1);
+  font-size:20px;
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  
+}
+.img-title{
+  margin-right: 100%;
+}
+.title-mi{
+  position: relative;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #f0f0f0;
+  left: 70%;
+}
+td{
+  padding-left: 30px;
+  padding-right: 50px;
+}
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 @media (max-width: 600px) {
   /* Estilos para el encabezado en pantallas pequeñas */
   .page-header {
@@ -29,7 +57,7 @@ body {
 }
 
 .login-container {
-  background-color: #e1e0e0;
+  background-color: #ffffff;
   border-radius: 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -42,9 +70,9 @@ body {
 
 h2 {
   font-size: 28px;
-  color: #AE895F;
+  color: #a57f2c;
   margin-bottom: 30px;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:sans-serif;
 }
 
 .input-group {
@@ -57,13 +85,13 @@ h2 {
   font-size: 16px;
   color: #585757;
   margin-bottom: 5px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: sans-serif;
 }
 
 input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ffffff;
+  border: 1px solid #e2e2e2;
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 16px;
@@ -86,13 +114,6 @@ button:hover {
   background-color: #7b1d3d;
 }
 
-.forgot-password {
-  display: block;
-  margin-top: 20px;
-  color: #5d0f28;
-  text-decoration: none;
-  font-size: 14px;
-}
 @media (max-width: 600px) {
   /* Estilos para el encabezado en pantallas pequeñas */
   .page-header {
