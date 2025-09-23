@@ -6,36 +6,54 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginService {
-  
-  uuid="";
   private apiUrl = 'http://localhost/Autenticacion/login';
 
   constructor(private http: HttpClient) {}
 
-
   login(credentials: { email: string; password: string }): Observable<any> {
-  return this.http.post<any>(this.apiUrl, credentials).pipe(
-    tap(response => {
-      if (response.token) {
-        console.log(response)
-        this.uuid=response.uuid;
-        this.storeToken(response.token);
-        localStorage.setItem('roles', JSON.stringify([response.rol]));  // guarda el rol en un arreglo
-      }
-    })
-  );
-}
+    return this.http.post<any>(this.apiUrl, credentials).pipe(
+      tap(response => {
+        if (response.token) {
+          this.storeToken(response.token);
+          this.storeUUID(response.uuid);
+          this.storeRoles([response.rol]); 
+        }
+      })
+    );
+  }
 
- Usuario(){
-  return this.uuid;
- }
+  getToken(): string {
+    return localStorage.getItem('auth_token') || '';
+  }
 
-  storeToken(token: string) {
+  private storeToken(token: string): void {
     localStorage.setItem('auth_token', token);
   }
 
-getUserRoles(): string[] {
-  const roles = localStorage.getItem('roles');
-  return roles ? JSON.parse(roles) : [];
-}
+  private storeUUID(uuid: string): void {
+    localStorage.setItem('uuid', uuid);
+  }
+
+  private storeRoles(roles: string[]): void {
+    localStorage.setItem('roles', JSON.stringify(roles));
+  }
+
+  Usuario(): string {
+    return localStorage.getItem('uuid') || '';
+  }
+
+  getUserRoles(): string[] {
+    const roles = localStorage.getItem('roles');
+    return roles ? JSON.parse(roles) : [];
+  }
+
+  logout(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('uuid');
+    localStorage.removeItem('roles');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken(); 
+  }
 }

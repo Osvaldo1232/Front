@@ -10,54 +10,39 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.scss'
 })
 export class Login {
-   email = '';
-
-   uuid="";
+  email = '';
   password = '';
   errorMessage = '';
 
+  constructor(private loginService: LoginService, private router: Router) {}
 
+  login() {
+    const credentials = {
+      email: this.email,
+      password: this.password
+    };
 
+    this.loginService.login(credentials).subscribe({
+      next: () => {
+        const roles = this.loginService.getUserRoles(); 
+        const uuid = this.loginService.Usuario(); 
 
+        console.log('Login exitoso, uuid:', uuid);
+        console.log('Roles:', roles);
 
-
-
-
-
-  
-  constructor(private loginService: LoginService, private router: Router) {
-  }
-
-login() {
-  console.log("lihgoiughoi")
-  const credentials = {
-    email: this.email,
-    password: this.password
-  };
-
-  this.loginService.login(credentials).subscribe({
-    next: (response) => {
-      console.log(response);
-      const roles = this.loginService.getUserRoles();
-
-      this.uuid=this.loginService.Usuario();
-      console.log(this.uuid, "uuid");
-
-
-      if (roles.includes('DIRECTOR')) {
-        this.router.navigate(['/admin']);
-      } else if (roles.includes('ESTUDIANTE')) {
-        this.router.navigate(['/usuario']);
-      } else if (roles.includes('PROFESOR')) {
-        this.router.navigate(['/profesor']);
-      } else {
-        this.router.navigate(['/']);
+        if (roles.includes('DIRECTOR')) {
+          this.router.navigate(['/admin']);
+        } else if (roles.includes('ESTUDIANTE')) {
+          this.router.navigate(['/usuario']);
+        } else if (roles.includes('PROFESOR')) {
+          this.router.navigate(['/profesor']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: () => {
+        this.errorMessage = 'Credenciales inválidas o error del servidor';
       }
-    },
-    error: () => {
-      this.errorMessage = 'Credenciales inválidas o error del servidor';
-    }
-  });
-}
-
+    });
+  }
 }
