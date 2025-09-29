@@ -19,9 +19,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./docentes.scss']  // 👈 Esta es la forma correcta
 })
 export class DocentesComponent {
-  products = [
-    { code: 'P001', name: 'Producto 1', category: 'Cat A', quantity: 10 },
-    { code: 'P002', name: 'Producto 2', category: 'Cat B', quantity: 5 },
-    { code: 'P003', name: 'Producto 3', category: 'Cat C', quantity: 12 }
+docentes = [
+    { id: 1, nombre: 'Juan Pérez', especialidad: 'Matemáticas', email: 'juan.perez@escuela.com' },
+    { id: 2, nombre: 'María López', especialidad: 'Historia', email: 'maria.lopez@escuela.com' },
+    { id: 3, nombre: 'Carlos Sánchez', especialidad: 'Física', email: 'carlos.sanchez@escuela.com' }
   ];
 }

@@ -53,7 +53,32 @@ export class LoginService {
     localStorage.removeItem('roles');
   }
 
-  isAuthenticated(): boolean {
-    return !!this.getToken(); 
+
+
+  getTokenExpirationDate(token: string): Date | null {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (!payload.exp) return null;
+
+    const date = new Date(0);
+    date.setUTCSeconds(payload.exp);
+    return date;
+  } catch {
+    return null;
   }
+}
+
+isTokenExpired(): boolean {
+  const token = this.getToken();
+  if (!token) return true;
+
+  const expirationDate = this.getTokenExpirationDate(token);
+  return !expirationDate || expirationDate < new Date();
+}
+
+isAuthenticated(): boolean {
+  return !!this.getToken() && !this.isTokenExpired();
+}
+
+
 }
