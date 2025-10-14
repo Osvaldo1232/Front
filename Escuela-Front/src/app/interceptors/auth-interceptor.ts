@@ -7,6 +7,8 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const loginService = inject(LoginService);
   const token = loginService.getToken();
 
+  console.log('🔑 Token:', token); // 👈 AÑADE ESTO
+
   if (token) {
     const cloned = req.clone({
       setHeaders: {
@@ -18,3 +20,4 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req);
 };
+

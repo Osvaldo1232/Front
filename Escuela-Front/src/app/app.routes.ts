@@ -7,6 +7,10 @@ import { DocentesComponent } from './pages/admin/Components/docentes/docentes';
 import { AuthGuard } from './guards/auth-guard';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized';
 import { Alumnos } from './pages/admin/Components/alumnos/alumnos';
+import { Grado } from './pages/admin/Components/grado/grado';
+import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones';
+import { Historial } from './pages/usuario/component/historial/historial';
+import { Grupos } from './pages/admin/Components/grupos/grupos';
 
 
 
@@ -16,10 +20,21 @@ export const routes: Routes = [
       { path: '', redirectTo: 'docentes', pathMatch: 'full' },
       { path: 'docentes', component: DocentesComponent },
       { path: 'alumnos', component: Alumnos },
+      { path: 'grados', component: Grado },
+        { path: 'grupos', component: Grupos },
     ]
 },
-  { path: 'usuario', component: Usuario, canActivate: [AuthGuard] , data: { roles: ['ESTUDIANTE'] } },
-  { path: 'profesor', component: Profesor, canActivate: [AuthGuard], data: { roles: ['PROFESOR'] } },
+  { path: 'usuario', component: Usuario, canActivate: [AuthGuard] , canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },
+
+children: [
+      { path: '', redirectTo: 'calificaciones', pathMatch: 'full' },
+      { path: 'calificaciones', component: Calificaciones },
+      { path: 'historial', component: Historial },
+     
+    ]
+  },
+
+  { path: 'profesor', component: Profesor, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],data: { roles: ['PROFESOR'] } },
    { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'login', component: Login },
   { path: '**', redirectTo: 'login' }
