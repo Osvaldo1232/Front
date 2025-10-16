@@ -1,19 +1,73 @@
-<h2>Lista de Alumnos</h2>
-<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #2d0404; color: white;">
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Especialidad</th>
-      <th>Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let docente of docentes">
-      <td>{{ docente.id }}</td>
-      <td>{{ docente.nombre }}</td>
-      <td>{{ docente.especialidad }}</td>
-      <td>{{ docente.email }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">ESTUDIANTES REGISTRADOS</h1>
+    <p class="header__subtitle">Lista de alumnos</p>
+  </header>
+
+  <!-- Sección de búsqueda y botones -->
+  <div class="search-section">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      placeholder="Buscar por nombre, apellidos o matrícula"
+      class="search-input"
+    />
+    <button class="btn btn--secondary" (click)="buscar()">Buscar</button>
+    <button class="btn btn--secondary" (click)="limpiar()">Limpiar</button>
+    <button class="btn btn--primary">+ Nuevo</button>
+  </div>
+
+  <!-- Tabla de alumnos -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>MATRICULA</th>
+          <th>NOMBRE</th>
+          <th>APELLIDOS</th>
+          <th>TELEFONO TUTOR</th>
+          <th>TUTOR</th>
+          <th>ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alumno of alumnosPaginados; let i = index" [class.row-alt]="i % 2 !== 0">
+          <td>{{ alumno.matricula }}</td>
+          <td>{{ alumno.nombre }}</td>
+          <td>{{ alumno.apellidos }}</td>
+          <td>{{ alumno.telefono }}</td>
+          <td>{{ alumno.tutor }}</td>
+          <td class="actions">
+            <button class="icon-btn icon-btn--edit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+            <button class="icon-btn icon-btn--view">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)">‹</button>
+    <button
+      *ngFor="let p of totalPaginasArray"
+      class="pagination__btn"
+      [class.pagination__btn--active]="p === paginaActual"
+      (click)="cambiarPagina(p)"
+    >
+      {{ p }}
+    </button>
+    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)">›</button>
+  </div>
+</div>

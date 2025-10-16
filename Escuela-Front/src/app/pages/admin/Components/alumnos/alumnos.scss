@@ -1,0 +1,267 @@
+@use "sass:color";
+
+// Variables
+$color-primary: #E8DCC4;
+$color-secondary: #E8DCC4;
+$color-burgundy: #5C1F38;
+$color-bg-light: #E8E8E8;
+$color-table-header: #D9D9D9;
+$color-table-alt: #E8E8E8;
+$color-text-dark: #000000;
+
+// Reset
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FFFFFF;
+    padding: 40px;
+}
+
+// Container
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+// Header
+.header {
+    margin-bottom: 30px;
+
+    &__title {
+        font-size: 36px;
+        font-weight: 400;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        font-weight: 300;
+    }
+}
+
+// Search Section
+.search-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 20px;
+    background-color: $color-bg-light;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+
+    &::placeholder {
+        color: #999;
+    }
+}
+
+// Buttons
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &--primary {
+        background-color: $color-primary;
+        color: $color-text-dark;
+
+        &:hover {
+            background-color: color.scale($color-primary, $lightness: -5%);
+        }
+    }
+
+    &--secondary {
+        background-color: $color-secondary;
+        color: $color-text-dark;
+
+        &:hover {
+            background-color: color.scale($color-secondary, $lightness: -5%);
+        }
+    }
+}
+
+// Table Container
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+// Data Table
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+
+    thead {
+        tr {
+            background-color: $color-table-header;
+
+            th {
+                padding: 15px 20px;
+                text-align: left;
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                color: $color-text-dark;
+                border: none;
+
+                &:first-child {
+                    border-top-left-radius: 8px;
+                }
+
+                &:last-child {
+                    border-top-right-radius: 8px;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: color.scale($color-table-alt, $lightness: -3%);
+            }
+
+            &.row-alt {
+                background-color: $color-table-alt;
+
+                &:hover {
+                    background-color: color.scale($color-table-alt, $lightness: -5%);
+                }
+            }
+
+            td {
+                padding: 15px 20px;
+                font-size: 14px;
+                color: $color-text-dark;
+                border: none;
+
+                &.actions {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}
+
+// Icon Buttons
+.icon-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &--edit {
+        background-color: transparent;
+        color: $color-text-dark;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    &--view {
+        background-color: transparent;
+        color: $color-text-dark;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    svg {
+        stroke-width: 2;
+    }
+}
+
+// Pagination
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    &__btn {
+        min-width: 35px;
+        height: 35px;
+        padding: 8px 12px;
+        border: none;
+        background-color: transparent;
+        color: $color-text-dark;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: $color-bg-light;
+        }
+
+        &--active {
+            background-color: $color-burgundy;
+            color: #FFFFFF;
+
+            &:hover {
+                background-color: $color-burgundy;
+            }
+        }
+
+        &--prev,
+        &--next {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+
+    &__dots {
+        padding: 0 5px;
+        color: $color-text-dark;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .search-section {
+        flex-wrap: wrap;
+
+        .search-input {
+            width: 100%;
+        }
+    }
+
+    .table-container {
+        overflow-x: scroll;
+    }
+
+    .data-table {
+        min-width: 800px;
+    }
+}

@@ -1,20 +1,53 @@
-<h2>Lista de Docentes</h2>
-<table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #2d0404; color: white;">
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Especialidad</th>
-      <th>Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let docente of docentes">
-      
-      <td>{{ docente.id }}</td>
-      <td>{{ docente.nombre }}</td>
-      <td>{{ docente.especialidad }}</td>
-      <td>{{ docente.email }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">DOCENTES</h1>
+    <p class="header__subtitle">Lista de Docentes</p>
+  </header>
+
+  <div class="search-section">
+    <input type="text" class="search-input" placeholder="Buscar docente..." [(ngModel)]="terminoBusqueda">
+    <button class="btn btn--secondary" (click)="buscar()">Buscar</button>
+    <button class="btn btn--secondary" (click)="limpiarBusqueda()">Limpiar</button>
+    <button class="btn btn--primary">+ Nuevo</button>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" *ngFor="let docente of usuariosPaginados">
+      <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidos }}</h2>
+      <div class="card__divider"></div>
+      <div class="card__info">
+        <p class="card__detail">Clave Presupuestal: {{ docente.clavepresupuestal }}</p>
+        <p class="card__detail">RFC: {{ docente.rfc }}</p>
+      </div>
+      <div class="card__info">
+        <p class="card__detail">Teléfono: {{ docente.telefono }}</p>
+        <p class="card__detail">Especialidad: {{ docente.especialidad }}</p>
+      </div>
+      <div class="card__footer">
+        <div class="card__status">
+          <span class="status-label">Estatus: {{ docente.estatus }}</span>
+          <label class="toggle">
+            <input type="checkbox" [checked]="docente.estatus === 'Activo'">
+            <span class="toggle__slider"></span>
+          </label>
+          <span class="status-label">Activo</span>
+        </div>
+        <button class="btn btn--edit">EDITAR</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="totalPaginas > 1">
+    <button class="pagination__btn pagination__btn--prev" (click)="paginaAnterior()" [disabled]="paginaActual === 1">‹</button>
+    
+    <button 
+      *ngFor="let num of totalPaginasArray" 
+      class="pagination__btn" 
+      [class.pagination__btn--active]="paginaActual === num"
+      (click)="irAPagina(num)">
+      {{ num }}
+    </button>
+
+    <button class="pagination__btn pagination__btn--next" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">›</button>
+  </div>
+</div>
