@@ -1,28 +1,15 @@
-# Etapa 1: Compilar la aplicación Angular
+# Etapa 1: Build Angular
 FROM node:18 AS build
+WORKDIR /app
 
-# Trabajamos en la carpeta Angular
-WORKDIR /app/Escuela-Front
-
-# Copiamos solo las dependencias primero
+# Copiar los archivos de la carpeta Angular
 COPY Escuela-Front/package*.json ./
-RUN npm install -g @angular/cli
 RUN npm install
-
-# Copiamos el resto del código fuente
 COPY Escuela-Front/ ./
+RUN npm run build --prod
 
-# Compilamos la app en producción
-RUN ng build --configuration=production
-
-# Etapa 2: Servir la app con NGINX
+# Etapa 2: Servir con nginx
 FROM nginx:alpine
-
-# Copiamos la carpeta generada de build al contenedor de NGINX
-COPY --from=build /app/Escuela-Front/dist/Escuela-Front/* /usr/share/nginx/html
-
-# Exponemos el puerto 80
+COPY --from=build /app/dist/Escuela-Front /usr/share/nginx/html
 EXPOSE 80
-
-# Iniciamos NGINX
 CMD ["nginx", "-g", "daemon off;"]
