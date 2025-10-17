@@ -11,6 +11,9 @@ import { Grado } from './pages/admin/Components/grado/grado';
 import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones';
 import { Historial } from './pages/usuario/component/historial/historial';
 import { Grupos } from './pages/admin/Components/grupos/grupos';
+import { NuevoAlumno } from './pages/admin/Components/alumnos/nuevo_alumno/nuevo-alumno/nuevo-alumno';
+import { PerfilEstudiante } from './pages/admin/Components/alumnos/perfil-estudiante/perfil-estudiante/perfil-estudiante';
+import { NuevoDocente } from './pages/admin/Components/docentes/nuevo-docente/nuevo-docente/nuevo-docente';
 
 
 
@@ -19,9 +22,12 @@ export const routes: Routes = [
  children: [
       { path: '', redirectTo: 'docentes', pathMatch: 'full' },
       { path: 'docentes', component: DocentesComponent },
+      { path: 'nuevo-docente', component: NuevoDocente },
       { path: 'alumnos', component: Alumnos },
+      { path: 'nuevo-alumno', component: NuevoAlumno },
+      { path: 'perfil-estudiante', component: PerfilEstudiante },
       { path: 'grados', component: Grado },
-        { path: 'grupos', component: Grupos },
+      { path: 'grupos', component: Grupos },
     ]
 },
   { path: 'usuario', component: Usuario, canActivate: [AuthGuard] , canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },

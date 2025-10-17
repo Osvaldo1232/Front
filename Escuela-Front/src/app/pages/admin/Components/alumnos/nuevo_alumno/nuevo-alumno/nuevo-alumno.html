@@ -1,1 +1,130 @@
-<p>nuevo-alumno works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Estudiante</title>
+    <link rel="stylesheet" href="nuevo-alumno.scss">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header__title">REGISTRO DE ESTUDIANTE</h1>
+            <p class="header__subtitle">Registro</p>
+        </header>
+
+        <!-- Datos Estudiante -->
+        <section class="form-section">
+            <h2 class="section-title">DATOS ESTUDIANTE</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nombre:</label>
+                    <input type="text" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Apellidos:</label>
+                    <input type="text" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Curp:</label>
+                    <input type="text" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Grupo:</label>
+                    <select class="form-select">
+                        <option value="">Seleccione...</option>
+                        <option value="1A">1A</option>
+                        <option value="1B">1B</option>
+                        <option value="2A">2A</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Grado</label>
+                    <select class="form-select">
+                        <option value="">Seleccione...</option>
+                        <option value="1">Primero</option>
+                        <option value="2">Segundo</option>
+                        <option value="3">Tercero</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ciclo:</label>
+                    <input type="text" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Matrícula:</label>
+                    <input type="text" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Fecha de Inscripción:</label>
+                    <input type="date" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Sexo:</label>
+                    <select class="form-select">
+                        <option value="">Seleccione...</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Correo:</label>
+                    <input type="email" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Contraseña:</label>
+                    <input type="password" class="form-input">
+                </div>
+
+                <div class="form-group form-group--status">
+                    <div class="status-toggle">
+                        <span class="status-label">Estatus: Inactivo</span>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="toggle__slider"></span>
+                        </label>
+                        <span class="status-label">Activo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Datos Tutor -->
+        <section class="form-section">
+            <h2 class="section-title">DATOS TUTOR</h2>
+            
+            <div class="form-grid form-grid--tutor">
+                <div class="form-group">
+                    <label class="form-label">Nombre:</label>
+                    <select class="form-select">
+                        <option value="">Seleccione...</option>
+                        <option value="tutor1">Juan Pérez</option>
+                        <option value="tutor2">María García</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn--new-tutor">+Nuevo Tutor</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botones de Acción -->
+        <div class="actions">
+            <button class="btn btn--primary">Guardar</button>
+            <button class="btn btn--secondary">Cerrar</button>
+        </div>
+    </div>
+</body>
+</html>
