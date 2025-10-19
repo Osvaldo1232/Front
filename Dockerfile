@@ -10,5 +10,5 @@ RUN ng build --configuration=production
 
 FROM nginx:alpine
 COPY --from=build /app/dist/Escuela-Front /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 8000
 CMD ["nginx", "-g", "daemon off;"]
