@@ -1,0 +1,33 @@
+<!-- Fondo modal -->
+<div class="modal-backdrop" *ngIf="nuevo">
+  <div class="modal-content p-4 shadow-lg">
+
+   <div class="modal-header bg-vino">
+  <h5 >Nuevo Grado</h5>
+  <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+</div>
+
+    <div class="modal-body">
+      <form (ngSubmit)="guardar()">
+        <div class="mb-3">
+          <label class="form-label required-label">Nombre:</label>
+          <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label required-label">Estatus:</label>
+          <select class="form-select" [(ngModel)]="estatus" name="estatus">
+            <option value="ACTIVO">Activo</option>
+            <option value="INACTIVO">Inactivo</option>
+          </select>
+        </div>
+
+        <div class="text-end mt-3">
+          <button type="button" class="btn btn-limpiar me-2" (click)="cerrarModal()">Cerrar</button>
+          <button type="submit" class="btn btn-guardar">Guardar</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

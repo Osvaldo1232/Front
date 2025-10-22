@@ -10,6 +10,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.scss'
 })
 export class Login {
+
+   alumnos = [
+    { correo:'', contraseña: '',  }
+];
+  
   email = '';
   password = '';
   errorMessage = '';
