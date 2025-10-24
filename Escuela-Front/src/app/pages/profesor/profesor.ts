@@ -5,12 +5,11 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-profesor',
   standalone: true,
-  // Necesita RouterModule para el <router-outlet> y routerLink
   imports: [CommonModule, RouterModule], 
   templateUrl: './profesor.html',
-  styleUrl: './profesor.scss' // Asegúrate de que los estilos existan
+  styleUrl: './profesor.scss' 
 })
-export class ProfesorComponent { // <--- ¡EXPORTANDO EL NOMBRE CORRECTO!
+export class ProfesorComponent { 
   sidebarVisible: boolean = true; 
 
   constructor(private router: Router) {} 
@@ -20,7 +19,6 @@ export class ProfesorComponent { // <--- ¡EXPORTANDO EL NOMBRE CORRECTO!
   }
   
   logout() {
-    // Lógica de logout real y redirección
     this.router.navigate(['/login']);
   }
 }
