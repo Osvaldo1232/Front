@@ -95,4 +95,7 @@ export class Alumnos {
     if (num > this.totalPaginas) num = this.totalPaginas;
     this.paginaActual = num;
   }
+
+  
+
 }

@@ -1,21 +1,15 @@
-export interface Materia {
-  id?: string;              
+export interface Maestros {
+  id?: any;              
   nombre: string;          
   apellidos: string;  
   email: string;
+  password: string;
   fechaNacimiento: string;
-  rol: string;
   sexo: string;
   especialidad: string;
-  rfc: string;
+  estatus: string; 
   telefono: string;
-  clavepresupuestal: string; 
-  estatus: string;      
-}
-export interface MateriaResponse {
-  content: Materia[];
-  totalPages: number;
-  totalElements: number;
-  number: number;
-  size: number;
+  rfc: string;
+  clavePresupuestal: string; 
+       
 }

@@ -8,7 +8,17 @@
     <input type="text" class="search-input" placeholder="Buscar docente..." [(ngModel)]="terminoBusqueda">
     <button class="btn btn--secondary" (click)="buscar()">Buscar</button>
     <button class="btn btn--secondary" (click)="limpiarBusqueda()">Limpiar</button>
-    <button class="btn btn--primary" [routerLink]="['/admin/nuevo-docente']">+ Nuevo</button>
+    <button class="btn btn--secondary" (click)="nuevo()">+Nuevo</button>
+  </div>
+
+  <!-- Mensaje cuando no hay docentes -->
+  <div *ngIf="registros.length === 0" class="no-data">
+    <p>No hay docentes registrados. Haz clic en "+Nuevo" para agregar uno.</p>
+  </div>
+
+  <!-- Mensaje cuando no hay resultados de búsqueda -->
+  <div *ngIf="registros.length > 0 && usuariosFiltrados.length === 0" class="no-data">
+    <p>No se encontraron docentes con el término "{{ terminoBusqueda }}"</p>
   </div>
 
   <div class="cards-grid">
@@ -16,7 +26,7 @@
       <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidos }}</h2>
       <div class="card__divider"></div>
       <div class="card__info">
-        <p class="card__detail">Clave Presupuestal: {{ docente.clavepresupuestal }}</p>
+        <p class="card__detail">Clave Presupuestal: {{ docente.clavePresupuestal }}</p>
         <p class="card__detail">RFC: {{ docente.rfc }}</p>
       </div>
       <div class="card__info">
@@ -27,12 +37,12 @@
         <div class="card__status">
           <span class="status-label">Estatus: {{ docente.estatus }}</span>
           <label class="toggle">
-            <input type="checkbox" [checked]="docente.estatus === 'Activo'">
+            <input type="checkbox" [checked]="docente.estatus === 'ACTIVO'">
             <span class="toggle__slider"></span>
           </label>
           <span class="status-label">Activo</span>
         </div>
-        <button class="btn btn--edit">EDITAR</button>
+        <button class="btn btn--edit" (click)="editar(docente)">EDITAR</button>
       </div>
     </div>
   </div>
@@ -51,3 +61,9 @@
     <button class="pagination__btn pagination__btn--next" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">›</button>
   </div>
 </div>
+
+<!-- Modal Nuevo Docente -->
+<app-nuevo-docente 
+  [nuevo]="nuevom"
+  (cerrar)="cerrarmodal($event)">
+</app-nuevo-docente>

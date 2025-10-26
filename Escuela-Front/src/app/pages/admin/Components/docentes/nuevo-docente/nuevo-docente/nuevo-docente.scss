@@ -1,236 +1,173 @@
-@use "sass:color";
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 20px;
+}
 
-// Variables
-$color-primary: #E8DCC4;
-$color-secondary: #E8DCC4;
-$color-burgundy: #5C1F38;
-$color-bg-light: #E8E8E8;
-$color-text-dark: #000000;
-$color-text-label: #666666;
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
 
-// Reset
-* {
+.modal-header {
+  background: #5C1F38;
+  color: white;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: none;
+  flex-shrink: 0;
+
+  .modal-title {
     margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .btn-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.75rem;
+    cursor: pointer;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Didot', 'Bodoni MT', 'Cochin', serif;
-    background-color: #FFFFFF;
-    padding: 40px;
-}
-
-// Container
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-// Header
-.header {
-    margin-bottom: 40px;
-
-    &__title {
-        font-size: 36px;
-        font-weight: 400;
-        letter-spacing: 2px;
-        margin-bottom: 5px;
-    }
-
-    &__subtitle {
-        font-size: 18px;
-        font-weight: 300;
-    }
-}
-
-// Form Section
-.form-section {
-    margin-bottom: 40px;
-}
-
-// Form Grid
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-// Form Group
-.form-group {
+    width: 30px;
+    height: 30px;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
 
-    &--wide {
-        grid-column: span 2;
+    &:hover {
+      transform: scale(1.2);
     }
+  }
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+
+  // Personaliza el scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #5C1F38;
+    border-radius: 10px;
+
+    &:hover {
+      background: #5C1F38;
+    }
+  }
+}
+
+.modal-footer {
+  padding: 1rem 0 0 0;
+  border-top: 1px solid #dee2e6;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .form-label {
-    font-size: 14px;
-    color: $color-text-dark;
-    font-weight: 400;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+
+  .text-danger {
+    color: #dc3545;
+  }
 }
 
-.form-input {
-    padding: 12px 15px;
-    background-color: $color-bg-light;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: 'Didot', 'Bodoni MT', 'Cochin', serif;
-    color: $color-text-dark;
-    transition: background-color 0.3s ease;
+.form-control,
+.form-select {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
-    &:focus {
-        outline: none;
-        background-color: color.scale($color-bg-light, $lightness: -5%);
-    }
-
-    &::placeholder {
-        color: #999;
-    }
+  &:focus {
+    border-color: #5C1F38;
+    box-shadow: 0 0 0 0.2rem rgba(139, 21, 56, 0.25);
+    outline: none;
+  }
 }
 
-// Status Section
-.status-section {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 20px;
-}
-
-// Status Toggle
-.status-toggle {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.status-label {
-    font-size: 14px;
-    color: $color-text-dark;
-}
-
-// Toggle Switch
-.toggle {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-
-    input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-
-        &:checked + .toggle__slider {
-            background-color: $color-burgundy;
-
-            &:before {
-                transform: translateX(26px);
-            }
-        }
-    }
-
-    &__slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: $color-burgundy;
-        transition: 0.4s;
-        border-radius: 24px;
-
-        &:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
-        }
-    }
-}
-
-// Buttons
 .btn {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 500;
-    font-family: 'Didot', 'Bodoni MT', 'Cochin', serif;
-    transition: all 0.3s ease;
-
-    &--primary {
-        background-color: $color-primary;
-        color: $color-text-dark;
-
-        &:hover {
-            background-color: color.scale($color-primary, $lightness: -5%);
-        }
-    }
-
-    &--secondary {
-        background-color: $color-secondary;
-        color: $color-text-dark;
-
-        &:hover {
-            background-color: color.scale($color-secondary, $lightness: -5%);
-        }
-    }
+  padding: 0.625rem 1.5rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 }
 
-// Actions
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 40px;
+.btn-guardar {
+  background: #5C1F38;
+  color: white;
+
+  &:hover {
+    background: #5C1F38;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(139, 21, 56, 0.3);
+  }
 }
 
-// Responsive Design
-@media (max-width: 1024px) {
-    .form-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.btn-limpiar {
+  background: #6c757d;
+  color: white;
 
-    .form-group--wide {
-        grid-column: span 2;
-    }
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+  }
 }
 
+// Responsive
 @media (max-width: 768px) {
-    body {
-        padding: 20px;
-    }
+  .modal-content {
+    max-width: 95%;
+    max-height: 95vh;
+  }
 
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+  .modal-header {
+    padding: 1rem;
+  }
 
-    .form-group--wide {
-        grid-column: span 1;
-    }
+  .modal-body {
+    padding: 1rem;
+  }
 
-    .status-section {
-        justify-content: center;
-        padding-right: 0;
-    }
-
-    .actions {
-        flex-direction: column;
-
-        .btn {
-            width: 100%;
-        }
-    }
+  .row > div {
+    margin-bottom: 0.75rem !important;
+  }
 }

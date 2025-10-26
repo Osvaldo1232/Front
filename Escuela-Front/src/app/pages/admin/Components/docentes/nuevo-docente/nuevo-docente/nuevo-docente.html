@@ -1,68 +1,108 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">REGISTRO DOCENTE</h1>
-    <p class="header__subtitle">Registro</p>
-  </header>
+<!-- Fondo modal -->
+<div class="modal-backdrop" *ngIf="nuevo" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
 
-  <!-- Formulario -->
-  <section class="form-section">
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">Nombre:</label>
-        <input type="text" class="form-input">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Apellidos:</label>
-        <input type="text" class="form-input">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Especialidad:</label>
-        <input type="text" class="form-input">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Clave Presupuestal:</label>
-        <input type="text" class="form-input">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">RFC:</label>
-        <input type="text" class="form-input">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Teléfono:</label>
-        <input type="tel" class="form-input">
-      </div>
-
-      <div class="form-group form-group--wide">
-        <label class="form-label">Correo:</label>
-        <input type="email" class="form-input">
-      </div>
-
-      <div class="form-group form-group--wide">
-        <label class="form-label">Contraseña:</label>
-        <input type="password" class="form-input">
-      </div>
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <h5 class="modal-title">Registrar Docente</h5>
+      <button type="button" class="btn-close" (click)="cerrarModal()">×</button>
     </div>
 
-    <div class="status-section">
-      <div class="status-toggle">
-        <span class="status-label">Estatus: Inactivo</span>
-        <label class="toggle">
-          <input type="checkbox">
-          <span class="toggle__slider"></span>
-        </label>
-        <span class="status-label">Activo</span>
-      </div>
-    </div>
-  </section>
+    <!-- Cuerpo del modal con scroll -->
+    <div class="modal-body">
+      <form (ngSubmit)="guardar()">
+        
+        <div class="row">
+          <!-- Nombre -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+          </div>
 
-  <!-- Botones de Acción -->
-  <div class="actions">
-    <button class="btn btn--primary">Guardar</button>
-    <button class="btn btn--secondary">Cerrar</button>
+          <!-- Apellidos -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellidos: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidos" name="apellidos" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Especialidad -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Especialidad: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required>
+          </div>
+
+          <!-- Sexo -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sexo: <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="sexo" name="sexo" required>
+              <option value="">Seleccionar...</option>
+              <option value="MASCULINO">MASCULINO</option>
+              <option value="FEMENINO">FEMENINO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Clave Presupuestal -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Clave Presupuestal:</label>
+            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal">
+          </div>
+
+          <!-- RFC -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">RFC:</label>
+            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc">
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Fecha de Nacimiento -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento">
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Teléfono:</label>
+            <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono">
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Correo -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Correo: <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Contraseña: <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
+          </div>
+        </div>
+
+        <!-- Estatus -->
+        <div class="mb-3">
+          <label class="form-label">Estatus:</label>
+          <select class="form-select" [(ngModel)]="estatus" name="estatus">
+            <option value="ACTIVO">Activo</option>
+            <option value="INACTIVO">Inactivo</option>
+          </select>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-limpiar" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-guardar">Guardar</button>
+        </div>
+
+      </form>
+    </div>
+
   </div>
 </div>
