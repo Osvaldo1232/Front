@@ -6,7 +6,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'http://localhost/Autenticacion/login';
+  private apiUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Autenticacion/login';
 
   constructor(private http: HttpClient) {}
 
