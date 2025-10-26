@@ -8,28 +8,29 @@
   </div>
 </header>
 
-
 <div class="layout">
-  <nav class="sidebar" *ngIf="sidebarVisible">
-    
+  <!-- Sidebar -->
+  <nav class="sidebar" [class.active]="sidebarVisible">
     <div class="profile-section">
-    <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
-    <p class="profile-name">Erika</p>
-    <p class="profile-role">Alumno</p>
-  </div>
-
- 
+      <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
+      <p class="profile-name">Erika</p>
+      <p class="profile-role">Alumno</p>
+    </div>
 
     <ul>
       <li><a routerLink="inicio" routerLinkActive="active">Inicio</a></li>
       <li><a routerLink="calificaciones" routerLinkActive="active">Calificaciones</a></li>
-      <li><a routerLink="docentes" routerLinkActive="active">Docentes</a></li>
-      <li><a routerLink="alumnos" routerLinkActive="active">Alumnos</a></li>
+      <li><a routerLink="info-personal" routerLinkActive="active">Información Personal</a></li>
+      <li><a routerLink="historial" routerLinkActive="active">Historial</a></li>
       <li><a routerLink="grados" routerLinkActive="active">Grados</a></li>
       <li><a (click)="logout()">Salir</a></li>
     </ul>
   </nav>
 
+  <!-- Overlay (solo móvil) -->
+  <div class="overlay" *ngIf="sidebarVisible" (click)="toggleSidebar()"></div>
+
+  <!-- Contenido principal -->
   <div class="main-content">
     <router-outlet></router-outlet>
   </div>

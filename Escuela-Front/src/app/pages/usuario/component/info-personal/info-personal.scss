@@ -1,0 +1,58 @@
+.info-personal-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 1000px;
+  margin: 30px auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+/* Ícono circular tipo perfil */
+.profile-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/847/847969.png');
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  border: 2px solid #ccc;
+}
+
+/* Contenedor de texto */
+.info-text {
+  flex: 1;
+}
+
+.info-text h2 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 5px;
+}
+
+.info-text p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.info-text strong {
+  color: #222;
+}
+
+/* Estilo para el mensaje de carga */
+.cargando {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  padding: 20px;
+}

@@ -1,0 +1,23 @@
+<div *ngIf="alumno; else cargando" class="info-personal-card">
+  <div class="card-content">
+    <div class="profile-icon"></div>
+
+    <div class="info-text">
+      <h2>Información Personal</h2>
+      <p><strong>Nombre:</strong> {{ alumno.nombre }} {{ alumno?.apellidos }}</p>
+      <p><strong>Email:</strong> {{ alumno.email }}</p>
+      <p><strong>Fecha de Nacimiento:</strong> {{ alumno.fechaNacimiento }}</p>
+      <p><strong>Sexo:</strong> {{ alumno.sexo }}</p>
+      <p><strong>Matrícula:</strong> {{ alumno.matricula }}</p>
+      <p><strong>CURP:</strong> {{ alumno.curp }}</p>
+      <p><strong>Estatus:</strong> {{ alumno.estatus }}</p>
+      <p><strong>Rol:</strong> {{ alumno.rol }}</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #cargando>
+  <div class="cargando">
+    <p>Cargando información...</p>
+  </div>
+</ng-template>
