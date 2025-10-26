@@ -1,3 +1,4 @@
+
 .encabezado {
   background-color: #38021c;
   display: flex;
@@ -94,14 +95,14 @@ body {
 
 .login-container {
   background-color: #ffffff;
-  border-radius: 25px;
+  border-radius: 22px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 50px;
-  max-width: 420px;
+  max-width: 350px;
   margin: 50px auto;
   text-align: center;
-  max-height: 400px;
-  
+ 
+ 
 }
 
 h2 {
@@ -122,13 +123,15 @@ h2 {
   color: #585757;
   margin-bottom: 5px;
   font-family: sans-serif;
+  
+ 
 }
 
 input {
   width: 100%;
   padding: 12px;
   border: 1px solid #e2e2e2;
-  border-radius: 10px;
+  border-radius: 10px !important;
   box-sizing: border-box;
   font-size: 16px;
 }
