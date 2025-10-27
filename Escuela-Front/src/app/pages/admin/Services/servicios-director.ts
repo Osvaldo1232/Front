@@ -10,9 +10,10 @@ import { Maestros } from '../../../models/maestros.model';
 })
 export class ServiciosDirector {
 
-  private apiUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app'; 
-  private apiUrlProfesores = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app'; // Para GET (listar)
-  private apiUrlCrearProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app'; // Para POST (crear)
+  private apiUrl = 'http://localhost:8080/grados'; 
+  private apiUrlProfesores = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores';
+  private apiUrlCrearProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/profesor';
+  private apiUrlActualizarProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores/profesor'; 
 
   constructor(private http: HttpClient) {}
   
@@ -37,15 +38,19 @@ export class ServiciosDirector {
     return this.http.get<Grados[]>(this.apiUrl);
   }
   
-  // Crear profesor - usa /usuarios/profesor
   CrearDocente(docente: Maestros): Observable<any> {
     return this.http.post(this.apiUrlCrearProfesor, docente, {
       responseType: 'text' as 'json'
     });
   }
 
-  // Obtener profesores - usa /Profesores
   ObtenerDocentes(): Observable<Maestros[]> {
     return this.http.get<Maestros[]>(this.apiUrlProfesores);
+  }
+
+  ActualizarDocente(id: string, docente: Maestros): Observable<any> {
+    return this.http.put(`${this.apiUrlActualizarProfesor}/${id}`, docente, {
+      responseType: 'text' as 'json'
+    });
   }
 }

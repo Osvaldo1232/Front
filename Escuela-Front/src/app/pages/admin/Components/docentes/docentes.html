@@ -67,3 +67,11 @@
   [nuevo]="nuevom"
   (cerrar)="cerrarmodal($event)">
 </app-nuevo-docente>
+
+<!-- ⬇️ AGREGAR ESTE MODAL -->
+<!-- Modal Editar Docente -->
+<app-editar-docente 
+  [editar]="editarm"
+  [docente]="docenteSeleccionado"
+  (cerrar)="cerrarModalEditar($event)">
+</app-editar-docente>

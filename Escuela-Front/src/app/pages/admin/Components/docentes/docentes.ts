@@ -11,6 +11,7 @@ import { selectAllMaterias } from '../../../../store/selectors/materia.selectors
 import { Maestros } from '../../../../models/maestros.model';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import { NuevoDocente } from './nuevo-docente/nuevo-docente/nuevo-docente';
+import { EditarDocente } from './editar-docente/editar-docente/editar-docente'; // ⬅️ IMPORTAR
 
 @Component({
   selector: 'app-docentes',
@@ -21,7 +22,8 @@ import { NuevoDocente } from './nuevo-docente/nuevo-docente/nuevo-docente';
     RouterModule,
     ButtonModule,
     TableModule,
-    NuevoDocente
+    NuevoDocente,
+    EditarDocente // ⬅️ AGREGAR
   ],
   templateUrl: './docentes.html',
   styleUrls: ['./docentes.scss']
@@ -32,6 +34,8 @@ export class DocentesComponent implements OnInit {
 
   terminoBusqueda: string = '';
   nuevom: boolean = false;
+  editarm: boolean = false; // ⬅️ AGREGAR
+  docenteSeleccionado: Maestros | null = null; // ⬅️ AGREGAR
   registros: Maestros[] = [];
 
   registrosPorPagina = 9;
@@ -89,8 +93,10 @@ export class DocentesComponent implements OnInit {
     this.cargarDocentes();
   }
 
-  editar(registro: any) {
-    // Implementar lógica de edición
+  // ⬇️ MODIFICAR ESTE MÉTODO
+  editar(docente: Maestros) {
+    this.docenteSeleccionado = docente;
+    this.editarm = true;
   }
 
   nuevo() {
@@ -101,7 +107,16 @@ export class DocentesComponent implements OnInit {
     this.nuevom = false;
     
     if (event) {
-      // Si se creó un nuevo docente, recargar la lista
+      this.cargarDocentes();
+    }
+  }
+
+  // ⬇️ AGREGAR ESTE MÉTODO
+  cerrarModalEditar(guardado: boolean) {
+    this.editarm = false;
+    this.docenteSeleccionado = null;
+    
+    if (guardado) {
       this.cargarDocentes();
     }
   }
