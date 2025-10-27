@@ -1,0 +1,20 @@
+<div class="alert-overlay" (click)="close()">
+  <div class="alert-modal" [attr.data-type]="type" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()">×</button>
+    
+    <div class="alert-content">
+      <div class="icon-container">
+        <div class="warning-icon">{{ type === 'success' ? '✓' : '⚠' }}</div>
+      </div>
+      
+      <div class="text-content">
+        <h3 class="alert-title">{{ title }}</h3>
+        <p class="alert-message">{{ message }}</p>
+      </div>
+    </div>
+    
+    <div class="alert-actions">
+      <button class="btn-cerrar" (click)="close()">Cerrar</button>
+    </div>
+  </div>
+</div>

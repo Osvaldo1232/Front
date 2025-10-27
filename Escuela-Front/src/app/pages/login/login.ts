@@ -3,6 +3,7 @@ import { LoginService } from '../../services/login-service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../shared/alert-service';
 @Component({
   selector: 'app-login',
   imports: [CommonModule, FormsModule],
@@ -19,7 +20,7 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private alertService: AlertService) {}
 
   login() {
     const credentials = {
@@ -46,6 +47,11 @@ export class Login {
         }
       },
       error: () => {
+    this.alertService.show(
+  'Usuario o contraseña incorrectos. Verifica tus datos.',
+  'danger',
+  'Error de autenticación'
+);
         this.errorMessage = 'Credenciales inválidas o error del servidor';
       }
     });
