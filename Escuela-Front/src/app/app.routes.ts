@@ -18,6 +18,7 @@ import { CalificacionesComponent } from './pages/profesor/component/Calificacion
 import { DatosPersonales } from './pages/profesor/component/datos-personales/datos-personales';
 import { Materias } from './pages/profesor/component/materias/materias';
 import { HistorialAcademico } from './pages/profesor/component/historial-academico/historial-academico';
+import { InfoPersonalComponent } from './pages/usuario/component/info-personal/info-personal';
 
 
 export const routes: Routes = [
@@ -41,6 +42,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'calificaciones', pathMatch: 'full' },
             { path: 'calificaciones', component: Calificaciones },
             { path: 'historial', component: Historial },
+            {path: 'info-personal', component: InfoPersonalComponent },
 
 
         ]
