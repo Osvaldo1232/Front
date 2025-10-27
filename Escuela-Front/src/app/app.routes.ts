@@ -2,19 +2,22 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Admin } from './pages/admin/admin';
 import { Usuario } from './pages/usuario/usuario';
-import { ProfesorComponent } from './pages/profesor/profesor'; // <<-- CORREGIDO a Component
+import { ProfesorComponent } from './pages/profesor/profesor'; 
 import { DocentesComponent } from './pages/admin/Components/docentes/docentes';
 import { AuthGuard } from './guards/auth-guard';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized';
 import { Alumnos } from './pages/admin/Components/alumnos/alumnos';
 import { Grado } from './pages/admin/Components/grado/grado';
-import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones'; // Calificaciones Estudiante
+import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones'; 
 import { Historial } from './pages/usuario/component/historial/historial';
 import { Grupos } from './pages/admin/Components/grupos/grupos';
 import { NuevoAlumno } from './pages/admin/Components/alumnos/nuevo_alumno/nuevo-alumno/nuevo-alumno';
 import { PerfilEstudiante } from './pages/admin/Components/alumnos/perfil-estudiante/perfil-estudiante/perfil-estudiante';
 import { NuevoDocente } from './pages/admin/Components/docentes/nuevo-docente/nuevo-docente/nuevo-docente';
-import { CalificacionesComponent } from './pages/profesor/component/Calificaciones/calificaciones';// Calificaciones Profesor
+import { CalificacionesComponent } from './pages/profesor/component/Calificaciones/calificaciones';
+import { DatosPersonales } from './pages/profesor/component/datos-personales/datos-personales';
+import { Materias } from './pages/profesor/component/materias/materias';
+import { HistorialAcademico } from './pages/profesor/component/historial-academico/historial-academico';
 
 
 export const routes: Routes = [
@@ -52,11 +55,10 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'registro-calificaciones', pathMatch: 'full' },
             { path: 'registro-calificaciones', component: CalificacionesComponent },
-            { path: 'Historial', component: CalificacionesComponent },
-            { path: 'Historial1', component: CalificacionesComponent },
-            { path: 'Historial2', component: CalificacionesComponent },
-            { path: 'Historial3', component: CalificacionesComponent },
-            { path: 'Historial4', component: CalificacionesComponent },
+            { path: 'datos-personales', component: DatosPersonales },
+            { path: 'materias', component: Materias },
+            { path: 'Historial-academico', component: HistorialAcademico },
+            { path: 'Historial-alumno', component: Historial }
         ]
     },
 

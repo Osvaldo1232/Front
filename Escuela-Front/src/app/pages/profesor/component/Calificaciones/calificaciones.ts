@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ModalEdicionCalificacionComponent } from './modal-edicion-calificacion/modal-edicion-calificacion';
+import { ModalEdicionCalificacion } from '../../modales/modal-edicion-calificacion/modal-edicion-calificacion';
+import { CalificacionRegistro } from '../../../../models/calificacion';
 
 
 @Component({
   selector: 'app-calificaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionCalificacionComponent], 
+  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionCalificacion],
   templateUrl: './calificaciones.html',
   styleUrl: './calificaciones.scss'
 })
@@ -45,7 +46,7 @@ export class CalificacionesComponent implements OnInit {
     const terminos = Object.keys(this.filtros);
     let datosFiltrados = this.registros;
     if (terminos.every(key => !this.filtros[key as keyof typeof this.filtros])) {
-        return this.registros; 
+      return this.registros;
     }
 
     datosFiltrados = this.registros.filter(registro => {
@@ -77,43 +78,51 @@ export class CalificacionesComponent implements OnInit {
   aplicarFiltros(): void {
     this.paginaActual = 1;
   }
-  
+
   irAPagina(num: number): void {
     if (num > 0 && num <= this.totalPaginas) {
-        this.paginaActual = num;
+      this.paginaActual = num;
     }
   }
 
   registroParaEditar: any = null;
 
-  editar(registro: any): void { 
+  editar(registro: any) {
     this.registroParaEditar = registro;
   }
 
-  manejarCierreModal(registroActualizado: any): void {
-    if (registroActualizado) {
-        console.log('Registro guardado y actualizado en la lista:', registroActualizado);
-        
-        const index = this.registros.findIndex(r => r.matricula === registroActualizado.matricula);
-        if (index > -1) {
-            this.registros[index] = registroActualizado; 
-        }
-    }
+  cerrarModal(event: CalificacionRegistro | null) {
     this.registroParaEditar = null;
+
+    if (event?.id) {
+      this.cargarCalificaciones();
+    }
+  }
+
+  cargarCalificaciones() {
+    console.log("Actualizar lista de calificaciones...");
+  }
+  ngOnInit(): void {
   }
 
   guardar(): void {
-    console.log('Guardando nuevo registro:', this.formulario);
+    if (!this.formulario.materia || !this.formulario.estudiante ||
+      !this.formulario.trimestre || this.formulario.calificacion === null) {
+      alert('Por favor complete todos los campos requeridos');
+      return;
+    }
+    console.log('Guardando:', this.formulario);
   }
 
   limpiar(): void {
-    console.log('Limpiando formulario.');
     this.formulario = {
-        estudiante: '', materia: '', grado: '', grupo: '',
-        trimestre: '', ciclo: '', calificacion: null
+      estudiante: '',
+      materia: '',
+      grado: '',
+      grupo: '',
+      trimestre: '',
+      ciclo: '',
+      calificacion: null
     };
-  }
-
-  ngOnInit(): void {
   }
 }

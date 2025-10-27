@@ -7,14 +7,14 @@ export interface CalificacionRegistro {
   grupo: string;
   trimestre: string;
   ciclo: string;
-  calificacion: number; // El campo que se edita
+  calificacion: number; 
 }
 
 export interface CalificacionResponse {
-  content: CalificacionRegistro[]; // La lista de registros
+  content: CalificacionRegistro[]; 
   totalElements: number;
   totalPages: number;
-  number: number; // Página actual (page)
+  number: number; 
   size: number;
-  // ... otros campos de paginación que use tu API
+  
 }

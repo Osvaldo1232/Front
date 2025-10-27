@@ -1,0 +1,102 @@
+<div class="perfil-card" *ngIf="usuario">
+    <h2 class="titulo-pagina">DATOS PERSONALES</h2>
+    
+    <div class="contenido-perfil">
+        <div class="seccion-avatar">
+            <div class="avatar-circulo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+            </div>
+            <h4 class="nombre-usuario">
+                {{ usuario.nombre | uppercase}}<br>
+                {{ usuario.apellidos | uppercase }}
+            </h4>
+        </div>
+        <div class="seccion-info">
+            <div class="fila-info">
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.65 10C11.7 7.31 8.9 5.5 5.77 6.12c-2.29.46-4.15 2.29-4.63 4.58C.32 14.57 3.26 18 7 18c2.61 0 4.83-1.67 5.65-4H17v2c0 1.1.9 2 2 2s2-.9 2-2v-2c1.1 0 2-.9 2-2s-.9-2-2-2h-8.35zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                    </svg>
+                    <div>
+                        <label>RFC</label>
+                        <p>{{ usuario.rfc }}</p>
+                    </div>
+                </div>
+
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                    </svg>
+                    <div>
+                        <label>CLAVE PRESUPUESTAL</label>
+                        <p>{{ usuario.clavePresupuestal }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fila-info">
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    <div>
+                        <label>NÚMERO DE TELÉFONO</label>
+                        <p>{{ usuario.telefono }}</p>
+                    </div>
+                </div>
+
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                    </svg>
+                    <div>
+                        <label>FECHA NACIMIENTO</label>
+                        <p>{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fila-info">
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                    </svg>
+                    <div>
+                        <label>ESPECIALIDAD</label>
+                        <p>{{ usuario.especialidad }}</p>
+                    </div>
+                </div>
+
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    <div>
+                        <label>GRADO / GRUPO ASIGNADO</label>
+                        <p>3 B</p>
+                    </div>
+                </div>
+
+                <div class="campo-info">
+                    <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.65 10C11.7 7.31 8.9 5.5 5.77 6.12c-2.29.46-4.15 2.29-4.63 4.58C.32 14.57 3.26 18 7 18c2.61 0 4.83-1.67 5.65-4H17v2c0 1.1.9 2 2 2s2-.9 2-2v-2c1.1 0 2-.9 2-2s-.9-2-2-2h-8.35zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                    </svg>
+                    <div>
+                        <label>CORREO</label>
+                        <p>{{ usuario.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn-editar" (click)="editar(usuario)" title="Editar">Editar</button>
+    <app-modal-edicion-personales [registro]="registroParaEditar"(cerrar)="cerrarModal($event)"></app-modal-edicion-personales>
+
+</div>
