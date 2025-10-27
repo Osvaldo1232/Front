@@ -1,15 +1,13 @@
 export interface Alumnos {
-  id?: string;              
-  matricula: string;          
+  id?: string;  
   nombre: string;   
   apellidos: string; 
-  telefono: string;
-  tutor: string;     
+  email: string;
+  password: string;
+  fechaNacimiento: string;
+  sexo: string;            
+  matricula: string;
+  curp: string;          
+  estatus: string;   
 }
-export interface MateriaResponse {
-  content: Alumnos[];
-  totalPages: number;
-  totalElements: number;
-  number: number;
-  size: number;
-}
+

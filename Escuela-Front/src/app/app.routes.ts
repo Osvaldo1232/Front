@@ -6,7 +6,7 @@ import { ProfesorComponent } from './pages/profesor/profesor';
 import { DocentesComponent } from './pages/admin/Components/docentes/docentes';
 import { AuthGuard } from './guards/auth-guard';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized';
-import { Alumnos } from './pages/admin/Components/alumnos/alumnos';
+import { AlumnosComponent } from './pages/admin/Components/alumnos/alumnos'; 
 import { Grado } from './pages/admin/Components/grado/grado';
 import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones'; 
 import { Historial } from './pages/usuario/component/historial/historial';
@@ -27,7 +27,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'docentes', pathMatch: 'full' },
             { path: 'docentes', component: DocentesComponent },
             { path: 'nuevo-docente', component: NuevoDocente },
-            { path: 'alumnos', component: Alumnos },
+            { path: 'alumnos', component: AlumnosComponent },
             { path: 'nuevo-alumno', component: NuevoAlumno },
             { path: 'perfil-estudiante', component: PerfilEstudiante },
             { path: 'grados', component: Grado },
