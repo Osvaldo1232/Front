@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { Maestros } from '../../../../../../models/maestros.model';
 import { ServiciosDirector } from '../../../../Services/servicios-director';
+import { AlertService } from '../../../../../../shared/alert-service'; 
+
 
 @Component({
   selector: 'app-nuevo-docente',
@@ -16,7 +18,11 @@ export class NuevoDocente {
   @Input() nuevo: any;
   @Output() cerrar = new EventEmitter<Maestros | null>();
 
-  constructor(private Servicios: ServiciosDirector) { }
+  constructor(
+    private Servicios: ServiciosDirector,
+    private alertService: AlertService // ⬅️ INYECTAR
+    
+  ) { }
 
   nombre: string = '';
   apellidos: string = '';
@@ -48,6 +54,11 @@ export class NuevoDocente {
     this.Servicios.CrearDocente(maestros).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
+         this.alertService.show(
+          'Docente registrado exitosamente',
+          'success',
+          'Éxito'
+        );
         
         const NuevoDocente = { 
           nombre: this.nombre,
@@ -66,7 +77,14 @@ export class NuevoDocente {
         this.limpiarCampos(); // ⬅️ Limpiar después de guardar
         this.cerrar.emit(NuevoDocente); 
       },
-      error: (err) => console.error('Error al crear Docente:', err)
+       error: (err) => {
+        console.error('Error al crear Docente:', err);
+       this.alertService.show(
+          'Error al crear el Docente',
+          'danger',
+          'Error'
+        );
+      }
     });
   }
 

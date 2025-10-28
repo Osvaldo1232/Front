@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Maestros } from '../../../../../../models/maestros.model';
-import { ServiciosDirector } from '../../../../Services/servicios-director';
 import { ServiciosDirectorAlumnos } from '../../../../Services/servicios-director-alumnos/servicios-director-alumnos';
 import { Alumnos } from '../../../../../../models/alumnos.model';
+import { AlertService } from '../../../../../../shared/alert-service'; 
+
 
 @Component({
   selector: 'app-editar-alumno',
@@ -18,7 +18,11 @@ export class EditarAlumno implements OnChanges {
   @Input() alumno: Alumnos | null = null;
   @Output() cerrar = new EventEmitter<boolean>();
 
-  constructor(private Servicios: ServiciosDirectorAlumnos) { }
+  constructor(
+    private Servicios: ServiciosDirectorAlumnos,
+        private alertService: AlertService 
+
+  ) { }
 
   id: string = '';
   nombre: string = '';
@@ -69,12 +73,22 @@ export class EditarAlumno implements OnChanges {
     this.Servicios.ActualizarAlumno(this.id, AlumnoActualizado).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-        alert('Alumno actualizado exitosamente');
-        this.cerrar.emit(true); // true indica que se guardó
+        // ⬇️ REEMPLAZAR alert() con tu servicio
+        this.alertService.show(
+          'Alumno actualizado exitosamente',
+          'success',
+          'Éxito'
+        );
+        this.cerrar.emit(true);
       },
       error: (err) => {
         console.error('Error al actualizar Alumno:', err);
-        alert('Error al actualizar el Alumno');
+        // ⬇️ REEMPLAZAR alert() con tu servicio
+        this.alertService.show(
+          'Error al actualizar el Alumno',
+          'danger',
+          'Error'
+        );
       }
     });
   }

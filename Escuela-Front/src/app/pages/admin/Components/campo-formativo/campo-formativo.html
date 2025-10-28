@@ -1,0 +1,79 @@
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">CAMPOS FORMATIVOS</h1>
+    <p class="header__subtitle">Materias</p>
+  </header>
+
+  <!-- Sección de búsqueda y botones -->
+  <div class="search-section">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      placeholder="Buscar..."
+      class="search-input"
+    />
+    <button class="btn btn--search" (click)="buscar()">Buscar</button>
+    <button class="btn btn--clear" (click)="limpiar()">Limpiar</button>
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+  </div>
+
+  <!-- Mensaje cuando no hay campos -->
+  <div *ngIf="registros.length === 0" class="no-data">
+    <p>No hay campos formativos registrados.</p>
+  </div>
+
+ <!-- Grid de tarjetas -->
+<div class="cards-grid" *ngIf="alumnosPaginados.length > 0">
+  <div class="card" *ngFor="let campo of alumnosPaginados; let i = index">
+    <h2 class="card__title">{{ getNombreCampo(i) }}</h2>
+    <div class="card__divider"></div>
+    
+    <div class="card__content">
+      <p class="card__item">{{ campo.nombre }}</p>
+    </div>
+
+    <div class="card__footer">
+      <div class="card__status">
+        <span class="status-label">Estatus: {{ campo.estatus === 'ACTIVO' ? 'Inactivo' : 'Activo' }}</span>
+        <label class="toggle">
+          <input 
+            type="checkbox" 
+            [checked]="campo.estatus === 'ACTIVO'"
+            (change)="cambiarEstatus(campo)">
+          <span class="toggle__slider"></span>
+        </label>
+        <span class="status-label">{{ campo.estatus === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</span>
+      </div>
+      <button class="btn btn--edit" (click)="editar(campo)">EDITAR</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Paginación -->
+  <div class="pagination" *ngIf="totalPaginas > 1">
+    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+    <button
+      *ngFor="let p of totalPaginasArray"
+      class="pagination__btn"
+      [class.pagination__btn--active]="p === paginaActual"
+      (click)="cambiarPagina(p)"
+    >
+      {{ p }}
+    </button>
+    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+  </div>
+</div>
+
+<!-- Modal Nuevo Campo -->
+<app-campo-formativo-nuevo
+  [nuevo]="nuevom"
+  (cerrar)="cerrarModal($event)">
+</app-campo-formativo-nuevo>
+
+<!-- Modal Editar Campo -->
+<app-campo-formativo-editar
+  [editar]="editarm"
+  [campo]="CamposSeleccionado"
+  (cerrar)="cerrarModalEditar($event)">
+</app-campo-formativo-editar>
