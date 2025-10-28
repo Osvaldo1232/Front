@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { Profesor } from '../../../../models/Profesor';
 import { ServiciosProfesor } from '../../services/servicios-profesor';
 import { ModalEdicionPersonales } from '../../modales/modal-edicion-personales/modal-edicion-personales';
+import { LoginService } from '../../../../services/login-service';
 
 
 @Component({
@@ -32,22 +33,26 @@ export class DatosPersonales implements OnInit {
     grupo: 'N/A'
   };
 
-  uuid = 'ab717484-1533-4cdf-b904-1f85e86bd33e'
-
   registroParaEditar: Profesor | null = null;
+  usuariologueado: string = '';
 
-  constructor(private profesorService: ServiciosProfesor) { }
+  constructor(private profesorService: ServiciosProfesor, private loginser:LoginService) { }
 
   get nombreCompleto(): string {
     return `${this.perfil.nombre} ${this.perfil.apellidos}`.trim();
   }
 
   ngOnInit(): void {
-    this.obtenerPerfil();
+    this.usuariologueado=this.loginser.Usuario();
+    console.log('datos correctos', this.usuariologueado);
+    if (this.usuariologueado){
+      this.obtenerPerfil();
+    }else{
+      console.error('No se encontró UUID del usuario logueado.');
+    }
   }
-
   obtenerPerfil(): void {
-    this.profesorService.obtenerPerfilUsuario(this.uuid).subscribe({
+    this.profesorService.obtenerPerfilUsuario(this.usuariologueado).subscribe({
       next: (data: Profesor) => {
         this.usuario = data;
         console.log('Datos del profesor:', this.usuario);
