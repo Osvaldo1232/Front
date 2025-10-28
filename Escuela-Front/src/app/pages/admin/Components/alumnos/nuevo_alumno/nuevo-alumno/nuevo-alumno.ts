@@ -3,6 +3,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Alumnos } from '../../../../../../models/alumnos.model';
 import { ServiciosDirectorAlumnos } from '../../../../Services/servicios-director-alumnos/servicios-director-alumnos';
+import { AlertService } from '../../../../../../shared/alert-service'; 
+
+
 @Component({
   selector: 'app-nuevo-alumno',
   standalone: true,
@@ -14,7 +17,11 @@ export class NuevoAlumno {
   @Input() nuevo: boolean = false;
   @Output() cerrar = new EventEmitter<Alumnos | null>();
 
-  constructor(private Servicios: ServiciosDirectorAlumnos) { }
+  constructor(
+    private Servicios: ServiciosDirectorAlumnos,
+    private alertService: AlertService // ⬅️ INYECTAR
+    
+  ) { }
 
   nombre: string = '';
   apellidos: string = '';
@@ -42,7 +49,11 @@ export class NuevoAlumno {
     this.Servicios.CrearAlumno(alumno).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-        alert('Alumno registrado exitosamente');
+        this.alertService.show(
+          'Alumno registrado exitosamente',
+          'success',
+          'Éxito'
+        );
         
         const nuevoAlumno = { 
           nombre: this.nombre,
@@ -61,11 +72,14 @@ export class NuevoAlumno {
       },
       error: (err) => {
         console.error('Error al crear Alumno:', err);
-        alert('Error al crear el alumno');
+       this.alertService.show(
+          'Error al crear el Alumno',
+          'danger',
+          'Error'
+        );
       }
     });
   }
-
   cerrarModal() {
     this.limpiarCampos();
     this.cerrar.emit(null);

@@ -10,7 +10,7 @@ import { Maestros } from '../../../models/maestros.model';
 })
 export class ServiciosDirector {
 
-  private apiUrl = 'http://localhost:8080/grados'; 
+  private apiUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/grados'; 
   private apiUrlProfesores = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores';
   private apiUrlCrearProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/profesor';
   private apiUrlActualizarProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores/profesor'; 

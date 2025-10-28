@@ -3,6 +3,8 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import { FormsModule } from '@angular/forms';
 import { Maestros } from '../../../../../../models/maestros.model';
 import { ServiciosDirector } from '../../../../Services/servicios-director';
+import { AlertService } from '../../../../../../shared/alert-service'; 
+
 
 @Component({
   selector: 'app-editar-docente',
@@ -16,7 +18,11 @@ export class EditarDocente implements OnChanges {
   @Input() docente: Maestros | null = null;
   @Output() cerrar = new EventEmitter<boolean>();
 
-  constructor(private Servicios: ServiciosDirector) { }
+  constructor(
+    private Servicios: ServiciosDirector,
+    private alertService: AlertService // ⬅️ INYECTAR
+    
+  ) { }
 
   id: string = '';
   nombre: string = '';
@@ -60,7 +66,7 @@ export class EditarDocente implements OnChanges {
       nombre: this.nombre, 
       apellidos: this.apellidos,
       email: this.email, 
-    password: this.password,
+      password: this.password,
       fechaNacimiento: this.fechaNacimiento,
       sexo: this.sexo, 
       especialidad: this.especialidad, 
@@ -73,12 +79,21 @@ export class EditarDocente implements OnChanges {
     this.Servicios.ActualizarDocente(this.id, maestroActualizado).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-        alert('Docente actualizado exitosamente');
-        this.cerrar.emit(true); // true indica que se guardó
+        this.alertService.show(
+          'Campo Formativo actualizado exitosamente',
+          'success',
+          'Éxito'
+        );
+        this.cerrar.emit(true);
       },
       error: (err) => {
-        console.error('Error al actualizar Docente:', err);
-        alert('Error al actualizar el docente');
+        console.error('Error al actualizar Campo Formativo:', err);
+        // ⬇️ REEMPLAZAR alert() con tu servicio
+        this.alertService.show(
+          'Error al actualizar el campo formativo',
+          'danger',
+          'Error'
+        );
       }
     });
   }

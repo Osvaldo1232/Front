@@ -16,15 +16,34 @@ export interface Alumno {
   estatus: string;
 }
 
+// ✅ Nueva interfaz para la respuesta del servicio de inscripciones recientes
+export interface InscripcionReciente {
+  id: string;
+  idGrado: string;
+  nombreGrado: string;
+  idGrupo: string;
+  nombreGrupo: string;
+  idCiclo: string;
+  ciclo: string;
+  nombreProfesorCompleto: string;
+  telefonoProfesor: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AlumnoService {
   private apiUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos';
+  private inscripcionUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/inscripcion/reciente';
 
   constructor(private http: HttpClient) {}
 
   obtenerAlumnoPorId(id: string): Observable<Alumno> {
     return this.http.get<Alumno>(`${this.apiUrl}/usuario/${id}`);
+  }
+
+  // ✅ Nuevo método para obtener inscripción reciente de un alumno
+  obtenerInscripcionReciente(alumnoId: string): Observable<InscripcionReciente> {
+    return this.http.get<InscripcionReciente>(`${this.inscripcionUrl}/${alumnoId}`);
   }
 }
