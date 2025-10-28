@@ -10,4 +10,14 @@ export interface Alumnos {
   curp: string;          
   estatus: string;   
 }
-
+export interface InscripcionReciente {
+  id: string;
+  idGrado: string;
+  nombreGrado: string;
+  idGrupo: string;
+  nombreGrupo: string;
+  idCiclo: string;
+  ciclo: string;
+  nombreProfesorCompleto: string;
+  telefonoProfesor: string;
+}
