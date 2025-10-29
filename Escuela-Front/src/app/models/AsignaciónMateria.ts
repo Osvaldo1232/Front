@@ -21,3 +21,14 @@ export interface MateriaResponse {
   size: number;
   number: number;
 }
+
+
+export interface MateriasCamposFormativos {
+ 
+    idGrado:any;
+    nombreGrado: any,
+    idMateria: any,
+    nombreMateria: any;
+    idCampoFormativo: any;
+    nombreCampoFormativo: any
+}

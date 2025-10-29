@@ -44,7 +44,6 @@ export class DatosPersonales implements OnInit {
 
   ngOnInit(): void {
     this.usuariologueado=this.loginser.Usuario();
-    console.log('datos correctos', this.usuariologueado);
     if (this.usuariologueado){
       this.obtenerPerfil();
     }else{
@@ -55,10 +54,8 @@ export class DatosPersonales implements OnInit {
     this.profesorService.obtenerPerfilUsuario(this.usuariologueado).subscribe({
       next: (data: Profesor) => {
         this.usuario = data;
-        console.log('Datos del profesor:', this.usuario);
       },
       error: (err) => {
-        console.error('Error al obtener perfil', err);
       }
     });
   }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Materia } from '../../../../models/Materia';
-import { AsignacionDocente } from '../../../../models/AsignaciónMateria';
+import { InscripcionDTO, Materia } from '../../../../models/Materia';
+import { AsignacionDocente, MateriasCamposFormativos } from '../../../../models/AsignaciónMateria';
 import { MateriaAsignada } from '../../../../models/AsignaciónMateria';
 import { ServiciosProfesor } from '../../services/servicios-profesor';
+import { LoginService } from '../../../../services/login-service';
 
 @Component({
   selector: 'app-materias',
@@ -14,41 +15,35 @@ import { ServiciosProfesor } from '../../services/servicios-profesor';
   styleUrl: './materias.scss'
 })
 export class Materias implements OnInit {
-  materias: MateriaAsignada[] = [];
+  materias: MateriasCamposFormativos[] = [];
   cargando: boolean = false;
   asignacionDocente: AsignacionDocente | null = null;
   errorMensaje: string = '';
-
+inscripciones:InscripcionDTO []=[];
+  usuariologuado:any;
   constructor(
     private router: Router,
-    private servicios: ServiciosProfesor
+    private servicios: ServiciosProfesor,
+    private LoginS:LoginService
   ) {}
 
   ngOnInit(): void {
+    this.usuariologuado=this.LoginS.Usuario();
+    if(this.usuariologuado){
     this.cargarAsignacionYMaterias();
+    }
   }
 
   cargarAsignacionYMaterias(): void {
     this.cargando = true;
-    const idProfesor = this.obtenerIdProfesorLogueado();
-
-    if (!idProfesor) {
-      console.error('❌ No hay profesor logueado');
-      this.errorMensaje = 'No se pudo identificar al profesor';
-      this.cargando = false;
-      this.cargarDatosEjemplo();
-      return;
-    }
-
-    console.log('📡 Buscando asignación para profesor:', idProfesor);
-    this.servicios.obtenerAsignacionDocente(idProfesor).subscribe({
+    this.servicios.obtenerAsignacionDocente( this.usuariologuado).subscribe({
       next: (asignacion) => {
-        console.log('✅ Asignación del docente obtenida:', asignacion);
-        this.asignacionDocente = asignacion;
-        this.cargarMateriasPorGrado(asignacion.grado);
+        if(asignacion.idGrado){
+          this.cargarMateriasPorGrado(asignacion.idGrado);
+          this.AlumnosIns(asignacion.idGrado, asignacion.idGrupo, asignacion.idCiclo)
+        }
       },
       error: (err) => {
-        console.error('❌ Error al obtener asignación del docente:', err);
 
         if (err.status === 404) {
           this.errorMensaje = 'No tiene asignación de grado actualmente';
@@ -57,7 +52,6 @@ export class Materias implements OnInit {
           this.errorMensaje = 'Error de conexión con el servidor';
         } else {
           this.errorMensaje = 'Error al cargar la asignación';
-          this.cargarDatosEjemplo();
         }
 
         this.cargando = false;
@@ -65,18 +59,29 @@ export class Materias implements OnInit {
     });
   }
 
+
+AlumnosIns(grado:any, grupo:any, ciclo:any){
+  this.servicios.filtrarInscripciones(grado, grupo, ciclo).subscribe({
+  next: (inscripciones) => {
+    console.log('✅ Inscripciones obtenidas:', inscripciones);
+    this.inscripciones = inscripciones;
+  },
+  error: (err) => {
+    console.error('❌ Error al obtener inscripciones:', err);
+  }
+});
+
+}
+
   cargarMateriasPorGrado(idGrado: string): void {
     if (!idGrado) {
-      console.error('❌ No hay ID de grado');
       this.errorMensaje = 'No hay grado asignado';
       this.cargando = false;
       return;
     }
 
-    console.log('📘 Cargando materias para grado:', idGrado);
     this.servicios.obtenerMateriasPorGrado(idGrado).subscribe({
       next: (materias) => {
-        console.log('✅ Materias obtenidas:', materias);
 
         if (!materias || materias.length === 0) {
           this.errorMensaje = 'No hay materias asignadas para este grado';
@@ -89,7 +94,6 @@ export class Materias implements OnInit {
         this.cargando = false;
       },
       error: (err) => {
-        console.error('❌ Error al cargar materias:', err);
 
         if (err.status === 404) {
           this.errorMensaje = 'No hay materias asignadas para este grado';
@@ -107,54 +111,13 @@ export class Materias implements OnInit {
     });
   }
 
-  obtenerIdProfesorLogueado(): string | null {
-    const idProfesor =
-      localStorage.getItem('idUsuario') ||
-      localStorage.getItem('idProfesor') ||
-      localStorage.getItem('userId');
-
-    if (!idProfesor) {
-      console.error('❌ No se encontró ID de profesor en localStorage');
-    } else {
-      console.log('✅ ID del profesor encontrado:', idProfesor);
-    }
-
-    return idProfesor;
-  }
-
-  cargarDatosEjemplo(): void {
-    console.warn('⚠️ Cargando datos de ejemplo (modo prueba)');
-    this.asignacionDocente = {
-      id: 'ejemplo-1',
-      idProfesor: 'profesor-ejemplo',
-      grado: '1',
-      grupo: 'A',
-      ciclo: '2024-2025'
-    };
-
-    this.materias = [
-      {
-        id: '6',
-        nombre: 'EDUCACION FISICA',
-        campoFormativo: 'DE LO HUMANO Y COMUNITARIO',
-        grado: '1',
-        grupo: 'A'
-      }
-    ];
-
-    this.cargando = false;
-    this.errorMensaje = 'Mostrando datos de ejemplo';
-  }
-
-  abrirCalificaciones(materia: MateriaAsignada): void {
-    console.log('🧾 Abrir calificaciones para materia:', materia);
+  abrirCalificaciones(materia: MateriasCamposFormativos): void {
 
     if (!this.asignacionDocente) {
-      alert('No se puede acceder a calificaciones sin asignación de grado');
       return;
     }
 
-    this.router.navigate(['/calificaciones', materia.id], {
+    this.router.navigate(['/calificaciones', materia.idMateria], {
       state: {
         materia,
         grado: this.asignacionDocente.grado,
@@ -166,7 +129,6 @@ export class Materias implements OnInit {
   }
 
   recargarMaterias(): void {
-    console.log('🔄 Recargando materias...');
     this.errorMensaje = '';
     this.cargarAsignacionYMaterias();
   }

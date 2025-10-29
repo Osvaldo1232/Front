@@ -32,10 +32,6 @@ export class Login {
       next: () => {
         const roles = this.loginService.getUserRoles(); 
         const uuid = this.loginService.Usuario(); 
-
-        console.log('Login exitoso, uuid:', uuid);
-        console.log('Roles:', roles);
-
         if (roles.includes('DIRECTOR')) {
           this.router.navigate(['/admin']);
         } else if (roles.includes('ESTUDIANTE')) {
@@ -52,7 +48,6 @@ export class Login {
   'danger',
   'Error de autenticación'
 );
-        this.errorMessage = 'Credenciales inválidas o error del servidor';
       }
     });
   }

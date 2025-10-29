@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CalificacionRegistro, CalificacionResponse } from '../../../models/calificacion';
 import { Profesor } from '../../../models/Profesor';
-import { AsignacionDocente } from '../../../models/AsignaciónMateria';
+import { AsignacionDocente, MateriasCamposFormativos } from '../../../models/AsignaciónMateria';
 import { MateriaAsignada } from '../../../models/AsignaciónMateria';
 import { MateriaResponse } from '../../../models/AsignaciónMateria';
+import { InscripcionDTO } from '../../../models/Materia';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiciosProfesor {
-  private apiUrlBase = 'http://localhost:8080';
+  private apiUrlBase = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app';
 
   constructor(private http: HttpClient) { }
 
@@ -32,22 +33,28 @@ export class ServiciosProfesor {
     return this.http.put<Profesor>(`${this.apiUrlBase}/Profesores/profesor/${idProfesor}`, profesor);
   }
   // ✅ Obtener asignación del docente
-  obtenerAsignacionDocente(idProfesor: string): Observable<AsignacionDocente> {
-    return this.http.get<AsignacionDocente>(
-      `${this.apiUrlBase}/Asignacion-docente/resumen-profesor/reciente/${idProfesor}`
+  obtenerAsignacionDocente(idProfesor: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrlBase}/asignacion-docente/resumen-profesor/reciente?idProfesor=${idProfesor}`
     );
   }
 
   // ✅ Obtener materias por grado
-  obtenerMateriasPorGrado(idGrado: string): Observable<MateriaAsignada[]> {
-    const url = `${this.apiUrlBase}/asignacion/listar-por-grado/${idGrado}`;
-    console.log('📡 GET Materias por grado:', url);
-    return this.http.get<MateriaAsignada[]>(url);
+  obtenerMateriasPorGrado(idGrado: string): Observable<MateriasCamposFormativos[]> {
+    const url = `${this.apiUrlBase}/asignacion/listar-por-grado?idGrado=${idGrado}`;
+    return this.http.get<MateriasCamposFormativos[]>(url);
   }
   
 
 
-  
+   filtrarInscripciones(gradoId: string, grupoId: string, cicloId: string): Observable<InscripcionDTO[]> {
+    const params = new HttpParams()
+      .set('gradoId', gradoId)
+      .set('grupoId', grupoId)
+      .set('cicloId', cicloId);
+
+    return this.http.get<InscripcionDTO[]>(`${this.apiUrlBase}/inscripcion/filtrar`, { params });
+  }
 
   getMaterias(page: number = 0, size: number = 10, sortBy: string = 'id'): Observable<CalificacionResponse> {
     const params = new HttpParams()

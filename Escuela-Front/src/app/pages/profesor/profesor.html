@@ -4,18 +4,17 @@
     <button class="toggle-button" (click)="toggleSidebar()">☰</button>
   </div>
   <div class="header-right">
-    Erika Jaimes Soto
+   {{ usuario.nombre + ' ' + usuario.apellidos }}
+
   </div>
 </header>
 
-
 <div class="layout">
   <nav class="sidebar" *ngIf="sidebarVisible">
-    
     <div class="profile-section">
-    <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
-    <p class="profile-name">Erika</p>
-    <p class="profile-role">Alumno</p>
+    <img src="assets/img/perfil.png" alt="Perfil" class="profile-image">
+    <p class="profile-name">{{this.usuario.nombre}}</p>
+    <p class="profile-role">{{rolUsuario}}</p>
   </div>
 
  
