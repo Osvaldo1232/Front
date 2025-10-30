@@ -6,12 +6,14 @@ import { Profesor } from '../../../../models/Profesor';
 import { ServiciosProfesor } from '../../services/servicios-profesor';
 import { ModalEdicionPersonales } from '../../modales/modal-edicion-personales/modal-edicion-personales';
 import { LoginService } from '../../../../services/login-service';
+import { Loading } from '../../../../shared/loading/loading';
+import { LoadingService } from '../../../../shared/loading-service';
 
 
 @Component({
   selector: 'app-datos-personales',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionPersonales],
+  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionPersonales, Loading  ],
   templateUrl: './datos-personales.html',
   styleUrl: './datos-personales.scss'
 })
@@ -36,7 +38,7 @@ export class DatosPersonales implements OnInit {
   registroParaEditar: Profesor | null = null;
   usuariologueado: string = '';
 
-  constructor(private profesorService: ServiciosProfesor, private loginser:LoginService) { }
+  constructor(private profesorService: ServiciosProfesor, private loginser:LoginService , private loadingService: LoadingService) { }
 
   get nombreCompleto(): string {
     return `${this.perfil.nombre} ${this.perfil.apellidos}`.trim();
@@ -51,11 +53,17 @@ export class DatosPersonales implements OnInit {
     }
   }
   obtenerPerfil(): void {
+    this.loadingService.show(); 
+
     this.profesorService.obtenerPerfilUsuario(this.usuariologueado).subscribe({
       next: (data: Profesor) => {
+    this.loadingService.hide(); 
+
         this.usuario = data;
       },
       error: (err) => {
+    this.loadingService.hide(); 
+
       }
     });
   }

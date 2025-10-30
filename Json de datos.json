@@ -1,0 +1,471 @@
+CAMPOS FORMATIVOS 
+  {
+    "nombre": "Lenguaje y Comunicación",
+    "estatus": "ACTIVO",
+     "id": "c14304d3-fee7-44fe-896c-c032954ab0d3",
+  },
+  {
+    "nombre": "Pensamiento Matemático",
+    "estatus": "ACTIVO",
+     "id": "7c298022-1dad-40d7-8a2c-b2c0139a7604",
+  },
+  {
+    "nombre": "Exploración y Comprensión del Mundo Natural y Social",
+    "estatus": "ACTIVO",
+    "id": "075ec158-397e-4f1a-89d5-635ea0d889a0",
+  },
+  {
+    "nombre": "Desarrollo Personal y Social",
+    "estatus": "ACTIVO",
+    "id": "cc4f6a72-298e-4638-a784-a89b82fedb10",
+  },
+  {
+    "nombre": "Artes y Expresión Creativa",
+    "estatus": "ACTIVO",
+     "id": "d9e3d4dc-d347-4f10-8558-7cfdcf3c60c8",
+  }
+
+DIRECTOR 
+  {
+    "nombre": "Roberto",
+    "apellidos": "Méndez López",
+    "email": "roberto.mendez@escuela.edu.mx",
+    "password": "Roberto123*",
+    "fechaNacimiento": "1978-05-10",
+    "sexo": "MASCULINO",
+    "departamento": "Dirección General",
+    "telefono": "5543219870"
+  },
+  {
+    "nombre": "Patricia",
+    "apellidos": "García Torres",
+    "email": "patricia.garcia@escuela.edu.mx",
+    "password": "Patricia123*",
+    "fechaNacimiento": "1982-11-03",
+    "sexo": "FEMENINO",
+    "departamento": "Recursos Humanos",
+    "telefono": "5532147891"
+  },
+  {
+    "nombre": "Fernando",
+    "apellidos": "Sánchez Rivera",
+    "email": "fernando.sanchez@escuela.edu.mx",
+    "password": "Fernando123*",
+    "fechaNacimiento": "1975-09-14",
+    "sexo": "MASCULINO",
+    "departamento": "Planeación Académica",
+    "telefono": "5529876541"
+  },
+  {
+    "nombre": "Claudia",
+    "apellidos": "Morales Pérez",
+    "email": "claudia.morales@escuela.edu.mx",
+    "password": "Claudia123*",
+    "fechaNacimiento": "1980-02-28",
+    "sexo": "FEMENINO",
+    "departamento": "Supervisión Escolar",
+    "telefono": "5512345672"
+  },
+  {
+    "nombre": "Javier",
+    "apellidos": "Ramírez Gómez",
+    "email": "javier.ramirez@escuela.edu.mx",
+    "password": "Javier123*",
+    "fechaNacimiento": "1976-07-21",
+    "sexo": "MASCULINO",
+    "departamento": "Control Escolar",
+    "telefono": "5587654319"
+  }
+
+ALUMNO
+  {
+    "nombre": "Andrea",
+    "apellidos": "López Martínez",
+    "email": "andrea.lopez@escuela.edu.mx",
+    "password": "Andrea123*",
+    "fechaNacimiento": "2008-04-15",
+    "sexo": "FEMENINO",
+    "matricula": "A001",
+    "curp": "LOMA080415MDFPRNA1",
+    "estatus": "ACTIVO",
+    "id": "695db432-656a-4969-93aa-be32926552cf",
+  },
+  {
+    "nombre": "Diego",
+    "apellidos": "Hernández Cruz",
+    "email": "diego.hernandez@escuela.edu.mx",
+    "password": "Diego123*",
+    "fechaNacimiento": "2007-09-22",
+    "sexo": "MASCULINO",
+    "matricula": "A002",
+    "curp": "HECD070922HDFRNGA2",
+    "estatus": "ACTIVO",
+    "id": "36a4bd41-14b6-4556-b95e-61f97fb1a095"
+  },
+  {
+    "nombre": "Valeria",
+    "apellidos": "Gómez Torres",
+    "email": "valeria.gomez@escuela.edu.mx",
+    "password": "Valeria123*",
+    "fechaNacimiento": "2009-01-30",
+    "sexo": "FEMENINO",
+    "matricula": "A003",
+    "curp": "GOTV090130MDFMRLA3",
+    "estatus": "ACTIVO",
+     "id": "e79a2f9b-ee5b-4641-93c5-8a7076afdb1b",
+  },
+  {
+    "nombre": "Luis",
+    "apellidos": "Ramírez Soto",
+    "email": "luis.ramirez@escuela.edu.mx",
+    "password": "Luis123*",
+    "fechaNacimiento": "2008-06-18",
+    "sexo": "MASCULINO",
+    "matricula": "A004",
+    "curp": "RASL080618HDFMTSA4",
+    "estatus": "ACTIVO",
+    "id": "1ef6fc51-6187-4e14-a59d-ade31c25c06b",
+  },
+  {
+    "nombre": "Sofía",
+    "apellidos": "Pérez Díaz",
+    "email": "sofia.perez@escuela.edu.mx",
+    "password": "Sofia123*",
+    "fechaNacimiento": "2007-12-10",
+    "sexo": "FEMENINO",
+    "matricula": "A005",
+    "curp": "PEDS071210MDFRZFA5",
+    "estatus": "ACTIVO",
+    "id": "223d878b-3c19-4d76-88e7-72cd5fa8fde4",
+  }
+
+PROFESOR 
+  {
+    "nombre": "Carlos",
+    "apellidos": "Ramírez López",
+    "email": "carlos.ramirez@escuela.edu.mx",
+    "password": "Carlos123*",
+    "fechaNacimiento": "1985-03-12",
+    "sexo": "MASCULINO",
+    "especialidad": "Matemáticas",
+    "estatus": "ACTIVO",
+    "telefono": "5543219876",
+    "rfc": "RALC850312HDF",
+    "clavePresupuestal": "MAT-001",
+    "id": "d909978d-8da9-4a09-b93f-794690dd4682",
+  },
+  {
+    "nombre": "María",
+    "apellidos": "González Torres",
+    "email": "maria.gonzalez@escuela.edu.mx",
+    "password": "Maria123*",
+    "fechaNacimiento": "1990-07-25",
+    "sexo": "FEMENINO",
+    "especialidad": "Lengua y Literatura",
+    "estatus": "ACTIVO",
+    "telefono": "5532147890",
+    "rfc": "GOTM900725MDF",
+    "clavePresupuestal": "LEN-002",
+    "id": "117b22bc-f2e4-4ba1-85e6-7568aa77cece",
+  },
+  {
+    "nombre": "José",
+    "apellidos": "Martínez Cruz",
+    "email": "jose.martinez@escuela.edu.mx",
+    "password": "Jose123*",
+    "fechaNacimiento": "1982-11-05",
+    "sexo": "MASCULINO",
+    "especialidad": "Educación Física",
+    "estatus": "ACTIVO",
+    "telefono": "5529876543",
+    "rfc": "MACJ821105HDF",
+    "clavePresupuestal": "EDF-003",
+    "id": "a66c87c0-b964-444b-958c-388087c44f1f",
+  },
+  {
+    "nombre": "Laura",
+    "apellidos": "Hernández Pérez",
+    "email": "laura.hernandez@escuela.edu.mx",
+    "password": "Laura123*",
+    "fechaNacimiento": "1993-02-19",
+    "sexo": "FEMENINO",
+    "especialidad": "Ciencias Naturales",
+    "estatus": "ACTIVO",
+    "telefono": "5512345678",
+    "rfc": "HEPL930219MDF",
+    "clavePresupuestal": "CIN-004",
+     "id": "eae1cbf8-3173-402c-a5e7-29813bded934",
+  },
+  {
+    "nombre": "Miguel",
+    "apellidos": "Sánchez Rivera",
+    "email": "miguel.sanchez@escuela.edu.mx",
+    "password": "Miguel123*",
+    "fechaNacimiento": "1988-09-30",
+    "sexo": "MASCULINO",
+    "especialidad": "Historia y Geografía",
+    "estatus": "ACTIVO",
+    "telefono": "5587654321",
+    "rfc": "SARL880930HDF",
+    "clavePresupuestal": "HIG-005",
+      "id": "9976719d-df0e-4ab5-ba69-645183ab32d9",
+  }
+
+GRADO 
+  {
+    "nombre": "Primer Grado",
+    "estatus": "ACTIVO",
+    "id": "6914305b-bed2-4a37-9e21-7e8d59ad10c2",
+  },
+  {
+    "nombre": "Segundo Grado",
+    "estatus": "ACTIVO",
+    "id": "36000fdc-aacb-48eb-b96a-3e63a3cb37e1",
+  },
+  {
+    "nombre": "Tercer Grado",
+    "estatus": "ACTIVO",
+    "id": "f121aff3-2925-4b01-847e-06cd049a0c94",
+  },
+  {
+    "nombre": "Cuarto Grado",
+    "estatus": "ACTIVO",
+     "id": "6d7c69f6-acfc-4302-95d8-01f542eefb45",
+  },
+  {
+    "nombre": "Quinto Grado",
+    "estatus": "ACTIVO",
+      "id": "216b7f0c-33ac-4679-af8e-883ab262f616",
+  }
+
+GRUPO
+  {
+    "nombre": "Grupo A",
+    "estatus": "ACTIVO",
+    "id": "3fde3cc7-dc54-48cd-9109-08a246459ca2",
+  },
+  {
+    "nombre": "Grupo B",
+    "estatus": "ACTIVO",
+     "id": "cb6ebabb-8a87-41c7-8453-0627a724a875",
+  },
+  {
+    "nombre": "Grupo C",
+    "estatus": "ACTIVO",
+    "id": "b5ba7647-94bf-40d7-807d-9dd231e64791",
+  },
+  {
+    "nombre": "Grupo D",
+    "estatus": "ACTIVO"
+  },
+  {
+    "nombre": "Grupo E",
+    "estatus": "ACTIVO"
+  }
+Materias
+
+  [
+  {
+    "id": "068f36f6-5855-44cb-a4fb-05ced7a913e2",
+    "nombre": "Lengua y Literatura",
+    "campoFormativoId": "7c298022-1dad-40d7-8a2c-b2c0139a7604",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "071483be-7f8b-4c8e-bf18-ae2d07a237b8",
+    "nombre": "Arte",
+    "campoFormativoId": "7c298022-1dad-40d7-8a2c-b2c0139a7604",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "3066572c-d6ab-4e4f-8929-65a339c0c997",
+    "nombre": "Historia",
+    "campoFormativoId": "cc4f6a72-298e-4638-a784-a89b82fedb10",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "432baae3-c052-466a-bdf9-ae933714b132",
+    "nombre": "Educación Física",
+    "campoFormativoId": "c14304d3-fee7-44fe-896c-c032954ab0d3",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "5486c6da-66e6-4fe6-9f98-5fb237915cec",
+    "nombre": "Tecnología",
+    "campoFormativoId": "cc4f6a72-298e-4638-a784-a89b82fedb10",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "57721c57-9d21-4f71-8e59-fa7bb2864768",
+    "nombre": "Valores y Ética",
+    "campoFormativoId": "d9e3d4dc-d347-4f10-8558-7cfdcf3c60c8",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "99af141a-763e-49a8-8bfd-f84f4c2e09b1",
+    "nombre": "Música",
+    "campoFormativoId": "075ec158-397e-4f1a-89d5-635ea0d889a0",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "cf5891fb-0808-4d76-be80-28fdb0d16093",
+    "nombre": "Matemáticas",
+    "campoFormativoId": "c14304d3-fee7-44fe-896c-c032954ab0d3",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "e95dd04c-0a4a-4dd3-bf49-35cf3665d118",
+    "nombre": "Geografía",
+    "campoFormativoId": "d9e3d4dc-d347-4f10-8558-7cfdcf3c60c8",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "ee626d74-7c84-4b0c-ab05-3bfedacdb560",
+    "nombre": "Ciencias Naturales",
+    "campoFormativoId": "075ec158-397e-4f1a-89d5-635ea0d889a0",
+    "estatus": "ACTIVO"
+  }
+]
+Trimestres
+
+[
+  {
+    "id": "34e42104-e85d-4f2a-bbda-2a704fc8ca15",
+    "nombre": "Trimestre dos",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "b11583ae-e170-42de-b29c-2f027b881d38",
+    "nombre": "Trimestre uno",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "ccc9bad5-7907-4e15-88bb-ecc686e44f91",
+    "nombre": "Trimestre tres",
+    "estatus": "ACTIVO"
+  }
+]
+Tutores
+
+[
+  {
+    "id": "463cc53e-b584-406d-a9e5-dc86e871f34b",
+    "nombre": "Carlos",
+    "apellidos": "Hernández Torres",
+    "correo": "carlos.hernandez@example.com",
+    "telefono": "555-456-7890",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "73ef6627-2e9c-4833-810f-22d5b2fab068",
+    "nombre": "Juan",
+    "apellidos": "Pérez López",
+    "correo": "juan.perez@example.com",
+    "telefono": "555-123-4567",
+    "estatus": "ACTIVO"
+  },
+  {
+    "id": "d6131428-89af-4ac0-8453-09af34ee59af",
+    "nombre": "María",
+    "apellidos": "González Ramírez",
+    "correo": "maria.gonzalez@example.com",
+    "telefono": "555-987-6543",
+    "estatus": "ACTIVO"
+  }
+]
+
+Ciclos
+[
+  {
+    "id": "2cbcc8b8-f541-49b2-8934-8b07f0425fd8",
+    "fechaInicio": "2021-08-20",
+    "fechaFin": "2022-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:46:23"
+  },
+  {
+    "id": "32195b10-6e46-486c-a373-cc309f4676f7",
+    "fechaInicio": "2022-08-20",
+    "fechaFin": "2023-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:46:34"
+  },
+  {
+    "id": "4154ff70-aa19-4557-bedb-53702097a833",
+    "fechaInicio": "2023-08-20",
+    "fechaFin": "2024-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:46:46"
+  },
+  {
+    "id": "46b487b0-3474-43e3-97f0-100a05410643",
+    "fechaInicio": "2019-08-20",
+    "fechaFin": "2020-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:46:06"
+  },
+  {
+    "id": "8beab594-889f-4d07-b39d-18f5fbafa4cf",
+    "fechaInicio": "2020-08-20",
+    "fechaFin": "2021-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:46:13"
+  },
+  {
+    "id": "9b9cb2ea-6a2b-48ca-9ca9-ff2b91792a70",
+    "fechaInicio": "2018-08-20",
+    "fechaFin": "2019-06-10",
+    "estatus": "ACTIVO",
+    "fechaCreado": "2025-10-29T03:45:54"
+  }
+]
+
+INSCRITO ALUMNOS
+{
+  "idInscripcion": "a74dd5a1-b82f-4d37-9790-ed0dc7882533",
+  "mensaje": "Inscripción creada exitosamente"
+}
+
+
+  cargarMateriasPorGrado(idGrado: string): void {
+    if (!idGrado) {
+      console.error('❌ No hay ID de grado');
+      this.errorMensaje = 'No hay grado asignado';
+      this.cargando = false;
+      return;
+    }
+
+    console.log('📘 Cargando materias para grado:', idGrado);
+    this.servicios.obtenerMateriasPorGrado(idGrado).subscribe({
+      next: (materias) => {
+        console.log('✅ Materias obtenidas:', materias);
+
+        if (!materias || materias.length === 0) {
+          this.errorMensaje = 'No hay materias asignadas para este grado';
+          this.materias = [];
+        } else {
+          this.materias = materias;
+          this.errorMensaje = '';
+        }
+
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar materias:', err);
+
+        if (err.status === 404) {
+          this.errorMensaje = 'No hay materias asignadas para este grado';
+          this.materias = [];
+        } else if (err.status === 0) {
+          this.errorMensaje = 'Error de conexión con el servidor';
+        } else if (err.status === 500) {
+          this.errorMensaje = 'Error interno del servidor';
+        } else {
+          this.errorMensaje = 'Error al cargar las materias';
+        }
+
+        this.cargando = false;
+      }
+    });
+  }
+

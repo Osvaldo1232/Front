@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../shared/alert-service';
+import { LoadingService } from '../../shared/loading-service';
+import { Loading } from '../../shared/loading/loading';
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Loading],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -20,7 +22,7 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  constructor(private loginService: LoginService, private router: Router, private alertService: AlertService) {}
+  constructor(private loginService: LoginService, private router: Router, private alertService: AlertService, private loadingService: LoadingService) {}
 
   login() {
     const credentials = {
@@ -28,6 +30,7 @@ export class Login {
       password: this.password
     };
 
+    this.loadingService.show(); 
     this.loginService.login(credentials).subscribe({
       next: () => {
         const roles = this.loginService.getUserRoles(); 
@@ -41,8 +44,10 @@ export class Login {
         } else {
           this.router.navigate(['/']);
         }
+        this.loadingService.hide(); 
       },
       error: () => {
+        this.loadingService.hide(); 
     this.alertService.show(
   'Usuario o contraseña incorrectos. Verifica tus datos.',
   'danger',

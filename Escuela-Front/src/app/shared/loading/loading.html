@@ -1,0 +1,37 @@
+<div class="loading-overlay" *ngIf="isLoading$ | async">
+  <div class="loading-modal">
+    <div class="spinner-container">
+      <svg class="spinner" viewBox="0 0 120 120">
+        <circle
+          cx="60"
+          cy="60"
+          r="50"
+          fill="none"
+          stroke="#e0e0e0"
+          stroke-width="12"
+          opacity="0.3"
+        />
+        <circle
+          cx="60"
+          cy="60"
+          r="50"
+          fill="none"
+          stroke="url(#gradient)"
+          stroke-width="12"
+          stroke-linecap="round"
+          stroke-dasharray="314"
+          stroke-dashoffset="80"
+          class="spinner-circle"
+        />
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#06b6d4" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    
+    <h3 class="loading-text">LOADING...</h3>
+  </div>
+</div>
