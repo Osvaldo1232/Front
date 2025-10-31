@@ -1,0 +1,13 @@
+<div class="alerta-overlay" *ngIf="mostrar">
+  <div class="alerta-contenedor">
+    <div class="alerta-icono">
+      ⚠️
+    </div>
+    <h3 class="alerta-titulo">Confirmar acción</h3>
+    <p class="alerta-mensaje">{{ mensaje }}</p>
+    <div class="alerta-botones">
+      <button class="btn-confirmar" (click)="confirmar()">Aceptar</button>
+      <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</div>

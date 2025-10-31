@@ -1,0 +1,82 @@
+.alerta-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(45, 4, 4, 0.6); /* Fondo vino semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.alerta-contenedor {
+  background: beige;
+  border-radius: 16px;
+  padding: 30px 25px;
+  width: 450px; /* más ancha */
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  animation: aparecer 0.25s ease-in-out;
+  color: #2d0404; /* texto vino oscuro */
+  border: 2px solid #530909; /* borde vino */
+}
+
+.alerta-icono {
+  font-size: 45px;
+  margin-bottom: 10px;
+  color: #d33; /* rojo advertencia */
+}
+
+.alerta-titulo {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.alerta-mensaje {
+  font-size: 16px;
+  color: #2d0404;
+  margin-bottom: 25px;
+}
+
+.alerta-botones {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-confirmar {
+  background-color: #530909;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.btn-confirmar:hover {
+  background-color: #2d0404;
+}
+
+.btn-cancelar {
+  background-color: #d33;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #a00;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

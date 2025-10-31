@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../shared/alert-service';
 import { LoadingService } from '../../shared/loading-service';
 import { Loading } from '../../shared/loading/loading';
+import { AlertaConfirmacionService } from '../../shared/alerta-confirmacion-service';
 @Component({
   selector: 'app-login',
   imports: [CommonModule, FormsModule, Loading],
@@ -22,9 +23,16 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  constructor(private loginService: LoginService, private router: Router, private alertService: AlertService, private loadingService: LoadingService) {}
+  constructor(private loginService: LoginService, private router: Router, 
+    private alertService: AlertService, private loadingService: LoadingService,
+  private alerta:AlertaConfirmacionService) {}
 
-  login() {
+   async login() {
+    const confirmado = await this.alerta.mostrar('¿Estás seguro de iniciar sesión?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     const credentials = {
       email: this.email,
       password: this.password
