@@ -4,7 +4,7 @@
     <button class="toggle-button" (click)="toggleSidebar()">☰</button>
   </div>
   <div class="header-right">
-    Erika Jaimes Soto
+     {{ usuario.nombre + ' ' + usuario.apellidos }}
   </div>
 </header>
 
@@ -13,8 +13,8 @@
   <nav class="sidebar" [class.active]="sidebarVisible">
     <div class="profile-section">
       <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
-      <p class="profile-name">Erika</p>
-      <p class="profile-role">Alumno</p>
+      <p class="profile-name">{{this.usuario.nombre}}</p>
+      <p class="profile-role">{{rolUsuario}}</p>
     </div>
 
     <ul>
@@ -23,6 +23,7 @@
       <li><a routerLink="info-personal" routerLinkActive="active">Información Personal</a></li>
       <li><a routerLink="historial" routerLinkActive="active">Historial</a></li>
       <li><a routerLink="grados" routerLinkActive="active">Grados</a></li>
+      
       <li><a (click)="logout()">Salir</a></li>
     </ul>
   </nav>

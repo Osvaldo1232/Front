@@ -1,10 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-historial',
   imports: [],
   templateUrl: './historial.html',
-  styleUrl: './historial.scss'
+  styleUrl: './historial.scss',
+ 
 })
 export class Historial {
 

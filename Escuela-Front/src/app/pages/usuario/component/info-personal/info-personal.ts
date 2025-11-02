@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlumnoService, Alumno, InscripcionReciente } from '../../Services/alumno-service';
 import { LoginService } from '../../../../services/login-service';
 import { CommonModule } from '@angular/common';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-info-personal',
@@ -14,39 +15,42 @@ export class InfoPersonalComponent implements OnInit {
   alumno?: Alumno;
   inscripcion?: InscripcionReciente; // ✅ Guardamos la inscripción reciente
   errorMessage = '';
-
+  usuario:any;
   constructor(
     private alumnoService: AlumnoService,
     private loginService: LoginService
   ) {}
 
   ngOnInit(): void {
-    const id = this.loginService.Usuario(); // Obtenemos el UUID del alumno
+    this.usuario= this.loginService.Usuario(); // Obtenemos el UUID del alumno
+    if (this.usuario) {
+      this.cargarUsuario(this.usuario);
+      this.cargarTutor(this.usuario);
+    } else {
+      this.errorMessage = 'No se encontró el ID del alumno.';
+    }
+}
 
-    if (id) {
-      // 🔹 Obtener datos del alumno
-      this.alumnoService.obtenerAlumnoPorId(id).subscribe({
-        next: (data) => {
-          this.alumno = data;
-          console.log('Datos del alumno:', data);
 
-          // 🔹 Obtener inscripción reciente
-          this.alumnoService.obtenerInscripcionReciente(id).subscribe({
+cargarTutor(id:any){
+        this.alumnoService.obtenerInscripcionReciente(id).subscribe({
             next: (inscripcionData) => {
               this.inscripcion = inscripcionData;
-              console.log('Inscripción reciente:', inscripcionData);
             },
             error: () => {
               this.errorMessage = 'No se pudo cargar la inscripción reciente.';
             }
           });
-        },
+}
+
+cargarUsuario(usu:any){
+   this.alumnoService.obtenerAlumnoPorId(usu).subscribe({
+        next: (data) => {
+          this.alumno = data;
         error: () => {
           this.errorMessage = 'No se pudieron cargar los datos del alumno.';
         }
-      });
-    } else {
-      this.errorMessage = 'No se encontró el ID del alumno.';
-    }
-  }
+      }});
+}
+
 }

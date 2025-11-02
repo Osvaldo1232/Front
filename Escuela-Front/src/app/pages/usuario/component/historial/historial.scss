@@ -1,0 +1,83 @@
+.reporte-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 1000px;
+  margin: 30px auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Encabezado con selector y botón */
+.reporte-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ciclo-selector {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  font-size: 0.95rem;
+}
+
+.descargar-btn {
+  background-color: #eee;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Título del trimestre */
+.trimestre-titulo {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+/* Tabla de calificaciones */
+.tabla-calificaciones {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-calificaciones th {
+  background-color: #f0e6d6;
+  text-align: left;
+  padding: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tabla-calificaciones td {
+  padding: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.tabla-calificaciones tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla-calificaciones tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.tabla-calificaciones td:last-child {
+  text-align: right;
+}
+
+.promedio-final {
+  background-color: #bdb19f;
+  text-align: center;
+}
