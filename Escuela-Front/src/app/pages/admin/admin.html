@@ -4,21 +4,29 @@
     <button class="toggle-button" (click)="toggleSidebar()">☰</button>
   </div>
   <div class="header-right">
-    Erika Jaimes Soto
+    <ng-container *ngIf="usuario; else cargando">
+      {{ usuario.nombre + ' ' + usuario.apellidos }}
+    </ng-container>
+    <ng-template #cargando>
+      Cargando...
+    </ng-template>
   </div>
 </header>
-
 
 <div class="layout">
   <nav class="sidebar" *ngIf="sidebarVisible">
     
     <div class="profile-section">
-    <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
-    <p class="profile-name">Erika</p>
-    <p class="profile-role">Alumno</p>
-  </div>
-
- 
+      <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
+      <ng-container *ngIf="usuario">
+        <p class="profile-name">{{ usuario.nombre }}</p>
+        <p class="profile-role">{{ rolUsuario }}</p>
+      </ng-container>
+      <ng-container *ngIf="!usuario">
+        <p class="profile-name">Cargando...</p>
+        <p class="profile-role">---</p>
+      </ng-container>
+    </div>
 
     <ul>
       <li><a routerLink="inicio" routerLinkActive="active">Inicio</a></li>
@@ -28,8 +36,7 @@
       <li><a routerLink="grados" routerLinkActive="active">Grados</a></li>
       <li><a routerLink="grupos" routerLinkActive="active">Grupos</a></li>
       <li><a routerLink="campoformativo" routerLinkActive="active">Campos Formativos</a></li>
-
-
+      <li><a routerLink="Tutores" routerLinkActive="active">Tutores</a></li>
       <li><a (click)="logout()">Salir</a></li>
     </ul>
   </nav>

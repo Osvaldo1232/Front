@@ -1,1 +1,66 @@
-<p>grupos works!</p>
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">GRUPO</h1>
+  </header>
+
+  <!-- Botón Nuevo -->
+  <div class="button-section">
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+  </div>
+
+  <!-- Mensaje cuando no hay grupos -->
+  <div *ngIf="registros.length === 0" class="no-data">
+    <p>No hay grupos registrados.</p>
+  </div>
+
+  <!-- Grid de tarjetas -->
+  <div class="cards-grid" *ngIf="registros.length > 0">
+    <div class="card" *ngFor="let grupo of registros">
+      <h2 class="card__title">{{ grupo.nombre }}</h2>
+      
+      <div class="card__footer">
+        <div class="card__status">
+          <span class="status-label">Estatus: {{ grupo.estatus === 'ACTIVO' ? 'Inactivo' : 'Activo' }}</span>
+          <label class="toggle">
+            <input 
+              type="checkbox" 
+              [checked]="grupo.estatus === 'ACTIVO'"
+              (change)="cambiarEstatus(grupo)">
+            <span class="toggle__slider"></span>
+          </label>
+          <span class="status-label">{{ grupo.estatus === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</span>
+        </div>
+        <button class="btn btn--edit" (click)="editar(grupo)">EDITAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination" *ngIf="totalPaginas > 1">
+    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+    <button
+      *ngFor="let p of totalPaginasArray"
+      class="pagination__btn"
+      [class.pagination__btn--active]="p === paginaActual"
+      (click)="cambiarPagina(p)"
+    >
+      {{ p }}
+    </button>
+    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+  </div>
+</div>
+
+<!-- Modal Nuevo Grupo -->
+<app-nuevo-grupo 
+  *ngIf="nuevom" 
+  [nuevo]="nuevom" 
+  (cerrar)="cerrarModal($event)">
+</app-nuevo-grupo>
+
+<!-- Modal Editar Grupo -->
+<app-editar-grupo 
+  *ngIf="editarm"
+  [editar]="editarm"
+  [grupo]="grupoSeleccionado"
+  (cerrar)="cerrarModalEditar($event)">
+</app-editar-grupo>

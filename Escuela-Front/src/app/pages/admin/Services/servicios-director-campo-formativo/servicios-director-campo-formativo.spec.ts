@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ServiciosDirectorCampoFormativo } from './servicios-director-campo-formativo';
+import { ServiciosCampoFormativo } from './servicios-director-campo-formativo';
 
 describe('ServiciosDirectorCampoFormativo', () => {
-  let service: ServiciosDirectorCampoFormativo;
+  let service: ServiciosCampoFormativo;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ServiciosDirectorCampoFormativo);
+    service = TestBed.inject(ServiciosCampoFormativo);
   });
 
   it('should be created', () => {

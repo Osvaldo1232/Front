@@ -10,7 +10,7 @@ import { AlumnosComponent } from './pages/admin/Components/alumnos/alumnos';
 import { Grado } from './pages/admin/Components/grado/grado';
 import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones'; 
 import { Historial } from './pages/usuario/component/historial/historial';
-import { Grupos } from './pages/admin/Components/grupos/grupos';
+import { GruposComponent } from './pages/admin/Components/grupos/grupos';
 import { NuevoAlumno } from './pages/admin/Components/alumnos/nuevo_alumno/nuevo-alumno/nuevo-alumno';
 import { PerfilEstudiante } from './pages/admin/Components/alumnos/perfil-estudiante/perfil-estudiante/perfil-estudiante';
 import { NuevoDocente } from './pages/admin/Components/docentes/nuevo-docente/nuevo-docente/nuevo-docente';
@@ -20,6 +20,7 @@ import { Materias } from './pages/profesor/component/materias/materias';
 import { HistorialAcademico } from './pages/profesor/component/historial-academico/historial-academico';
 import { InfoPersonalComponent } from './pages/usuario/component/info-personal/info-personal';
 import { CampoFormativo } from "./pages/admin/Components/campo-formativo/campo-formativo";
+import { TutoresComponent } from './pages/admin/Components/tutores/tutores/tutores';
 
 
 export const routes: Routes = [
@@ -33,8 +34,10 @@ export const routes: Routes = [
             { path: 'nuevo-alumno', component: NuevoAlumno },
             { path: 'perfil-estudiante', component: PerfilEstudiante },
             { path: 'grados', component: Grado },
-            { path: 'grupos', component: Grupos },
+            { path: 'grupos', component: GruposComponent },
             { path: 'campoformativo', component: CampoFormativo },
+            { path: 'Tutores', component: TutoresComponent },
+
 
         ]
     },

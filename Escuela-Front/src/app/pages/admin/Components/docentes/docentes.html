@@ -21,7 +21,7 @@
     <p>No se encontraron docentes con el término "{{ terminoBusqueda }}"</p>
   </div>
 
-  <div class="cards-grid">
+  <!-- <div class="cards-grid">
     <div class="card" *ngFor="let docente of usuariosPaginados">
       <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidos }}</h2>
       <div class="card__divider"></div>
@@ -35,9 +35,12 @@
       </div>
       <div class="card__footer">
         <div class="card__status">
-          <span class="status-label">Estatus: {{ docente.estatus }}</span>
+          <span class="status-label">Inactivo</span>
           <label class="toggle">
-            <input type="checkbox" [checked]="docente.estatus === 'ACTIVO'">
+            <input 
+              type="checkbox" 
+              [checked]="docente.estatus === 'ACTIVO'"
+              (change)="cambiarEstatus(docente)">
             <span class="toggle__slider"></span>
           </label>
           <span class="status-label">Activo</span>
@@ -45,7 +48,7 @@
         <button class="btn btn--edit" (click)="editar(docente)">EDITAR</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="pagination" *ngIf="totalPaginas > 1">
     <button class="pagination__btn pagination__btn--prev" (click)="paginaAnterior()" [disabled]="paginaActual === 1">‹</button>
@@ -68,7 +71,6 @@
   (cerrar)="cerrarmodal($event)">
 </app-nuevo-docente>
 
-<!-- ⬇️ AGREGAR ESTE MODAL -->
 <!-- Modal Editar Docente -->
 <app-editar-docente 
   [editar]="editarm"

@@ -11,7 +11,8 @@ import { selectAllMaterias } from '../../../../store/selectors/materia.selectors
 import { Maestros } from '../../../../models/maestros.model';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import { NuevoDocente } from './nuevo-docente/nuevo-docente/nuevo-docente';
-import { EditarDocente } from './editar-docente/editar-docente/editar-docente'; // ⬅️ IMPORTAR
+import { EditarDocente } from './editar-docente/editar-docente/editar-docente';
+import { AlertService } from '../../../../shared/alert-service';
 
 @Component({
   selector: 'app-docentes',
@@ -23,7 +24,7 @@ import { EditarDocente } from './editar-docente/editar-docente/editar-docente'; 
     ButtonModule,
     TableModule,
     NuevoDocente,
-    EditarDocente // ⬅️ AGREGAR
+    EditarDocente
   ],
   templateUrl: './docentes.html',
   styleUrls: ['./docentes.scss']
@@ -34,14 +35,17 @@ export class DocentesComponent implements OnInit {
 
   terminoBusqueda: string = '';
   nuevom: boolean = false;
-  editarm: boolean = false; // ⬅️ AGREGAR
-  docenteSeleccionado: Maestros | null = null; // ⬅️ AGREGAR
+  editarm: boolean = false;
+  docenteSeleccionado: Maestros | null = null;
   registros: Maestros[] = [];
 
   registrosPorPagina = 9;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirector) { }
+  constructor(
+    private Servicios: ServiciosDirector,
+    private alertService: AlertService
+  ) { }
 
   get usuariosFiltrados() {
     if (!this.terminoBusqueda.trim()) return this.registros;
@@ -93,7 +97,6 @@ export class DocentesComponent implements OnInit {
     this.cargarDocentes();
   }
 
-  // ⬇️ MODIFICAR ESTE MÉTODO
   editar(docente: Maestros) {
     this.docenteSeleccionado = docente;
     this.editarm = true;
@@ -111,7 +114,6 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  // ⬇️ AGREGAR ESTE MÉTODO
   cerrarModalEditar(guardado: boolean) {
     this.editarm = false;
     this.docenteSeleccionado = null;
@@ -120,6 +122,37 @@ export class DocentesComponent implements OnInit {
       this.cargarDocentes();
     }
   }
+
+  /* cambiarEstatus(docente: Maestros) {
+    // Cambiar el estatus localmente primero (UI optimista)
+    const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+    const estatusAnterior = docente.estatus;
+    docente.estatus = nuevoEstatus;
+
+    // Llamar al backend
+    if (docente.id) {
+      this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
+        next: (mensaje) => {
+          console.log(mensaje);
+          this.alertService.show(
+            `Estatus cambiado a ${nuevoEstatus}`,
+            'success',
+            'Éxito'
+          );
+        },
+        error: (err) => {
+          console.error('Error al cambiar estatus:', err);
+          // Revertir el cambio si falla
+          docente.estatus = estatusAnterior;
+          this.alertService.show(
+            'Error al cambiar el estatus',
+            'danger',
+            'Error'
+          );
+        }
+      });
+    }
+  } */
 
   cargarDocentes() {
     this.Servicios.ObtenerDocentes().subscribe({

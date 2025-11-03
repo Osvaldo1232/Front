@@ -1,165 +1,196 @@
-@use "sass:color";
-
-// Variables de color
-$color-vino: #530909; // Color Guardar/Encabezado
-$color-gris-secundario: #6c757d; // Gris para Limpiar y círculos de acción
-$color-gris-texto: #495057; 
-$color-estandar-azul: #007bff; // Azul estándar para hover/outline (según PPT)
-
-// --- AJUSTE DE MÁRGENES Y TIPOGRAFÍA ---
-
-.titulo-h2 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 700;
-    color: $color-gris-texto;
-    // Ajuste de margen para que se vea pegado al subtítulo
-    margin-top: 0 !important; 
-    margin-bottom: 0.1rem !important; 
-} 
-
-.titulo-h5 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 400;
-    color: $color-gris-secundario;
-    // Ajuste de margen con el título
-    margin-top: 0.1rem !important; 
+.container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.required-label {
-    font-weight: 500;
-    color: $color-gris-texto;
+.header {
+  margin-bottom: 2rem;
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #2c3e50;
+  }
 }
 
-// --- ESTILOS DE BOTONES DE FORMULARIO ---
+.button-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
 
-.btn-action {
-    font-weight: 600;
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+
+  &--new {
+    background: #D4AF37;
+    color: white;
+
+    &:hover {
+      background: #C19B2E;
+      transform: translateY(-2px);
+    }
+  }
+
+  &--edit {
+    background: #5D1F3C;
+    color: white;
     padding: 0.5rem 1.5rem;
-    border-radius: 0.5rem; 
-}
+    font-size: 0.85rem;
 
-.btn-guardar {
-    background-color: $color-vino;
-    border-color: $color-vino;
-    color: white;
     &:hover {
-        background-color: color.adjust($color-vino, $lightness: -5%);
-        border-color: color.adjust($color-vino, $lightness: -5%);
+      background: #4A1830;
     }
+  }
 }
 
-.btn-limpiar {
-    background-color: $color-gris-secundario;
-    border-color: $color-gris-secundario;
-    color: white;
-    &:hover {
-        background-color: color.adjust($color-gris-secundario, $lightness: -5%);
-        border-color: color.adjust($color-gris-secundario, $lightness: -5%);
-    }
+.no-data {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
 }
 
-// --- ESTILOS DE LA TABLA Y FILTROS ---
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 
-.table-grid-card {
-    border-radius: 1rem; 
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.grid-table {
-    margin-top: 0;
-    
-    // Encabezado principal (color vino)
-    .grid-header {
-        background-color: $color-vino; 
-        color: white;
-        
-        tr:first-child th {
-            font-weight: 700;
-            text-transform: uppercase;
-            vertical-align: middle;
-            // Se restaura el borde inferior para separar el encabezado del filtro
-            border-bottom: 2px solid $color-vino;
-        }
-    }
+.card {
+  background: #F5F5F5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 150px;
 
-    // Fila de filtros
-    .filter-row {
-        // Se corrige el color a blanco
-        background-color: white; 
-        
-        td {
-            padding: 0.5rem 0.75rem; 
-            border-top: none; 
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    text-align: center;
+  }
 
-            .form-control-sm {
-                padding: 0.35rem 0.5rem;
-                height: calc(1.5em + 0.7rem + 2px); 
-                font-size: 0.85rem;
-                color: $color-gris-texto;
-            }
-        }
-    }
-    
-    // Cuerpo de la tabla
-    tbody {
-        td {
-            // Se sobrescribe la variable de color de texto de Bootstrap
-            color: $color-gris-texto; 
-        }
-    }
-}
-
-
-// --- ESTILOS DE ACCIÓN POR FILA (CÍRCULOS ESTANDARIZADOS) ---
-
-.btn-icon-circular {
-    background-color: $color-gris-secundario; 
-    color: white; 
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    padding: 0;
-    display: inline-flex;
-    justify-content: center;
+  &__footer {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    border: 1px solid transparent; 
-    transition: all 0.2s ease-in-out;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
 
-    svg {
-        width: 15px;
-        height: 15px;
-    }
-
-    &:hover, &:focus {
-        border-color: $color-estandar-azul;
-        box-shadow: 0 0 0 0.2rem rgba($color-estandar-azul, 0.4);
-        background-color: color.adjust($color-gris-secundario, $lightness: -10%); 
-    }
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
 
-// --- ESTILOS DE PAGINACIÓN ---
+.status-label {
+  font-size: 0.85rem;
+  color: #2c3e50;
+}
 
-.pagination-standard {
-    .page-item {
-        &.active .page-link {
-            background-color: $color-vino; 
-            border-color: $color-vino;
-            color: white;
-            font-weight: 600;
-        }
-        .page-link {
-            color: $color-gris-secundario; 
-            border-color: #dee2e6;
-            transition: all 0.2s;
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
 
-            &:hover {
-                background-color: #e9ecef;
-            }
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 
-        }
-       // :ng.table > :not(caption) > * > * {
-    //padding: .5rem .5rem;
-    //border-bottom-width: var(--bs-border-width);
-    //box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
-//}
+    &:checked + .toggle__slider {
+      background-color: #5D1F3C;
     }
+
+    &:checked + .toggle__slider:before {
+      transform: translateX(26px);
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+
+  &__btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background: #f8f9fa;
+      border-color: #D4AF37;
+    }
+
+    &--active {
+      background: #5D1F3C;
+      color: white;
+      border-color: #5D1F3C;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
 }
