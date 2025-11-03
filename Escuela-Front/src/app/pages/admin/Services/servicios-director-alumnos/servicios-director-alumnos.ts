@@ -11,6 +11,7 @@ export class ServiciosDirectorAlumnos {
   private apiUrlAlumnosListar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/todosestudiantes';
   private apiUrlAlumnosCrear = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/estudiante';
   private apiUrlAlumnosEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/alumno';
+  private apiUrlAlumnosId= 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/usuario/';
 
 
   constructor(private http: HttpClient) {}
@@ -24,6 +25,9 @@ export class ServiciosDirectorAlumnos {
 
   ObtenerAlumnos(): Observable<Alumnos[]> {
     return this.http.get<Alumnos[]>(this.apiUrlAlumnosListar);
+  }
+  obtenerAlumnoPorId(id: any): Observable<Alumnos> {
+    return this.http.get<Alumnos>(`${this.apiUrlAlumnosId}${id}`);
   }
 
   ActualizarAlumno(id: string, alumno: Alumnos): Observable<any> {

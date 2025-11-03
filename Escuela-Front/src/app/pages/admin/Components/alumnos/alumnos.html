@@ -6,13 +6,8 @@
 
   <!-- Sección de búsqueda y botones -->
   <div class="search-section">
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      (input)="onSearchChange()"
-      placeholder="Buscar por nombre, apellidos o matrícula"
-      class="search-input"
-    />
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()"
+      placeholder="Buscar por nombre, apellidos o matrícula" class="search-input" />
     <button class="btn btn--secondary" (click)="buscar()">Buscar</button>
     <button class="btn btn--secondary" (click)="limpiar()">Limpiar</button>
     <button class="btn btn--primary" (click)="nuevo()">+ Nuevo</button>
@@ -48,8 +43,8 @@
           <td>{{ alumno.apellidos }}</td>
           <td>{{ alumno.curp }}</td>
           <td>
-            <span class="badge" [class.badge-activo]="alumno.estatus === 'ACTIVO'" 
-                                 [class.badge-inactivo]="alumno.estatus === 'INACTIVO'">
+            <span class="badge" [class.badge-activo]="alumno.estatus === 'ACTIVO'"
+              [class.badge-inactivo]="alumno.estatus === 'INACTIVO'">
               {{ alumno.estatus }}
             </span>
           </td>
@@ -63,7 +58,7 @@
             </button>
 
             <!-- Botón Ver perfil -->
-            <button class="icon-btn icon-btn--view" [routerLink]="['/admin/perfil-estudiante', alumno.id]" title="Ver perfil">
+            <button class="icon-btn icon-btn--view" (click)="irPerfil(alumno)" title="Ver perfil">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -77,29 +72,27 @@
 
   <!-- Paginación -->
   <div class="pagination" *ngIf="totalPaginas > 1">
-    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
-    <button
-      *ngFor="let p of totalPaginasArray"
-      class="pagination__btn"
-      [class.pagination__btn--active]="p === paginaActual"
-      (click)="cambiarPagina(p)"
-    >
+    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)"
+      [disabled]="paginaActual === 1">‹</button>
+    <button *ngFor="let p of totalPaginasArray" class="pagination__btn"
+      [class.pagination__btn--active]="p === paginaActual" (click)="cambiarPagina(p)">
       {{ p }}
     </button>
-    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)"
+      [disabled]="paginaActual === totalPaginas">›</button>
   </div>
 </div>
 
 <!-- Modal Nuevo Alumno -->
-<app-nuevo-alumno 
-  [nuevo]="nuevom"
-  (cerrar)="cerrarModal($event)">
+<app-nuevo-alumno [nuevo]="nuevom" (cerrar)="cerrarModal($event)">
 </app-nuevo-alumno>
 
 <!-- Modal Editar Alumno -->
-<app-editar-alumno
-  [editar]="editarm"
-  [alumno]="alumnoSeleccionado"
-  (cerrar)="cerrarModalEditar($event)">
+<app-editar-alumno [editar]="editarm" [alumno]="alumnoSeleccionado" (cerrar)="cerrarModalEditar($event)">
 </app-editar-alumno>
-  
+
+<app-perfil-estudiante 
+  [verEstudiante]="verEstudiante" 
+  [idAlumno]="idAlumnoSeleccionado"
+  (cerrar)="cerrarModalPerfil($event)"> 
+</app-perfil-estudiante>

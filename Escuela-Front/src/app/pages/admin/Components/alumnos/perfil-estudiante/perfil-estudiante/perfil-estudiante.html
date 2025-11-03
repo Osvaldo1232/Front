@@ -1,120 +1,75 @@
-<div class="container">
-    <header class="header">
-        <h1 class="header__title">PERFIL ESTUDIANTE</h1>
-        <p class="header__subtitle">Perfil Estudiante</p>
-    </header>
+<!-- Fondo modal -->
+<div class="modal-backdrop" *ngIf="verEstudiante" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
 
-    <!-- Datos Generales -->
-    <section class="profile-section">
-        <h2 class="section-title">DATOS GENERALES</h2>
-        
-        <div class="profile-content">
-            <div class="profile-avatar">
-                <div class="avatar-circle">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="profile-info">
-                <div class="info-columns">
-                    <div class="info-column">
-                        <p class="info-item">
-                            <span class="info-label">NOMBRE:</span> {{ alumno.nombre }} {{ alumno.apellidos }}
-                        </p>
-                        <p class="info-item">
-                            <span class="info-label">DOCENTE ACTUAL:</span> {{ alumno.tutor }}
-                        </p>
-                        <p class="info-item">
-                            <span class="info-label">MATRICULA:</span> {{ alumno.matricula }}
-                        </p>
-                        <p class="info-item">
-                            <span class="info-label">GRUPO ACTUAL:</span> A <!-- dummy -->
-                        </p>
-                    </div>
-
-                    <div class="info-column">
-                        <p class="info-item">
-                            <span class="info-label">CURP:</span> PESM100312HGARRNA9 <!-- dummy -->
-                        </p>
-                        <p class="info-item">
-                            <span class="info-label">FECHA DE NACIMIENTO:</span> 12/03/2010 <!-- dummy -->
-                        </p>
-                        <p class="info-item">
-                            <span class="info-label">GRADO ACTUAL:</span> 1 <!-- dummy -->
-                        </p>
-                    </div>
-                </div>
-
-                <div class="profile-actions">
-                    <div class="status-toggle">
-                        <span class="status-label">Estatus: Inactivo</span>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle__slider"></span>
-                        </label>
-                        <span class="status-label">Activo</span>
-                    </div>
-                    <button class="btn btn--edit">EDITAR</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Resto de la pantalla se queda con datos dummy -->
-    <div class="two-columns">
-        <section class="info-section">
-            <h2 class="section-title-left">DATOS DE TUTOR</h2>
-            <div class="info-content">
-                <p class="info-item">
-                    <span class="info-label">NOMBRE:</span> MARIO SALAZAR PEREZ SALGADO
-                </p>
-                <p class="info-item">
-                    <span class="info-label">CORREO:</span> maria102@gmail.com
-                </p>
-                <p class="info-item">
-                    <span class="info-label">PARENTESCO:</span> PADRE
-                </p>
-                <h3 class="subsection-title">CONTACTO DE EMERGENCIA</h3>
-                <p class="info-item info-item--phone">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                    7321-238-907
-                </p>
-            </div>
-        </section>
-
-        <section class="info-section">
-            <h2 class="section-title-left">CALIFICACION ACTUAL</h2>
-            <div class="table-wrapper">
-                <table class="grades-table">
-                    <thead>
-                        <tr>
-                            <th>GRADO</th>
-                            <th>GRUPO</th>
-                            <th>CICLO</th>
-                            <th>TRIMESTRE</th>
-                            <th>PROMEDIO GENERAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>A</td>
-                            <td>2025-2026</td>
-                            <td>1er.</td>
-                            <td>9.6</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="section-footer">
-                <button class="btn btn--details">DETALLE</button>
-            </div>
-        </section>
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <h5 class="modal-title">Perfil del Estudiante</h5>
+      <button type="button" class="btn-close" (click)="cerrarModal()">×</button>
     </div>
-</div>
+
+    <!-- Cuerpo del modal con scroll -->
+    <div class="modal-body">
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Matricula:</label>
+            <p class="info-text">{{ alumno?.matricula }}</p>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre:</label>
+            <p class="info-text">{{ alumno?.nombre }}</p>
+          </div>
+          </div>
+
+          <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Paterno:</label>
+          <p class="info-text">{{ alumno?.apellidos }}</p>
+          </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Materno:</label>
+          <p class="info-text">{{ alumno?.apellidos }}</p>
+          </div>
+          </div>
+
+          <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sexo:</label>
+          <p class="info-text">{{ alumno?.sexo }}</p>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CURP:</label>
+          <p class="info-text">{{ alumno?.curp }}</p>
+          </div>
+          </div>
+
+          <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Fecha de Nacimiento:</label>
+          <p class="info-text">{{ alumno?.fechaNacimiento }}</p>
+          </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Correo:</label>
+          <p class="info-text">{{ alumno?.email }}</p>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Estatus:</label>
+          <span class="badge" 
+                  [class.badge-activo]="alumno?.estatus === 'ACTIVO'"
+                  [class.badge-inactivo]="alumno?.estatus === 'INACTIVO'">
+              {{ alumno?.estatus }}
+            </span>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-limpiar" (click)="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+  </div>

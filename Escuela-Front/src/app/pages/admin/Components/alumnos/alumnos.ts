@@ -6,6 +6,8 @@ import { Alumnos } from '../../../../models/alumnos.model';
 import { ServiciosDirectorAlumnos } from '../../Services/servicios-director-alumnos/servicios-director-alumnos';
 import { NuevoAlumno } from './nuevo_alumno/nuevo-alumno/nuevo-alumno';
 import { EditarAlumno } from './editar-alumno/editar-alumno/editar-alumno'; // ⬅️ IMPORTA EL COMPONENTE EDITAR
+import { Router } from '@angular/router';
+import { PerfilEstudiante } from "./perfil-estudiante/perfil-estudiante/perfil-estudiante";
 
 @Component({
   selector: 'app-alumnos',
@@ -15,26 +17,32 @@ import { EditarAlumno } from './editar-alumno/editar-alumno/editar-alumno'; // �
     FormsModule,
     RouterModule,
     NuevoAlumno,
-    EditarAlumno, // ⬅️ AGREGA EDITAR A LOS IMPORTS
-  ],
+    EditarAlumno,
+    PerfilEstudiante
+],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.scss']
 })
-export class AlumnosComponent implements OnInit { 
-  
+export class AlumnosComponent implements OnInit {
+
   searchTerm: string = '';
-  registros: Alumnos[] = []; 
+  registros: Alumnos[] = [];
   nuevom: boolean = false;
-  
+
   // Modal editar
   editarm: boolean = false;
   alumnoSeleccionado: Alumnos | null = null;
+
+  verEstudiante: boolean = false;
+  idAlumnoSeleccionado: string | null = null;
+
+  
 
   // Paginación
   registrosPorPagina = 10;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorAlumnos) { }
+  constructor(private Servicios: ServiciosDirectorAlumnos, private router: Router) { }
 
   ngOnInit() {
     this.cargarAlumnos();
@@ -102,6 +110,19 @@ export class AlumnosComponent implements OnInit {
     this.alumnoSeleccionado = alumno;
     this.editarm = true; // abre modal
   }
+
+  irPerfil(alumno: Alumnos): void{
+  if (alumno.id) {
+      this.idAlumnoSeleccionado = alumno.id;
+      this.verEstudiante = true;
+}
+}
+
+  cerrarModalPerfil(event: boolean): void {
+    this.verEstudiante = event;
+    this.idAlumnoSeleccionado = null;
+  }
+
 
   cerrarModalEditar(event: boolean) {
     this.editarm = false; // cierra modal
