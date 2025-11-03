@@ -1,7 +1,8 @@
 export interface Profesor  {
   id?: string; 
   nombre: string;
-  apellidos: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
   email: string;
   fechaNacimiento: string; 
   sexo: string;
@@ -16,7 +17,8 @@ export interface Profesor  {
 export interface ProfesorUno {
   id: string;
   nombre: string;
-  apellidos: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
   email: string;
   password: string;
   fechaNacimiento: string;

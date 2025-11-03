@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { InscripcionDTO, Materia } from '../../../../models/Materia';
+import { InscripcionDTO } from '../../../../models/Materia';
 import { AsignacionDocente, MateriasCamposFormativos } from '../../../../models/AsignaciónMateria';
-import { MateriaAsignada } from '../../../../models/AsignaciónMateria';
 import { ServiciosProfesor } from '../../services/servicios-profesor';
 import { LoginService } from '../../../../services/login-service';
+import { Loading } from '../../../../shared/loading/loading';
+import { LoadingService } from '../../../../shared/loading-service';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AlertService } from '../../../../shared/alert-service';
 
 @Component({
   selector: 'app-materias',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule, Loading],
   templateUrl: './materias.html',
   styleUrl: './materias.scss'
 })
@@ -19,59 +23,53 @@ export class Materias implements OnInit {
   cargando: boolean = false;
   asignacionDocente: AsignacionDocente | null = null;
   errorMensaje: string = '';
-inscripciones:InscripcionDTO []=[];
-  usuariologuado:any;
-  constructor(
-    private router: Router,
-    private servicios: ServiciosProfesor,
-    private LoginS:LoginService
-  ) {}
+  inscripciones: InscripcionDTO[] = [];
+  usuariologuado: any;
+
+  constructor(private router: Router, private servicios: ServiciosProfesor, private LoginS: LoginService,
+    private loadingService: LoadingService, private AlertService: AlertService) { }
 
   ngOnInit(): void {
-    this.usuariologuado=this.LoginS.Usuario();
-    if(this.usuariologuado){
-    this.cargarAsignacionYMaterias();
+    this.usuariologuado = this.LoginS.Usuario();
+    if (this.usuariologuado) {
+      this.cargarAsignacionYMaterias();
     }
   }
 
   cargarAsignacionYMaterias(): void {
+    this.loadingService.show();
     this.cargando = true;
-    this.servicios.obtenerAsignacionDocente( this.usuariologuado).subscribe({
+    this.servicios.obtenerAsignacionDocente(this.usuariologuado).subscribe({
       next: (asignacion) => {
-        if(asignacion.idGrado){
+        if (asignacion.idGrado) {
           this.cargarMateriasPorGrado(asignacion.idGrado);
           this.AlumnosIns(asignacion.idGrado, asignacion.idGrupo, asignacion.idCiclo)
-        }
+        } 
       },
       error: (err) => {
-
-        if (err.status === 404) {
-          this.errorMensaje = 'No tiene asignación de grado actualmente';
-          this.materias = [];
-        } else if (err.status === 0) {
-          this.errorMensaje = 'Error de conexión con el servidor';
-        } else {
-          this.errorMensaje = 'Error al cargar la asignación';
-        }
-
-        this.cargando = false;
+        this.loadingService.hide();
+        this.AlertService.show(
+          'Actualmente, el profesor no tiene asignación registrada.',
+          'danger',
+          'Error'
+        );
       }
     });
   }
 
 
-AlumnosIns(grado:any, grupo:any, ciclo:any){
-  this.servicios.filtrarInscripciones(grado, grupo, ciclo).subscribe({
-  next: (inscripciones) => {
-    console.log('✅ Inscripciones obtenidas:', inscripciones);
-    this.inscripciones = inscripciones;
-  },
-  error: (err) => {
-    console.error('❌ Error al obtener inscripciones:', err);
-  }
-});
+  AlumnosIns(grado: any, grupo: any, ciclo: any) {
+    this.servicios.filtrarInscripciones(grado, grupo, ciclo).subscribe({
+      next: (inscripciones) => {
+        console.log('Inscripciones obtenidas:', inscripciones);
+        this.inscripciones = inscripciones;
+      },
+      error: (err) => {
+        console.error('Error al obtener inscripciones:', err);
+      }
+    });
 
-}
+  }
 
   cargarMateriasPorGrado(idGrado: string): void {
     if (!idGrado) {
@@ -88,38 +86,22 @@ AlumnosIns(grado:any, grupo:any, ciclo:any){
           this.materias = [];
         } else {
           this.materias = materias;
-          this.errorMensaje = '';
         }
-
+        this.loadingService.hide();
         this.cargando = false;
       },
-      error: (err) => {
-
-        if (err.status === 404) {
-          this.errorMensaje = 'No hay materias asignadas para este grado';
-          this.materias = [];
-        } else if (err.status === 0) {
-          this.errorMensaje = 'Error de conexión con el servidor';
-        } else if (err.status === 500) {
-          this.errorMensaje = 'Error interno del servidor';
-        } else {
-          this.errorMensaje = 'Error al cargar las materias';
-        }
-
-        this.cargando = false;
-      }
     });
   }
 
-  abrirCalificaciones(materia: MateriasCamposFormativos): void {
-
+  abrirCalificaciones(materia: any): void {
     if (!this.asignacionDocente) {
       return;
     }
 
-    this.router.navigate(['/calificaciones', materia.idMateria], {
+    this.router.navigate(['/pages/usuario/component/calificaciones/calificaciones', materia.idMateria], {
       state: {
         materia,
+        
         grado: this.asignacionDocente.grado,
         grupo: this.asignacionDocente.grupo,
         ciclo: this.asignacionDocente.ciclo,
@@ -129,7 +111,6 @@ AlumnosIns(grado:any, grupo:any, ciclo:any){
   }
 
   recargarMaterias(): void {
-    this.errorMensaje = '';
     this.cargarAsignacionYMaterias();
   }
 }

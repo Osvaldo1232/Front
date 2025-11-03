@@ -11,7 +11,7 @@
             </div>
             <h4 class="nombre-usuario">
                 {{ usuario.nombre | uppercase}}<br>
-                {{ usuario.apellidos | uppercase }}
+                {{ usuario.apellidoPaterno | uppercase }}  {{ usuario.apellidoMaterno | uppercase }}
             </h4>
         </div>
         <div class="seccion-info">
@@ -80,7 +80,7 @@
                     </svg>
                     <div>
                         <label>GRADO / GRUPO ASIGNADO</label>
-                        <p>3 B</p>
+                        <p>{{ usuario.grado }} {{ usuario.grupo}}</p>
                     </div>
                 </div>
 

@@ -13,7 +13,7 @@ import { LoadingService } from '../../../../shared/loading-service';
 @Component({
   selector: 'app-datos-personales',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionPersonales, Loading  ],
+  imports: [CommonModule, FormsModule, RouterModule, ModalEdicionPersonales, Loading],
   templateUrl: './datos-personales.html',
   styleUrl: './datos-personales.scss'
 })
@@ -22,7 +22,8 @@ export class DatosPersonales implements OnInit {
   perfil: Profesor = {
     id: '',
     nombre: '',
-    apellidos: '',
+    apellidoPaterno: '',
+    apellidoMaterno: '',
     email: '',
     fechaNacimiento: '',
     sexo: '',
@@ -31,38 +32,38 @@ export class DatosPersonales implements OnInit {
     telefono: '',
     rfc: '',
     clavePresupuestal: '',
-    grado: 'N/A',
-    grupo: 'N/A'
+    grado: '',
+    grupo: ''
   };
 
   registroParaEditar: Profesor | null = null;
   usuariologueado: string = '';
 
-  constructor(private profesorService: ServiciosProfesor, private loginser:LoginService , private loadingService: LoadingService) { }
+  constructor(private profesorService: ServiciosProfesor, private loginser: LoginService, private loadingService: LoadingService) { }
 
   get nombreCompleto(): string {
-    return `${this.perfil.nombre} ${this.perfil.apellidos}`.trim();
+    return `${this.perfil.nombre} ${this.perfil.apellidoPaterno}${this.perfil.apellidoMaterno}`.trim();
   }
 
   ngOnInit(): void {
-    this.usuariologueado=this.loginser.Usuario();
-    if (this.usuariologueado){
+    this.usuariologueado = this.loginser.Usuario();
+    if (this.usuariologueado) {
       this.obtenerPerfil();
-    }else{
+    } else {
       console.error('No se encontró UUID del usuario logueado.');
     }
   }
   obtenerPerfil(): void {
-    this.loadingService.show(); 
+    this.loadingService.show();
 
     this.profesorService.obtenerPerfilUsuario(this.usuariologueado).subscribe({
       next: (data: Profesor) => {
-    this.loadingService.hide(); 
+        this.loadingService.hide();
 
         this.usuario = data;
       },
       error: (err) => {
-    this.loadingService.hide(); 
+        this.loadingService.hide();
 
       }
     });

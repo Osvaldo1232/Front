@@ -12,25 +12,7 @@
 
       <div class="col-md-4 col-sm-6">
         <label for="materia" class="form-label required-label">Materia:</label>
-        <select id="materia" class="form-select" [(ngModel)]="formulario.materia">
-          <option value="" disabled selected>Seleccione una materia</option>
-        </select>
-      </div>
-      <div class="col-md-4 col-sm-6">
-        <label for="estudiante" class="form-label required-label">Estudiante:</label>
-        <input type="text" id="estudiante" class="form-control" [(ngModel)]="formulario.estudiante"
-          placeholder="Ingrese nombre o matrícula">
-      </div>
-      <div class="col-md-4 col-sm-6">
-        <label for="trimestre" class="form-label required-label">Trimestre:</label>
-        <select id="trimestre" class="form-select" [(ngModel)]="formulario.trimestre">
-          <option value="" disabled selected>Seleccione el trimestre</option>
-        </select>
-      </div>
-      <div class="col-md-4 col-sm-6">
-        <label for="calificacion" class="form-label required-label">Calificación:</label>
-        <input type="number" id="calificacion" class="form-control" [(ngModel)]="formulario.calificacion" min="0"
-          max="10" placeholder="0 - 10">
+        <input type="text" id="estudiante" class="form-control" [(ngModel)]="formulario.materia">
       </div>
 
       <div class="col-12 d-flex justify-content-end align-items-end pt-md-4 pt-sm-3">

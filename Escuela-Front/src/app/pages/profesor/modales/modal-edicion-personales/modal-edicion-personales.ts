@@ -18,7 +18,8 @@ export class ModalEdicionPersonales implements OnChanges {
   constructor(private Servicios: ServiciosProfesor) { }
 
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   email: string = '';
   fechaNacimiento: string = '';
   sexo: string = '';
@@ -34,7 +35,8 @@ export class ModalEdicionPersonales implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['registro'] && this.registro) {
       this.nombre = this.registro.nombre || '';
-      this.apellidos = this.registro.apellidos || '';
+      this.apellidoPaterno = this.registro.apellidoPaterno || '';
+      this.apellidoMaterno = this.registro.apellidoMaterno || '';
       this.email = this.registro.email || '';
       this.fechaNacimiento = this.registro.fechaNacimiento || '';
       this.sexo = this.registro.sexo || '';
@@ -54,7 +56,7 @@ export class ModalEdicionPersonales implements OnChanges {
       alert('Error: No se puede actualizar el registro');
       return;
     }
-    if (!this.nombre.trim() || !this.apellidos.trim() || !this.email.trim()) {
+    if (!this.nombre.trim() || !this.apellidoPaterno.trim() || !this.apellidoMaterno.trim() || !this.email.trim()) {
       alert('Por favor complete todos los campos requeridos');
       return;
     }
@@ -67,7 +69,8 @@ export class ModalEdicionPersonales implements OnChanges {
     const profesorActualizado: Profesor = {
       id: this.registro.id,
       nombre: this.nombre.trim(),
-      apellidos: this.apellidos.trim(),
+      apellidoPaterno: this.apellidoPaterno.trim(),
+      apellidoMaterno: this.apellidoMaterno.trim(),
       email: this.email.trim(),
       fechaNacimiento: this.fechaNacimiento,
       sexo: this.sexo,

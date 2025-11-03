@@ -1,20 +1,12 @@
 <div class="materias-container">
   <h1 class="titulo-principal">MATERIAS</h1>
 
-  <!-- Información del docente -->
   <div class="info-docente" *ngIf="asignacionDocente && !cargando">
     <p><strong>Grado:</strong> {{ asignacionDocente.grado }}</p>
     <p><strong>Grupo:</strong> {{ asignacionDocente.grupo }}</p>
     <p><strong>Ciclo:</strong> {{ asignacionDocente.ciclo }}</p>
   </div>
 
-  <!-- Spinner de carga -->
-  <div class="spinner-container" *ngIf="cargando">
-    <div class="spinner"></div>
-    <p>Cargando materias...</p>
-  </div>
-
-  <!-- Grid de materias -->
   <div class="materias-grid" *ngIf="!cargando && materias.length > 0">
     <div class="materia-card" *ngFor="let materia of materias">
       <h2 class="materia-nombre">{{ materia.nombreMateria }}</h2>
@@ -22,14 +14,12 @@
         <p class="campo-formativo">CAMPO FORMATIVO:</p>
         <p class="campo-valor">{{ materia.nombreCampoFormativo }}</p>
       </div>
-      <button class="btn-calificar" (click)="abrirCalificaciones(materia)">
-        Calificar
-      </button>
+      <button class="btn-calificar" (click)="abrirCalificaciones(materia)">Calificar</button>
     </div>
   </div>
 
   <div class="sin-datos" *ngIf="!cargando && materias.length === 0">
-    <p>{{ errorMensaje || 'No hay materias asignadas' }}</p>
     <button class="btn-recargar" (click)="recargarMaterias()">Recargar</button>
   </div>
 </div>
+<app-loading></app-loading>
