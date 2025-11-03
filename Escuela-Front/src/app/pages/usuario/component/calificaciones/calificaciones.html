@@ -3,16 +3,26 @@
     <div class="col-6 col-md-4 col-lg-3" *ngFor="let mat of alumno">
       <div 
         class="card shadow-sm border-0 h-100 text-center" 
-        [ngClass]="{
-          'bg-danger text-white title-white': mat.calificacionActual < 6,
-          'bg-white text-dark': mat.calificacionActual >= 6
-        }"
+        [ngClass]="mat.calificacionActual < 6 
+          ? ['bg-danger', 'text-white'] 
+          : ['bg-white', 'text-dark']"
       >
         <div class="card-body">
-          <h5 class="card-title fw-bold mb-3">{{ mat.nombreMateria }}</h5>
-          <p class="card-text mb-1"><strong>Calificación:</strong> {{ mat.calificacionActual }}</p>
-          <p class="card-text mb-1"><strong>Campo Formativo:</strong> {{ mat.nombreMateria }}</p>
-          <p class="card-text"><strong>Grado:</strong> {{ mat.nombreGrado }}</p>
+          <h5 
+            class="card-title fw-bold mb-3"
+            [ngClass]="mat.calificacionActual < 6 ? 'text-white' : 'text-vino'"
+          >
+            {{ mat.nombreMateria }}
+          </h5>
+          <p class="card-text mb-1">
+            <strong>Calificación:</strong> {{ mat.calificacionActual }}
+          </p>
+          <p class="card-text mb-1">
+            <strong>Campo Formativo:</strong> {{ mat.nombreMateria }}
+          </p>
+          <p class="card-text">
+            <strong>Grado:</strong> {{ mat.nombreGrado }}
+          </p>
         </div>
       </div>
     </div>
@@ -20,8 +30,5 @@
 </div>
 
 <ng-template #cargando>
-  <div class="text-center py-5 text-muted">
-    <div class="spinner-border text-primary mb-3" role="status"></div>
-    <p>🔄 Cargando información de calificaciones...</p>
-  </div>
+  <app-loading></app-loading>
 </ng-template>

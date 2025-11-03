@@ -3,13 +3,15 @@ import { AlumnoService, Alumno, InscripcionReciente } from '../../Services/alumn
 import { LoginService } from '../../../../services/login-service';
 import { CommonModule } from '@angular/common';
 import { timeout } from 'rxjs';
+import { LoadingService } from '../../../../shared/loading-service';
+import { Loading } from '../../../../shared/loading/loading';
 
 @Component({
   selector: 'app-info-personal',
   templateUrl: './info-personal.html',
   styleUrls: ['./info-personal.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, Loading]
 })
 export class InfoPersonalComponent implements OnInit {
   alumno?: Alumno;
@@ -18,7 +20,8 @@ export class InfoPersonalComponent implements OnInit {
   usuario:any;
   constructor(
     private alumnoService: AlumnoService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -33,22 +36,28 @@ export class InfoPersonalComponent implements OnInit {
 
 
 cargarTutor(id:any){
+this.loadingService.show();
         this.alumnoService.obtenerInscripcionReciente(id).subscribe({
             next: (inscripcionData) => {
               this.inscripcion = inscripcionData;
+              this.loadingService.hide(); 
             },
             error: () => {
               this.errorMessage = 'No se pudo cargar la inscripción reciente.';
+              this.loadingService.hide(); 
             }
           });
 }
 
 cargarUsuario(usu:any){
+  this.loadingService.show();
    this.alumnoService.obtenerAlumnoPorId(usu).subscribe({
         next: (data) => {
           this.alumno = data;
+          this.loadingService.hide(); 
         error: () => {
           this.errorMessage = 'No se pudieron cargar los datos del alumno.';
+          this.loadingService.hide(); 
         }
       }});
 }

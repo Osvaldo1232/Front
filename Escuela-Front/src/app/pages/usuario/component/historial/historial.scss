@@ -1,83 +1,60 @@
-.reporte-card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+/* Contenedor general */
+.tabla-container {
   max-width: 1000px;
-  margin: 30px auto;
-  font-family: 'Segoe UI', sans-serif;
 }
 
-/* Encabezado con selector y botón */
-.reporte-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.ciclo-selector {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
-  font-size: 0.95rem;
-}
-
-.descargar-btn {
-  background-color: #eee;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* Título del trimestre */
-.trimestre-titulo {
-  background-color: #003366;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-}
-
-/* Tabla de calificaciones */
-.tabla-calificaciones {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tabla-calificaciones th {
-  background-color: #f0e6d6;
-  text-align: left;
-  padding: 10px;
-  font-weight: bold;
+/* Encabezado de la tabla */
+.table thead th {
+  font-weight: 700;
+  color: #3b3b3b;
   text-transform: uppercase;
+  font-size: 0.9rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #800000 !important; /* línea vino */
 }
 
-.tabla-calificaciones td {
-  padding: 10px;
-  font-weight: bold;
+/* Filas */
+.table tbody tr {
+  background-color: #f8f9fa;
+  transition: all 0.2s ease-in-out;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Celdas */
+.table td {
+  font-size: 0.95rem;
   color: #333;
+  padding: 0.75rem;
 }
 
-.tabla-calificaciones tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+/* Select superior */
+.form-select {
+  border-radius: 10px;
+  box-shadow: none;
+  border: 1px solid #ccc;
 }
 
-.tabla-calificaciones tbody tr:nth-child(odd) {
+.form-select:focus {
+  border-color: #800000;
+  box-shadow: 0 0 0 0.15rem rgba(128, 0, 0, 0.25);
+}
+
+/* Color vino personalizado */
+.border-maroon {
+  border-color: #800000 !important;
+}
+
+/* Sombra y bordes del contenedor de la tabla */
+.table-responsive {
+  border-radius: 12px;
+  overflow: hidden;
   background-color: #fff;
-}
-
-.tabla-calificaciones td:last-child {
-  text-align: right;
-}
-
-.promedio-final {
-  background-color: #bdb19f;
-  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
