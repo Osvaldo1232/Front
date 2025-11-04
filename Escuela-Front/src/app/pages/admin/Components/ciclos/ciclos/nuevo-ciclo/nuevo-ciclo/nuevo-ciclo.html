@@ -1,0 +1,85 @@
+<!-- Fondo modal -->
+<div class="modal-backdrop" *ngIf="nuevo" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <h5 class="modal-title">Nuevo Ciclo Escolar</h5>
+      <button type="button" class="btn-close" (click)="cerrarModal()">×</button>
+    </div>
+
+    <!-- Cuerpo del modal -->
+    <div class="modal-body">
+      <form (ngSubmit)="guardar()">
+        
+        <div class="row">
+          <!-- Año Inicio -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Año Inicio: <span class="text-danger">*</span></label>
+            <select 
+              class="form-select" 
+              [(ngModel)]="fechaInicio" 
+              name="fechaInicio" 
+              required
+              (change)="validarAnios()">
+              <option value="">Seleccionar año</option>
+              <option *ngFor="let anio of aniosDisponibles" [value]="anio">{{ anio }}</option>
+            </select>
+            <small class="text-muted">Año de inicio del ciclo escolar</small>
+          </div>
+
+          <!-- Año Fin -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Año Fin: <span class="text-danger">*</span></label>
+            <select 
+              class="form-select" 
+              [(ngModel)]="fechaFin" 
+              name="fechaFin" 
+              required
+              [disabled]="!fechaInicio">
+              <option value="">Seleccionar año</option>
+              <option *ngFor="let anio of aniosFin" [value]="anio">{{ anio }}</option>
+            </select>
+            <small class="text-muted">Año de fin del ciclo escolar</small>
+          </div>
+        </div>
+
+        <!-- Vista previa -->
+        <div class="mb-3" *ngIf="fechaInicio && fechaFin">
+          <div class="alert alert-info">
+            <strong>Ciclo escolar:</strong> {{ fechaInicio }}-{{ fechaFin }}
+          </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div class="mb-3" *ngIf="errorValidacion">
+          <div class="alert alert-danger">
+            {{ errorValidacion }}
+          </div>
+        </div>
+
+        <!-- Estatus -->
+        <div class="mb-3">
+          <label class="form-label">Estatus:</label>
+          <select class="form-select" [(ngModel)]="estatus" name="estatus">
+            <option value="ACTIVO">Activo</option>
+            <option value="INACTIVO">Inactivo</option>
+          </select>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+          <button 
+            type="submit" 
+            class="btn btn-guardar"
+            [disabled]="!fechaInicio || !fechaFin || errorValidacion">
+            Guardar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

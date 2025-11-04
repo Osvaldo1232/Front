@@ -1,7 +1,7 @@
-export interface Ciclos {
+export interface Ciclos{
     id?: string;
-    fechaInicio: number;  
-    fechaFin: number;     
+    fechaInicio: string;
+    fechaFin: string;
     estatus: string;
     fechaCreado?: string;
 }

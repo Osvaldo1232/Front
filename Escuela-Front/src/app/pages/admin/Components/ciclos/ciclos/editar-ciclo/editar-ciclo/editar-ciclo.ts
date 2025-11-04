@@ -1,26 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Ciclos } from '../../../../../../../models/ciclos.model';
 import { ServiciosDirectorCiclos } from '../../../../../Services/servicios-director-ciclos/servicios-director-ciclos';
 import { AlertService } from '../../../../../../../shared/alert-service';
-
 @Component({
-  selector: 'app-nuevo-ciclo',
+  selector: 'app-editar-ciclo',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './nuevo-ciclo.html',
-  styleUrl: './nuevo-ciclo.scss'
+  templateUrl: './editar-ciclo.html',
+  styleUrl: './editar-ciclo.scss'
 })
-export class NuevoCiclo implements OnInit {
-  @Input() nuevo: boolean = false;
-  @Output() cerrar = new EventEmitter<Ciclos | null>();
+export class EditarCiclo implements OnChanges, OnInit {
+  @Input() editar: boolean = false;
+  @Input() ciclo: Ciclos | null = null;
+  @Output() cerrar = new EventEmitter<boolean>();
 
   constructor(
     private Servicios: ServiciosDirectorCiclos,
     private alertService: AlertService
   ) { }
 
+  id: any = '';
   fechaInicio: string = '';
   fechaFin: string = '';
   estatus: string = 'ACTIVO';
@@ -33,19 +34,50 @@ export class NuevoCiclo implements OnInit {
     this.generarAniosDisponibles();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['ciclo'] && this.ciclo) {
+      this.cargarDatos();
+    }
+  }
+
   generarAniosDisponibles() {
     const anioActual = new Date().getFullYear();
     const anioProximo = anioActual + 1;
     
-    // Desde 2015 hasta el año próximo
     for (let i = 2015; i <= anioProximo; i++) {
       this.aniosDisponibles.push(i);
     }
   }
 
+  cargarDatos() {
+    if (this.ciclo) {
+      console.log('📝 Ciclo recibido para editar:', this.ciclo);
+      
+      this.id = this.ciclo.id || '';
+      
+      // ✅ EXTRAER SOLO EL AÑO DE LA FECHA
+      this.fechaInicio = this.extraerAnio(this.ciclo.fechaInicio);
+      this.fechaFin = this.extraerAnio(this.ciclo.fechaFin);
+      this.estatus = this.ciclo.estatus || 'ACTIVO';
+      
+      console.log('📝 Año inicio:', this.fechaInicio);
+      console.log('📝 Año fin:', this.fechaFin);
+      
+      if (this.fechaInicio) {
+        this.validarAnios();
+      }
+    }
+  }
+
+  // ✅ EXTRAER SOLO EL AÑO
+  extraerAnio(fecha: string): string {
+    if (!fecha) return '';
+    // Si viene formato YYYY-MM-DD, tomar solo YYYY
+    return fecha.split('-')[0];
+  }
+
   validarAnios() {
     this.errorValidacion = '';
-    this.fechaFin = '';
     
     if (this.fechaInicio) {
       const anioInicio = Number(this.fechaInicio);
@@ -59,7 +91,11 @@ export class NuevoCiclo implements OnInit {
       }
       
       this.aniosFin = [anioInicio + 1];
-      this.fechaFin = (anioInicio + 1).toString();
+      
+      const anioFinActual = Number(this.fechaFin);
+      if (!this.fechaFin || anioFinActual !== anioInicio + 1) {
+        this.fechaFin = (anioInicio + 1).toString();
+      }
     }
   }
 
@@ -77,31 +113,30 @@ export class NuevoCiclo implements OnInit {
       return;
     }
 
-    // ✅ CONVERTIR A FORMATO YYYY-MM-DD (01 de enero de cada año)
-    const ciclo: Ciclos = { 
+    // ✅ CONVERTIR A FORMATO YYYY-MM-DD
+    const cicloActualizado: Ciclos = { 
+      id: this.id,
       fechaInicio: `${anioInicio}-01-01`,
       fechaFin: `${anioFin}-01-01`,
       estatus: this.estatus
     };
 
-    console.log('📤 Enviando ciclo:', ciclo);
+    console.log('📤 Enviando actualización:', cicloActualizado);
 
-    this.Servicios.CrearCiclo(ciclo).subscribe({
+    this.Servicios.ActualizarCiclo(this.id, cicloActualizado).subscribe({
       next: (mensaje) => {
         console.log('✅ Respuesta del servidor:', mensaje);
         this.alertService.show(
-          'Ciclo escolar registrado exitosamente',
+          'Ciclo escolar actualizado exitosamente',
           'success',
           'Éxito'
         );
-        
-        this.limpiarCampos();
-        this.cerrar.emit(ciclo); 
+        this.cerrar.emit(true);
       },
       error: (err) => {
-        console.error('❌ Error al crear Ciclo:', err);
+        console.error('❌ Error al actualizar Ciclo:', err);
         this.alertService.show(
-          'Error al crear el ciclo escolar',
+          'Error al actualizar el ciclo escolar',
           'danger',
           'Error'
         );
@@ -110,15 +145,6 @@ export class NuevoCiclo implements OnInit {
   }
 
   cerrarModal() {
-    this.limpiarCampos();
-    this.cerrar.emit(null);
-  }
-
-  limpiarCampos() {
-    this.fechaInicio = '';
-    this.fechaFin = '';
-    this.estatus = 'ACTIVO';
-    this.aniosFin = [];
-    this.errorValidacion = '';
+    this.cerrar.emit(false);
   }
 }
