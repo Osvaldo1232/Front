@@ -6,7 +6,6 @@ import { Maestros } from '../../../../../../models/maestros.model';
 import { ServiciosDirector } from '../../../../Services/servicios-director';
 import { AlertService } from '../../../../../../shared/alert-service'; 
 
-
 @Component({
   selector: 'app-nuevo-docente',
   standalone: true,
@@ -20,14 +19,16 @@ export class NuevoDocente {
 
   constructor(
     private Servicios: ServiciosDirector,
-    private alertService: AlertService // ⬅️ INYECTAR
-    
+    private alertService: AlertService
   ) { }
 
+  // Campos del formulario
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = ''; // ✅ nuevo campo
   fechaNacimiento: string = '';
   sexo: string = '';
   especialidad: string = '';
@@ -37,11 +38,22 @@ export class NuevoDocente {
   clavePresupuestal: string = '';
 
   guardar() {
+    // ✅ Validación de contraseñas
+    if (this.password !== this.confirmPassword) {
+      this.alertService.show(
+        'Las contraseñas no coinciden. Por favor, verifica.',
+        'warning',
+        'Advertencia'
+      );
+      return; // Detiene el proceso si no coinciden
+    }
+
     const maestros: Maestros = { 
       nombre: this.nombre, 
       estatus: this.estatus,
       email: this.email, 
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       password: this.password, 
       fechaNacimiento: this.fechaNacimiento,
       sexo: this.sexo, 
@@ -54,32 +66,20 @@ export class NuevoDocente {
     this.Servicios.CrearDocente(maestros).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-         this.alertService.show(
+        this.alertService.show(
           'Docente registrado exitosamente',
           'success',
           'Éxito'
         );
         
-        const NuevoDocente = { 
-          nombre: this.nombre,
-          estatus: this.estatus,
-          email: this.email,
-          apellidos: this.apellidos,
-          password: this.password,
-          fechaNacimiento: this.fechaNacimiento,
-          sexo: this.sexo,
-          especialidad: this.especialidad,
-          telefono: this.telefono,
-          rfc: this.rfc,
-          clavePresupuestal: this.clavePresupuestal
-        };
-        
-        this.limpiarCampos(); // ⬅️ Limpiar después de guardar
+        const NuevoDocente = { ...maestros };
+
+        this.limpiarCampos(); 
         this.cerrar.emit(NuevoDocente); 
       },
-       error: (err) => {
+      error: (err) => {
         console.error('Error al crear Docente:', err);
-       this.alertService.show(
+        this.alertService.show(
           'Error al crear el Docente',
           'danger',
           'Error'
@@ -89,16 +89,17 @@ export class NuevoDocente {
   }
 
   cerrarModal() {
-    this.limpiarCampos(); // ⬅️ Limpiar al cerrar
+    this.limpiarCampos();
     this.cerrar.emit(null);
   }
 
-  // ⬇️ NUEVO MÉTODO para limpiar campos
   limpiarCampos() {
     this.nombre = '';
-    this.apellidos = '';
+    this.apellidoPaterno = '';
+    this.apellidoMaterno = '';
     this.email = '';
     this.password = '';
+    this.confirmPassword = ''; 
     this.fechaNacimiento = '';
     this.sexo = '';
     this.especialidad = '';

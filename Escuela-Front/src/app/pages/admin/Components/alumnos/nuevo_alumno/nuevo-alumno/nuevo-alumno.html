@@ -23,8 +23,14 @@
 
           <!-- Apellidos -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Apellidos: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="apellidos" name="apellidos" required>
+            <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidop" required>
+          </div>
+
+          <!-- Apellidos -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Materno: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidom" required>
           </div>
         </div>
 
@@ -73,6 +79,14 @@
             <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
           </div>
         </div>
+        <!-- Confirmar Contraseña -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Confirmar Contraseña: <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+            <small class="text-danger" *ngIf="password && confirmPassword && password !== confirmPassword">
+              ⚠️ Las contraseñas no coinciden.
+            </small>
+          </div>
 
         <!-- Estatus -->
         <div class="mb-3">

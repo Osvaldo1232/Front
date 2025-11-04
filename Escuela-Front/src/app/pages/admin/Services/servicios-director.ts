@@ -17,8 +17,8 @@ export class ServiciosDirector {
   private apiUrlProfesores = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores';
   private apiUrlCrearProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/profesor';
   private apiUrlActualizarProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores/profesor'; 
-/*   private apiUrlActualizarEstatusProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores/profesor/estatus'; 
- */
+  private apiUrlUsuarios = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios';
+
 
   constructor(private http: HttpClient) {}
   
@@ -65,15 +65,18 @@ export class ServiciosDirector {
     });
   }
 
-  // ⬇️ NUEVO MÉTODO PARA CAMBIAR ESTATUS en revision
- /*  ActualizarEstatusDocente(id: string, estatus: string): Observable<any> {
-    return this.http.patch(`${this.apiUrlActualizarEstatusProfesor}/${id}/estatus`, 
-      { estatus: estatus },
-      { responseType: 'text' as 'json' }
-    );
-  } */
- // Obtener perfil del director logueado
+  // Obtener perfil del director logueado
 obtenerPerfilUsuario(email: string): Observable<Director> {
   return this.http.get<Director>(`https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/BuscarUsuario/${email}`);
 }
-}
+
+
+ // ✅ NUEVO MÉTODO PARA ACTUALIZAR SOLO EL ESTATUS
+  ActualizarEstatusDocente(id: string, estatus: string): Observable<any> {
+    // Enviar como query parameter según tu Swagger
+    return this.http.patch(
+      `${this.apiUrlUsuarios}/${id}/estatus?estatus=${estatus}`,
+      {},  // Body vacío
+      { responseType: 'text' as 'json' }
+    );
+  }}

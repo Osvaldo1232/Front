@@ -25,7 +25,7 @@
 }
 
 .modal-header {
-  background: #8B1538;
+  background: #5C1F38;
   color: white;
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -75,7 +75,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #8B1538;
+    background: #5C1F38;
     border-radius: 10px;
 
     &:hover {
@@ -87,10 +87,10 @@
 .section-subtitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #8B1538;
+  color: #5C1F38;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #8B1538;
+  border-bottom: 2px solid #5C1F38;
 }
 
 .modal-footer {
@@ -122,7 +122,7 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:focus {
-    border-color: #8B1538;
+    border-color: #5C1F38;
     box-shadow: 0 0 0 0.2rem rgba(139, 21, 56, 0.25);
     outline: none;
   }
@@ -139,7 +139,7 @@
 }
 
 .btn-guardar {
-  background: #8B1538;
+  background: #5C1F38;
   color: white;
 
   &:hover {

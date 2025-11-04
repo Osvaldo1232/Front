@@ -21,9 +21,10 @@
     <p>No se encontraron docentes con el término "{{ terminoBusqueda }}"</p>
   </div>
 
-  <!-- <div class="cards-grid">
+  <div class="cards-grid">
     <div class="card" *ngFor="let docente of usuariosPaginados">
-      <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidos }}</h2>
+      <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidoPaterno }} {{docente.apellidoMaterno}}</h2>
+
       <div class="card__divider"></div>
       <div class="card__info">
         <p class="card__detail">Clave Presupuestal: {{ docente.clavePresupuestal }}</p>
@@ -48,7 +49,7 @@
         <button class="btn btn--edit" (click)="editar(docente)">EDITAR</button>
       </div>
     </div>
-  </div> -->
+  </div> 
 
   <div class="pagination" *ngIf="totalPaginas > 1">
     <button class="pagination__btn pagination__btn--prev" (click)="paginaAnterior()" [disabled]="paginaActual === 1">‹</button>

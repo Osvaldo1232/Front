@@ -1,7 +1,8 @@
 export interface Director {
   id?: any;
   nombre: string;
-  apellidos: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
   email: string;
   telefono?: string;
   departamento?: string;

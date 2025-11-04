@@ -52,7 +52,8 @@ export class DocentesComponent implements OnInit {
     const termino = this.terminoBusqueda.toLowerCase();
     return this.registros.filter(u =>
       u.nombre.toLowerCase().includes(termino) ||
-      u.apellidos.toLowerCase().includes(termino) ||
+      u.apellidoPaterno.toLowerCase().includes(termino) ||
+      u.apellidoMaterno.toLowerCase().includes(termino) ||
       u.email.toLowerCase().includes(termino) ||
       u.especialidad.toLowerCase().includes(termino)
     );
@@ -123,36 +124,51 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  /* cambiarEstatus(docente: Maestros) {
-    // Cambiar el estatus localmente primero (UI optimista)
-    const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-    const estatusAnterior = docente.estatus;
-    docente.estatus = nuevoEstatus;
+  cambiarEstatus(docente: Maestros) {
+  const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+  const estatusAnterior = docente.estatus;
+  docente.estatus = nuevoEstatus;
 
-    // Llamar al backend
-    if (docente.id) {
-      this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
-        next: (mensaje) => {
-          console.log(mensaje);
-          this.alertService.show(
-            `Estatus cambiado a ${nuevoEstatus}`,
-            'success',
-            'Éxito'
-          );
-        },
-        error: (err) => {
-          console.error('Error al cambiar estatus:', err);
-          // Revertir el cambio si falla
-          docente.estatus = estatusAnterior;
-          this.alertService.show(
-            'Error al cambiar el estatus',
-            'danger',
-            'Error'
-          );
+  if (docente.id) {
+    console.log(`📤 Cambiando estatus de ${docente.nombre} a ${nuevoEstatus}`);
+
+    // ✅ USAR EL NUEVO MÉTODO DEDICADO
+    this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
+      next: (mensaje) => {
+        console.log('✅ Respuesta del servidor:', mensaje);
+        
+        // Actualizar localmente el registro
+        const index = this.registros.findIndex(d => d.id === docente.id);
+        if (index !== -1) {
+          this.registros[index].estatus = nuevoEstatus;
         }
-      });
-    }
-  } */
+        
+        this.alertService.show(
+          `Estatus cambiado a ${nuevoEstatus}`,
+          'success',
+          'Éxito'
+        );
+      },
+      error: (err) => {
+        console.error('❌ Error completo:', err);
+        console.error('❌ Status:', err.status);
+        console.error('❌ Error del servidor:', err.error);
+        
+        // Revertir el cambio si falla
+        docente.estatus = estatusAnterior;
+        
+        this.alertService.show(
+          'Error al cambiar el estatus',
+          'danger',
+          'Error'
+        );
+      }
+    });
+  } else {
+    console.error('❌ El docente no tiene ID');
+    docente.estatus = estatusAnterior;
+  }
+}
 
   cargarDocentes() {
     this.Servicios.ObtenerDocentes().subscribe({

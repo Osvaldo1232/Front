@@ -19,10 +19,17 @@
             <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
           </div>
 
+
           <!-- Apellidos -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Apellidos: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="apellidos" name="apellidos" required>
+            <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidos" required>
+          </div>
+
+          <!-- Apellidos -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidos" required>
           </div>
         </div>
 
@@ -47,22 +54,22 @@
         <div class="row">
           <!-- Clave Presupuestal -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Clave Presupuestal:</label>
-            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal">
+            <label class="form-label">Clave Presupuestal:<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required>
           </div>
 
           <!-- RFC -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">RFC:</label>
-            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc">
+            <label class="form-label">RFC:<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" required>
           </div>
         </div>
 
         <div class="row">
           <!-- Fecha de Nacimiento -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento">
+            <label class="form-label">Fecha de Nacimiento:<span class="text-danger">*</span></label>
+            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
           </div>
 
           <!-- Teléfono -->
@@ -85,6 +92,14 @@
             <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
           </div>
         </div>
+        <!-- Confirmar Contraseña -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Confirmar Contraseña: <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+            <small class="text-danger" *ngIf="password && confirmPassword && password !== confirmPassword">
+              ⚠️ Las contraseñas no coinciden.
+            </small>
+          </div>
 
         <!-- Estatus -->
         <div class="mb-3">

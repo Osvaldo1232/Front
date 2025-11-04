@@ -53,7 +53,8 @@ export class AlumnosComponent implements OnInit {
     const termino = this.searchTerm.toLowerCase();
     return this.registros.filter(a =>
       a.nombre.toLowerCase().includes(termino) ||
-      a.apellidos.toLowerCase().includes(termino) ||
+      a.apellidoPaterno.toLowerCase().includes(termino) ||
+      a.apellidoMaterno.toLowerCase().includes(termino) ||
       a.matricula.toLowerCase().includes(termino) ||
       a.email.toLowerCase().includes(termino)
     );

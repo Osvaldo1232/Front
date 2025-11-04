@@ -277,3 +277,60 @@ body {
   color: #666;
   font-size: 1.1rem;
 }
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    // ✅ CUANDO ESTÁ ACTIVO (checked) - Color morado
+    &:checked + .toggle__slider {
+      background-color: #5D1F3C;
+    }
+
+    &:checked + .toggle__slider:before {
+      transform: translateX(26px);
+    }
+
+    // ✅ CUANDO ESTÁ INACTIVO (unchecked) - Color gris
+    &:not(:checked) + .toggle__slider {
+      background-color: #ccc;
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; // ✅ Gris por defecto (inactivo)
+    transition: 0.4s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+}
+
+// ✅ ESTILOS PARA LOS LABELS
+.status-label {
+  font-size: 0.85rem;
+  color: #2c3e50;
+  font-weight: 500;
+}

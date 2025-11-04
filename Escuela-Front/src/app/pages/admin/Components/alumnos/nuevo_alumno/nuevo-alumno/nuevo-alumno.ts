@@ -5,7 +5,6 @@ import { Alumnos } from '../../../../../../models/alumnos.model';
 import { ServiciosDirectorAlumnos } from '../../../../Services/servicios-director-alumnos/servicios-director-alumnos';
 import { AlertService } from '../../../../../../shared/alert-service'; 
 
-
 @Component({
   selector: 'app-nuevo-alumno',
   standalone: true,
@@ -19,14 +18,16 @@ export class NuevoAlumno {
 
   constructor(
     private Servicios: ServiciosDirectorAlumnos,
-    private alertService: AlertService // ⬅️ INYECTAR
-    
-  ) { }
+    private alertService: AlertService
+  ) {}
 
+  // Campos del formulario
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = ''; // ✅ Nuevo campo
   fechaNacimiento: string = '';
   sexo: string = '';
   matricula: string = '';
@@ -34,9 +35,20 @@ export class NuevoAlumno {
   estatus: string = 'ACTIVO';
 
   guardar() {
+    // ✅ Validar que las contraseñas coincidan
+    if (this.password !== this.confirmPassword) {
+      this.alertService.show(
+        'Las contraseñas no coinciden. Por favor, verifica.',
+        'warning',
+        'Advertencia'
+      );
+      return;
+    }
+
     const alumno: Alumnos = { 
       nombre: this.nombre, 
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       email: this.email, 
       password: this.password, 
       fechaNacimiento: this.fechaNacimiento,
@@ -54,25 +66,14 @@ export class NuevoAlumno {
           'success',
           'Éxito'
         );
-        
-        const nuevoAlumno = { 
-          nombre: this.nombre,
-          apellidos: this.apellidos,
-          email: this.email,
-          password: this.password,
-          fechaNacimiento: this.fechaNacimiento,
-          sexo: this.sexo,
-          matricula: this.matricula,
-          curp: this.curp,
-          estatus: this.estatus
-        };
-        
+
+        const nuevoAlumno = { ...alumno };
         this.limpiarCampos();
         this.cerrar.emit(nuevoAlumno); 
       },
       error: (err) => {
         console.error('Error al crear Alumno:', err);
-       this.alertService.show(
+        this.alertService.show(
           'Error al crear el Alumno',
           'danger',
           'Error'
@@ -80,6 +81,7 @@ export class NuevoAlumno {
       }
     });
   }
+
   cerrarModal() {
     this.limpiarCampos();
     this.cerrar.emit(null);
@@ -87,9 +89,11 @@ export class NuevoAlumno {
 
   limpiarCampos() {
     this.nombre = '';
-    this.apellidos = '';
+    this.apellidoPaterno = '';
+    this.apellidoMaterno = '';
     this.email = '';
     this.password = '';
+    this.confirmPassword = ''; 
     this.fechaNacimiento = '';
     this.sexo = '';
     this.matricula = '';

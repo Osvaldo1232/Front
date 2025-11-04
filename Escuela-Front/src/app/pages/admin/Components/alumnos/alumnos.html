@@ -30,7 +30,8 @@
         <tr>
           <th>MATRICULA</th>
           <th>NOMBRE</th>
-          <th>APELLIDOS</th>
+          <th>APELLIDO PATERNO</th>
+          <th>APELLIDO MATERNO</th>
           <th>CURP</th>
           <th>ESTATUS</th>
           <th>ACCIÓN</th>
@@ -40,7 +41,8 @@
         <tr *ngFor="let alumno of alumnosPaginados; let i = index" [class.row-alt]="i % 2 !== 0">
           <td>{{ alumno.matricula }}</td>
           <td>{{ alumno.nombre }}</td>
-          <td>{{ alumno.apellidos }}</td>
+          <td>{{ alumno.apellidoPaterno }}</td>
+          <td>{{ alumno.apellidoMaterno }}</td>
           <td>{{ alumno.curp }}</td>
           <td>
             <span class="badge" [class.badge-activo]="alumno.estatus === 'ACTIVO'"

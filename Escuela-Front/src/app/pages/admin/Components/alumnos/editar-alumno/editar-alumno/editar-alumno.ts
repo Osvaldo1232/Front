@@ -5,7 +5,6 @@ import { ServiciosDirectorAlumnos } from '../../../../Services/servicios-directo
 import { Alumnos } from '../../../../../../models/alumnos.model';
 import { AlertService } from '../../../../../../shared/alert-service'; 
 
-
 @Component({
   selector: 'app-editar-alumno',
   standalone: true,
@@ -20,15 +19,16 @@ export class EditarAlumno implements OnChanges {
 
   constructor(
     private Servicios: ServiciosDirectorAlumnos,
-        private alertService: AlertService 
-
-  ) { }
+    private alertService: AlertService 
+  ) {}
 
   id: string = '';
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = ''; // ✅ Nuevo campo
   fechaNacimiento: string = '';
   sexo: string = '';
   matricula: string = '';
@@ -45,9 +45,11 @@ export class EditarAlumno implements OnChanges {
     if (this.alumno) {
       this.id = this.alumno.id || '';
       this.nombre = this.alumno.nombre || '';
-      this.apellidos = this.alumno.apellidos || '';
+      this.apellidoPaterno = this.alumno.apellidoPaterno || '';
+      this.apellidoMaterno = this.alumno.apellidoMaterno || '';
       this.email = this.alumno.email || '';
       this.password = ''; // No mostramos la contraseña actual
+      this.confirmPassword = ''; // ✅ limpiar también
       this.fechaNacimiento = this.alumno.fechaNacimiento || '';
       this.sexo = this.alumno.sexo || '';
       this.estatus = this.alumno.estatus || 'ACTIVO';
@@ -57,12 +59,26 @@ export class EditarAlumno implements OnChanges {
   }
 
   guardar() {
+    // ✅ Validar contraseñas solo si se intenta cambiar
+    if (this.password || this.confirmPassword) {
+      if (this.password !== this.confirmPassword) {
+        this.alertService.show(
+          'Las contraseñas no coinciden. Por favor, verifica.',
+          'warning',
+          'Advertencia'
+        );
+        return;
+      }
+    }
+
+    // ✅ Si la contraseña está vacía, no la cambiamos
     const AlumnoActualizado: Alumnos = { 
       id: this.id,
       nombre: this.nombre, 
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       email: this.email, 
-      password: this.password,
+      password: this.password, // sigue siendo string (vacío si no se cambia)
       fechaNacimiento: this.fechaNacimiento,
       sexo: this.sexo, 
       estatus: this.estatus,
@@ -70,10 +86,10 @@ export class EditarAlumno implements OnChanges {
       curp: this.curp
     };
 
+    // ✅ Enviar siempre un string, pero el backend decide si lo actualiza o no
     this.Servicios.ActualizarAlumno(this.id, AlumnoActualizado).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-        // ⬇️ REEMPLAZAR alert() con tu servicio
         this.alertService.show(
           'Alumno actualizado exitosamente',
           'success',
@@ -83,7 +99,6 @@ export class EditarAlumno implements OnChanges {
       },
       error: (err) => {
         console.error('Error al actualizar Alumno:', err);
-        // ⬇️ REEMPLAZAR alert() con tu servicio
         this.alertService.show(
           'Error al actualizar el Alumno',
           'danger',
@@ -94,6 +109,6 @@ export class EditarAlumno implements OnChanges {
   }
 
   cerrarModal() {
-    this.cerrar.emit(false); // false indica que se canceló
+    this.cerrar.emit(false);
   }
 }

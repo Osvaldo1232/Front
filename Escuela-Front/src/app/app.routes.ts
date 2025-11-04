@@ -21,6 +21,7 @@ import { HistorialAcademico } from './pages/profesor/component/historial-academi
 import { InfoPersonalComponent } from './pages/usuario/component/info-personal/info-personal';
 import { CampoFormativo } from "./pages/admin/Components/campo-formativo/campo-formativo";
 import { TutoresComponent } from './pages/admin/Components/tutores/tutores/tutores';
+import { CiclosEscolaresComponent } from './pages/admin/Components/ciclos/ciclos/ciclos';
 
 
 export const routes: Routes = [
@@ -37,6 +38,7 @@ export const routes: Routes = [
             { path: 'grupos', component: GruposComponent },
             { path: 'campoformativo', component: CampoFormativo },
             { path: 'Tutores', component: TutoresComponent },
+            {path: 'ciclos', component: CiclosEscolaresComponent }
 
 
         ]

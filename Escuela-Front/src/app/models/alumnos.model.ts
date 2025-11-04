@@ -1,7 +1,8 @@
 export interface Alumnos {
   id?: string;  
   nombre: string;   
-  apellidos: string; 
+  apellidoPaterno: string;
+  apellidoMaterno: string;
   email: string;
   password: string;
   fechaNacimiento: string;

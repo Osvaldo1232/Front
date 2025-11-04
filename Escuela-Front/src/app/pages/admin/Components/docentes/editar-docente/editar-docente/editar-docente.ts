@@ -5,7 +5,6 @@ import { Maestros } from '../../../../../../models/maestros.model';
 import { ServiciosDirector } from '../../../../Services/servicios-director';
 import { AlertService } from '../../../../../../shared/alert-service'; 
 
-
 @Component({
   selector: 'app-editar-docente',
   standalone: true,
@@ -20,15 +19,16 @@ export class EditarDocente implements OnChanges {
 
   constructor(
     private Servicios: ServiciosDirector,
-    private alertService: AlertService // ⬅️ INYECTAR
-    
+    private alertService: AlertService
   ) { }
 
   id: string = '';
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = ''; // ✅ nuevo campo
   fechaNacimiento: string = '';
   sexo: string = '';
   especialidad: string = '';
@@ -47,9 +47,11 @@ export class EditarDocente implements OnChanges {
     if (this.docente) {
       this.id = this.docente.id || '';
       this.nombre = this.docente.nombre || '';
-      this.apellidos = this.docente.apellidos || '';
+      this.apellidoPaterno = this.docente.apellidoPaterno || '';
+      this.apellidoMaterno = this.docente.apellidoMaterno || '';
       this.email = this.docente.email || '';
-      this.password = ''; // No mostramos la contraseña actual
+      this.password = ''; // no se muestra la contraseña actual
+      this.confirmPassword = ''; // limpiar confirmación
       this.fechaNacimiento = this.docente.fechaNacimiento || '';
       this.sexo = this.docente.sexo || '';
       this.especialidad = this.docente.especialidad || '';
@@ -61,12 +63,25 @@ export class EditarDocente implements OnChanges {
   }
 
   guardar() {
+    // ✅ Validar contraseñas solo si el usuario escribió una nueva
+    if (this.password) {
+      if (this.password !== this.confirmPassword) {
+        this.alertService.show(
+          'Las contraseñas no coinciden. Por favor, verifica.',
+          'warning',
+          'Advertencia'
+        );
+        return;
+      }
+    }
+
     const maestroActualizado: Maestros = { 
       id: this.id,
       nombre: this.nombre, 
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       email: this.email, 
-      password: this.password,
+      password: this.password, // se enviará vacío si no la cambió
       fechaNacimiento: this.fechaNacimiento,
       sexo: this.sexo, 
       especialidad: this.especialidad, 
@@ -80,17 +95,16 @@ export class EditarDocente implements OnChanges {
       next: (mensaje) => {
         console.log(mensaje);
         this.alertService.show(
-          'Campo Formativo actualizado exitosamente',
+          'Docente actualizado exitosamente',
           'success',
           'Éxito'
         );
         this.cerrar.emit(true);
       },
       error: (err) => {
-        console.error('Error al actualizar Campo Formativo:', err);
-        // ⬇️ REEMPLAZAR alert() con tu servicio
+        console.error('Error al actualizar el Docente:', err);
         this.alertService.show(
-          'Error al actualizar el campo formativo',
+          'Error al actualizar el Docente',
           'danger',
           'Error'
         );
@@ -99,6 +113,6 @@ export class EditarDocente implements OnChanges {
   }
 
   cerrarModal() {
-    this.cerrar.emit(false); // false indica que se canceló
+    this.cerrar.emit(false);
   }
 }
