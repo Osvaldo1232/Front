@@ -22,3 +22,17 @@ export interface InscripcionReciente {
   nombreProfesorCompleto: string;
   telefonoProfesor: string;
 }
+
+export interface AlumnoGGC {
+  alumnoId: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  matricula: string;
+  curp: string;
+  gradoId: string;
+  gradoNombre: string;
+  grupoId: string;
+  grupoNombre: string;
+  estatus: string;
+} 

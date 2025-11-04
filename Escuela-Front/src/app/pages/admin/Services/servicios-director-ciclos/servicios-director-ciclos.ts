@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ciclos } from '../../../../models/ciclos.model';
+import { AlumnoGGC } from '../../../../models/alumnos.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ServiciosDirectorCiclos {
   private apiUrlCicloCrear = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/ciclosescolares/NuevoCiclo';
   private apiUrlCicloEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/ciclosescolares/Actualizar';
   private apiUrlCicloId = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/ciclosescolares/Obtener';
-
+ private baseUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/inscripcion/filtrarAlumnos';
 
   constructor(private http: HttpClient) {}
   
@@ -35,4 +36,17 @@ export class ServiciosDirectorCiclos {
       responseType: 'text' as 'json'
     });
   }
+
+ filtrarAlumnos(gradoId: string, grupoId: string, cicloId: string): Observable<AlumnoGGC[]> {
+    const params = new HttpParams()
+      .set('gradoId', gradoId)
+      .set('grupoId', grupoId)
+      .set('cicloId', cicloId);
+
+    return this.http.get<AlumnoGGC[]>(this.baseUrl, { params });
+  } 
 }
+
+
+
+ 

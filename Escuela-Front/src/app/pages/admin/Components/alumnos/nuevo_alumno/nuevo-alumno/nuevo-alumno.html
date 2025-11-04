@@ -21,34 +21,34 @@
             <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
           </div>
 
-          <!-- Apellidos -->
+          <!-- Apellido Paterno -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidop" required>
           </div>
+        </div>
 
-          <!-- Apellidos -->
+        <div class="row">
+          <!-- Apellido Materno -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Apellido Materno: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidom" required>
           </div>
-        </div>
 
-        <div class="row">
           <!-- CURP -->
           <div class="col-md-6 mb-3">
             <label class="form-label">CURP: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" [(ngModel)]="curp" name="curp" required maxlength="18">
           </div>
+        </div>
 
+        <div class="row">
           <!-- Matrícula -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Matrícula: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" [(ngModel)]="matricula" name="matricula" required>
           </div>
-        </div>
 
-        <div class="row">
           <!-- Sexo -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Sexo: <span class="text-danger">*</span></label>
@@ -58,28 +58,30 @@
               <option value="FEMENINO">Femenino</option>
             </select>
           </div>
+        </div>
 
+        <div class="row">
           <!-- Fecha de Nacimiento -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Fecha de Nacimiento: <span class="text-danger">*</span></label>
             <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
           </div>
-        </div>
 
-        <div class="row">
           <!-- Correo -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Correo: <span class="text-danger">*</span></label>
             <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
           </div>
+        </div>
 
+        <div class="row">
           <!-- Contraseña -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Contraseña: <span class="text-danger">*</span></label>
             <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
           </div>
-        </div>
-        <!-- Confirmar Contraseña -->
+
+          <!-- Confirmar Contraseña -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Confirmar Contraseña: <span class="text-danger">*</span></label>
             <input type="password" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword" required>
@@ -87,6 +89,7 @@
               ⚠️ Las contraseñas no coinciden.
             </small>
           </div>
+        </div>
 
         <!-- Estatus -->
         <div class="mb-3">
@@ -97,10 +100,52 @@
           </select>
         </div>
 
+        <hr class="my-4">
+
+        <h3 class="section-subtitle">Inscripción</h3>
+
+        <div class="row">
+          <!-- Grado -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Grado: <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="gradoId" name="gradoId" required>
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+            </select>
+          </div>
+
+          <!-- Grupo -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Grupo: <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="grupoId" name="grupoId" required>
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+            </select>
+          </div>
+
+          <!-- Ciclo Escolar -->
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Ciclo Escolar: <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="cicloId" name="cicloId" required>
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+                {{ extraerAnio(ciclo.fechaInicio) }}-{{ extraerAnio(ciclo.fechaFin) }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div class="alert alert-danger" *ngIf="errorMensaje">
+          {{ errorMensaje }}
+        </div>
+
         <!-- Botones de acción -->
         <div class="modal-footer">
           <button type="button" class="btn btn-limpiar" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-guardar">Guardar</button>
+          <button type="submit" class="btn btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
         </div>
 
       </form>

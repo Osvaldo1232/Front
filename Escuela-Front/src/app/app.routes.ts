@@ -23,6 +23,7 @@ import { CampoFormativo } from "./pages/admin/Components/campo-formativo/campo-f
 import { TutoresComponent } from './pages/admin/Components/tutores/tutores/tutores';
 import { DatosPersonalesDirec } from './pages/admin/Components/docentes/datos-personales-direc/datos-personales-direc';
 import { Alumnos } from './pages/profesor/component/alumnos/alumnos';
+import { CiclosEscolaresComponent } from './pages/admin/Components/ciclos/ciclos/ciclos';
 
 
 export const routes: Routes = [
@@ -40,6 +41,7 @@ export const routes: Routes = [
             { path: 'campoformativo', component: CampoFormativo },
             { path: 'Tutores', component: TutoresComponent },
             { path: 'datos-personalesdirec', component: DatosPersonalesDirec },
+            { path: 'ciclos', component: CiclosEscolaresComponent },
 
 
         ]

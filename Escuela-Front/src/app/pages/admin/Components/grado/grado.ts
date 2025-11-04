@@ -10,6 +10,8 @@ import { NuevoGrado } from '../../modales/nuevo-grado/nuevo-grado';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import { Grados } from '../../../../models/grado.models';
 import { EditarGrado } from './editar-grado/editar-grado/editar-grado';
+import { Loading } from '../../../../shared/loading/loading';
+import { LoadingService } from '../../../../shared/loading-service';
 
 @Component({
   selector: 'app-grado',
@@ -23,7 +25,8 @@ import { EditarGrado } from './editar-grado/editar-grado/editar-grado';
     CheckboxModule,
     MultiSelectModule,
     NuevoGrado,
-    EditarGrado
+    EditarGrado,
+    Loading
   ],
   templateUrl: './grado.html',
   styleUrls: ['./grado.scss'] 
@@ -41,7 +44,7 @@ export class Grado implements OnInit {
   registrosPorPagina = 6; // 6 cards (3x2)
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirector) { }
+  constructor(private Servicios: ServiciosDirector,private loadingService: LoadingService) { }
 
   ngOnInit() {
     this.cargarGrados();
@@ -121,10 +124,12 @@ export class Grado implements OnInit {
   }
 
   cargarGrados() {
+            this.loadingService.show(); 
     this.Servicios.obtenerGrados().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Grados cargados:', this.registros);
+                    this.loadingService.hide(); 
       },
       error: (err) => console.error('Error al cargar grados:', err)
     });

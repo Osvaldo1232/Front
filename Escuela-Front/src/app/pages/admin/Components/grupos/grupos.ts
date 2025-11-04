@@ -6,6 +6,8 @@ import { Grupos } from '../../../../models/grupos.models';
 import { ServiciosDirectorGrupos } from '../../Services/servicios-director-grupos/servicio-director-grupos';
 import { EditarGrupo } from '../grupos/editar-grupo/editar-grupo/editar-grupo';
 import { NuevoGrupo } from '../grupos/nuevo-grupo/nuevo-grupo/nuevo-grupo';
+import { Loading } from '../../../../shared/loading/loading';
+import { LoadingService } from '../../../../shared/loading-service';
 
 @Component({
   selector: 'app-grupos',
@@ -15,7 +17,8 @@ import { NuevoGrupo } from '../grupos/nuevo-grupo/nuevo-grupo/nuevo-grupo';
     FormsModule,
     RouterModule,
     NuevoGrupo,
-    EditarGrupo
+    EditarGrupo,
+    Loading
   ],
   templateUrl: './grupos.html',
   styleUrls: ['./grupos.scss']
@@ -33,7 +36,7 @@ export class GruposComponent implements OnInit {
   registrosPorPagina = 6; // 6 cards (3x2)
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorGrupos) { }
+  constructor(private Servicios: ServiciosDirectorGrupos, private loadingService: LoadingService,) { }
 
   ngOnInit() {
     this.cargarGrupos();
@@ -84,10 +87,12 @@ export class GruposComponent implements OnInit {
   }
 
   cargarGrupos() {
+    this.loadingService.show(); 
     this.Servicios.ObtenerGrupos().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Grupos cargados:', this.registros);
+                    this.loadingService.hide(); 
       },
       error: (err) => console.error('Error al cargar Grupos:', err)
     });

@@ -6,6 +6,8 @@ import { Tutores } from '../../../../../models/tutores.model';
 import { ServiciosDirectorTutores } from '../../../Services/servicios-director-tutores/servicios-director-tutores';
 import { NuevoTutor } from '../tutores/nuevo-tutor/nuevo-tutor/nuevo-tutor';
 import { EditarTutor } from '../tutores/editar-tutor/editar-tutor/editar-tutor';
+import { Loading } from '../../../../../shared/loading/loading';
+import { LoadingService } from '../../../../../shared/loading-service';
 
 @Component({
   selector: 'app-tutores',
@@ -15,7 +17,8 @@ import { EditarTutor } from '../tutores/editar-tutor/editar-tutor/editar-tutor';
     FormsModule,
     RouterModule,
     NuevoTutor,
-    EditarTutor
+    EditarTutor,
+    Loading
   ],
   templateUrl: './tutores.html',
   styleUrls: ['./tutores.scss']
@@ -34,7 +37,7 @@ export class TutoresComponent implements OnInit {
   registrosPorPagina = 10;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorTutores) { }
+  constructor(private Servicios: ServiciosDirectorTutores,private loadingService: LoadingService,) { }
 
   ngOnInit() {
     this.cargarTutores();
@@ -105,10 +108,12 @@ export class TutoresComponent implements OnInit {
   }
 
   cargarTutores() {
+    this.loadingService.show(); 
     this.Servicios.ObtenerTutores().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Tutores cargados:', this.registros);
+                    this.loadingService.hide(); 
       },
       error: (err) => console.error('Error al cargar Tutores:', err)
     });

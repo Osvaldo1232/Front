@@ -43,6 +43,9 @@ export class EditarAlumno implements OnChanges {
 
   cargarDatos() {
     if (this.alumno) {
+
+      
+      console.log('Cargando datos del alumno para editar:', this.alumno);
       this.id = this.alumno.id || '';
       this.nombre = this.alumno.nombre || '';
       this.apellidoPaterno = this.alumno.apellidoPaterno || '';

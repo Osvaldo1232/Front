@@ -19,9 +19,9 @@ export class ServiciosDirectorAlumnos {
   
   
   CrearAlumno(alumnos: Alumnos): Observable<any> {
-    return this.http.post(this.apiUrlAlumnosCrear, alumnos, {
-      responseType: 'text' as 'json'
-    });
+    return this.http.post(this.apiUrlAlumnosCrear, alumnos);
+
+   
   }
 
   ObtenerAlumnos(): Observable<Alumnos[]> {

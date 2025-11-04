@@ -6,13 +6,13 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { Store } from '@ngrx/store';
 import { Materia } from '../../../../models/materia.model';
-import { cargarMaterias } from '../../../../store/actions/materia.actions';
-import { selectAllMaterias } from '../../../../store/selectors/materia.selectors';
 import { Maestros } from '../../../../models/maestros.model';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import { NuevoDocente } from './nuevo-docente/nuevo-docente/nuevo-docente';
 import { EditarDocente } from './editar-docente/editar-docente/editar-docente';
 import { AlertService } from '../../../../shared/alert-service';
+import { Loading } from '../../../../shared/loading/loading';
+import { LoadingService } from '../../../../shared/loading-service';
 
 @Component({
   selector: 'app-docentes',
@@ -24,7 +24,9 @@ import { AlertService } from '../../../../shared/alert-service';
     ButtonModule,
     TableModule,
     NuevoDocente,
-    EditarDocente
+    EditarDocente,
+    Loading
+
   ],
   templateUrl: './docentes.html',
   styleUrls: ['./docentes.scss']
@@ -43,7 +45,7 @@ export class DocentesComponent implements OnInit {
   paginaActual = 1;
 
   constructor(
-    private Servicios: ServiciosDirector,
+    private Servicios: ServiciosDirector,private loadingService: LoadingService,
     private alertService: AlertService
   ) { }
 
@@ -171,10 +173,12 @@ export class DocentesComponent implements OnInit {
 }
 
   cargarDocentes() {
+      this.loadingService.show();
     this.Servicios.ObtenerDocentes().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Docentes cargados:', this.registros);
+          this.loadingService.hide(); 
       },
       error: (err) => console.error('Error al cargar Docentes:', err)
     });
