@@ -18,3 +18,11 @@ export interface CalificacionResponse {
   size: number;
   
 }
+export interface ParametrosCalificacion {
+  idAlumno: string;
+  idMateria: string;
+  idTrimestre: string;
+  idCicloEscolar: string;
+  idGrado: string;
+  promedio: number;
+}

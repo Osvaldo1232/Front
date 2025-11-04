@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../services/login-service';
-import { ServiciosDirector } from './Services/servicios-director'; // Ajusta la ruta según tu estructura
-import { Director } from './../../models/director.model'; // Ajusta según tu modelo
+import { Directivo } from '../../models/DirectivoPersonal';
+import { ServiciosDirectorAlumnos } from './Services/servicios-director-alumnos/servicios-director-alumnos';
 
 @Component({
   selector: 'app-admin',
@@ -16,52 +16,54 @@ import { Director } from './../../models/director.model'; // Ajusta según tu mo
 export class Admin implements OnInit {
   
   sidebarVisible: boolean = true;
-  usuario!: Director; // Cambia Director por tu modelo (puede ser Usuario, Admin, etc.)
+  usuario!: Directivo;
   UsuarioLogueado: any;
   rolUsuario: any;
 
   constructor(
-    private loginService: LoginService, 
     private router: Router,
-    private directorService: ServiciosDirector // Servicio para obtener datos del director
+    private loginService: LoginService,
+    private directorService: ServiciosDirectorAlumnos
   ) {}
 
   ngOnInit(): void {
-    // 1. Obtener el rol desde localStorage
+    // 1️⃣ Obtener rol del usuario desde localStorage
     const rolesString = localStorage.getItem('roles');
     if (rolesString) {
       const roles: string[] = JSON.parse(rolesString);
-      this.rolUsuario = roles[0]; 
+      this.rolUsuario = roles[0];
     }
 
-    // 2. Obtener el usuario logueado
+    // 2️⃣ Obtener información del usuario logueado
     this.UsuarioLogueado = this.loginService.Usuario();
-    
-    // 3. Si hay usuario logueado, obtener su perfil completo
+
+    // 3️⃣ Cargar perfil del usuario si existe sesión activa
     if (this.UsuarioLogueado) {
       this.obtenerPerfil();
     }
   }
 
+  // 🔹 Método para obtener el perfil del directivo
   obtenerPerfil(): void {
-    // Ajusta este método según el servicio que tengas para obtener el perfil del director
     this.directorService.obtenerPerfilUsuario(this.UsuarioLogueado).subscribe({
-      next: (data: Director) => {
+      next: (data: Directivo) => {
         this.usuario = data;
-        console.log('Usuario cargado:', this.usuario);
+        console.log('Perfil cargado correctamente:', this.usuario);
       },
       error: (err) => {
-        console.error('Error al obtener perfil:', err);
+        console.error('Error al obtener el perfil:', err);
       }
     });
   }
 
-  logout() {
-    this.loginService.logout();
-    this.router.navigate(['/login']);
+  // 🔹 Alternar visibilidad del sidebar
+  toggleSidebar(): void {
+    this.sidebarVisible = !this.sidebarVisible;
   }
 
-  toggleSidebar() {
-    this.sidebarVisible = !this.sidebarVisible;
+  // 🔹 Cerrar sesión
+  logout(): void {
+    this.loginService.logout();
+    this.router.navigate(['/login']);
   }
 }

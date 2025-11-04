@@ -21,7 +21,8 @@ import { HistorialAcademico } from './pages/profesor/component/historial-academi
 import { InfoPersonalComponent } from './pages/usuario/component/info-personal/info-personal';
 import { CampoFormativo } from "./pages/admin/Components/campo-formativo/campo-formativo";
 import { TutoresComponent } from './pages/admin/Components/tutores/tutores/tutores';
-import { CiclosEscolaresComponent } from './pages/admin/Components/ciclos/ciclos/ciclos';
+import { DatosPersonalesDirec } from './pages/admin/Components/docentes/datos-personales-direc/datos-personales-direc';
+import { Alumnos } from './pages/profesor/component/alumnos/alumnos';
 
 
 export const routes: Routes = [
@@ -38,7 +39,7 @@ export const routes: Routes = [
             { path: 'grupos', component: GruposComponent },
             { path: 'campoformativo', component: CampoFormativo },
             { path: 'Tutores', component: TutoresComponent },
-            {path: 'ciclos', component: CiclosEscolaresComponent }
+            { path: 'datos-personalesdirec', component: DatosPersonalesDirec },
 
 
         ]
@@ -68,7 +69,8 @@ export const routes: Routes = [
             { path: 'datos-personales', component: DatosPersonales },
             { path: 'materias', component: Materias },
             { path: 'Historial-academico', component: HistorialAcademico },
-            { path: 'Historial-alumno', component: Historial }
+            { path: 'Historial-alumno', component: Historial },
+            { path: 'alumnoss', component: Alumnos }
         ]
     },
 

@@ -1,0 +1,60 @@
+<div class="alumnos-container">
+    <h1 class="title">ALUMNOS</h1>
+
+    <div class="header-section">
+        <div class="search-group">
+            <label>Grado</label>
+            <select class="input-field" [(ngModel)]="gradoId">
+                <option value="">Seleccione un grado</option>
+                <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+            </select>
+        </div>
+
+        <div class="search-group">
+            <label>Grupo</label>
+            <select class="input-field" [(ngModel)]="grupoId">
+                <option value="">Seleccione un grupo</option>
+                <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+            </select>
+        </div>
+
+        <div class="search-group">
+            <label>Ciclo Escolar</label>
+            <select class="input-field" [(ngModel)]="cicloEscolar">
+                <option value="">Seleccione un ciclo</option>
+                <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">{{ ciclo.fechaInicio | date:'yyyy'}}  -  {{ ciclo.fechaFin | date:'yyyy'}}</option>
+            </select>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-buscar" (click)="buscar()">Buscar</button>
+            <button class="btn btn-limpiar" (click)="limpiar()">Limpiar</button>
+        </div>
+    </div>
+
+    <table class="alumnos-table">
+        <thead>
+            <tr>
+                <th>MATRICULA</th>
+                <th>NOMBRE<span class="filter-icon">▼</span></th>
+                <th>APELLIDO PATERNO</th>
+                <th>APELLIDO MATERNO</th>
+                <th>CURP</th>
+                <th>GRADO</th>
+                <th>GRUPO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let alumno of inscripciones; let i = index" [class.row-alternate]="i % 2 === 1">
+                <td>{{ alumno.matricula }}</td>
+                <td>{{ alumno.nombre }}</td>
+                <td>{{ alumno.apellidoPaterno }}</td>
+                <td>{{ alumno.apellidoMaterno }}</td>
+                <td>{{ alumno.curp }}</td>
+                <td>{{ alumno.gradoNombre }}</td>
+                <td>{{ alumno.grupoNombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<app-loading></app-loading>

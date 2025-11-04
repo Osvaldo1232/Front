@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CalificacionRegistro, CalificacionResponse } from '../../../models/calificacion';
+import { CalificacionRegistro, CalificacionResponse, ParametrosCalificacion } from '../../../models/calificacion';
 import { Profesor } from '../../../models/Profesor';
 import { MateriasCamposFormativos } from '../../../models/AsignaciónMateria';
 import { InscripcionDTO } from '../../../models/Materia';
+
 
 
 @Injectable({
@@ -19,7 +20,7 @@ export class ServiciosProfesor {
     return this.http.get<Profesor>(`${this.apiUrlBase}/usuarios/BuscarUsuario/${idUsuario}`);
   }
 
-  editarProfesor(idProfesor: string, profesor:Profesor ): Observable<Profesor> {
+  editarProfesor(idProfesor: string, profesor: Profesor): Observable<Profesor> {
     return this.http.put<Profesor>(`${this.apiUrlBase}/Profesores/profesor/${idProfesor}`, profesor);
   }
 
@@ -32,14 +33,30 @@ export class ServiciosProfesor {
     const url = `${this.apiUrlBase}/asignacion/listar-por-grado?idGrado=${idGrado}`;
     return this.http.get<MateriasCamposFormativos[]>(url);
   }
-  
-   filtrarInscripciones(gradoId: string, grupoId: string, cicloId: string): Observable<InscripcionDTO[]> {
+
+  filtrarInscripciones(gradoId: string, grupoId: string, cicloId: string): Observable<InscripcionDTO[]> {
     const params = new HttpParams()
       .set('gradoId', gradoId)
       .set('grupoId', grupoId)
       .set('cicloId', cicloId);
-    return this.http.get<InscripcionDTO[]>(`${this.apiUrlBase}/inscripcion/filtrar`, { params });
+    return this.http.get<InscripcionDTO[]>(`${this.apiUrlBase}/inscripcion/filtrarAlumnos?`, { params });
   }
+
+  obtenerGradosUno(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlBase}/grados`);
+  }
+
+  obtenerGrupos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlBase}/grupos`);
+  }
+
+  obtenerCiclos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlBase}/ciclosescolares`);
+  }
+  
+  //guardarCalificacion(calificacion: ParametrosCalificacion): Observable<any> {
+  //  return this.http.post<any>(`${this.apiUrlBase}/cicloses`);
+  //}
 
   getMaterias(page: number = 0, size: number = 10, sortBy: string = 'id'): Observable<CalificacionResponse> {
     const params = new HttpParams()
@@ -53,8 +70,5 @@ export class ServiciosProfesor {
   editarCalificacion(calificacion: CalificacionRegistro): Observable<CalificacionRegistro> {
 
     return this.http.post<CalificacionRegistro>(`${this.apiUrlBase}/NuevaCalificacion`, calificacion);
-  }
-  obtenerGrados(): Observable<CalificacionRegistro[]> {
-    return this.http.get<CalificacionRegistro[]>(this.apiUrlBase);
   }
 }

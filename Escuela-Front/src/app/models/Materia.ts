@@ -9,8 +9,10 @@ export interface InscripcionDTO {
   idAlumno: string;
   matricula: string;
   curp: string;
-  nombreAlumno: string;
-  nombreGrado: string;
-  nombreGrupo: string;
+  nombre: string;
+  gradoNombre: string;
+  grupoNombre: string;
   nombreProfesor: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
 }
