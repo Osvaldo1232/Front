@@ -1,0 +1,11 @@
+<div class="container py-4">
+  <h2 class="text-center mb-4">CALIFICACIÓN GENERAL POR GRADOS</h2>
+  <div class="row">
+    <div class="col-6 col-md-4" *ngFor="let grade of grades">
+      <div class="grade-box">
+        <div class="grade-title">{{ grade.label }}</div>
+        <div *ngIf="grade.score !== null" class="grade-score">{{ grade.score }}</div>
+      </div>
+    </div>
+  </div>
+</div>

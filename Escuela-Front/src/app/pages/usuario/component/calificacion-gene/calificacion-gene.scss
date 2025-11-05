@@ -1,0 +1,25 @@
+.grade-box {
+  border: 2px solid #4b2c20; /* Marrón oscuro */
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.grade-title {
+  background-color: white;
+  color: #4b2c20;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 20px;
+  text-align: center;
+}
+
+.grade-score {
+  background-color: #4b2c20;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center;
+}

@@ -24,6 +24,7 @@ import { TutoresComponent } from './pages/admin/Components/tutores/tutores/tutor
 import { DatosPersonalesDirec } from './pages/admin/Components/docentes/datos-personales-direc/datos-personales-direc';
 import { Alumnos } from './pages/profesor/component/alumnos/alumnos';
 import { CiclosEscolaresComponent } from './pages/admin/Components/ciclos/ciclos/ciclos';
+import { CalificacionGene } from './pages/usuario/component/calificacion-gene/calificacion-gene';
 
 
 export const routes: Routes = [
@@ -47,13 +48,14 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'usuario', component: Usuario, canActivate: [AuthGuard], canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },
+         path: 'usuario', component: Usuario, canActivate: [AuthGuard], canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },
 
         children: [
             { path: '', redirectTo: 'calificaciones', pathMatch: 'full' },
             { path: 'calificaciones', component: Calificaciones },
             { path: 'historial', component: Historial },
             {path: 'info-personal', component: InfoPersonalComponent },
+            {path: 'calificacion-gene', component:CalificacionGene},
 
 
         ]
