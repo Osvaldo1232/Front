@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../services/login-service';
 import { Component } from '@angular/core';
-import { Alumno, AlumnoService } from './Services/alumno-service';
+import { AlumnoService } from './Services/alumno-service';
+import { Alumnos } from '../../models/alumnos.model';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class Usuario {
   constructor(private router: Router, private LoginS:LoginService, private alumnoService: AlumnoService) {}
 sidebarVisible: boolean = true; 
 rolUsuario :any;
-usuario!: Alumno;
+usuario!: Alumnos;
 UsuarioLogueado:any;
 
 ngOnInit(): void {
@@ -34,7 +35,7 @@ if (this.UsuarioLogueado){
   }
   obtenerPerfil(): void {
       this.alumnoService.obtenerAlumnoPorId( this.UsuarioLogueado).subscribe({
-        next: (data: Alumno) => {
+        next: (data: Alumnos) => {
           this.usuario = data;
         },
         error: (err) => {

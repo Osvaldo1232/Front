@@ -22,6 +22,13 @@ export interface InscripcionReciente {
   nombreProfesorCompleto: string;
   telefonoProfesor: string;
 }
+export interface MateriasCalifica {
+  idMateria: string;
+  nombreMateria: string;
+  calificacionActual: any;
+  idGrado: string;
+  nombreGrado: string;
+}
 
 export interface AlumnoGGC {
   alumnoId: string;

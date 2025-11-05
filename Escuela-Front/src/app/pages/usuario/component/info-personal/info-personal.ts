@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AlumnoService, Alumno, InscripcionReciente } from '../../Services/alumno-service';
+import { AlumnoService } from '../../Services/alumno-service';
+import { Alumnos, InscripcionReciente } from '../../../../models/alumnos.model';
 import { LoginService } from '../../../../services/login-service';
 import { CommonModule } from '@angular/common';
 import { timeout } from 'rxjs';
@@ -14,7 +15,7 @@ import { Loading } from '../../../../shared/loading/loading';
   imports: [CommonModule, Loading]
 })
 export class InfoPersonalComponent implements OnInit {
-  alumno?: Alumno;
+  alumno?: Alumnos;
   inscripcion?: InscripcionReciente; // ✅ Guardamos la inscripción reciente
   errorMessage = '';
   usuario:any;
@@ -51,15 +52,15 @@ this.loadingService.show();
 
 cargarUsuario(usu:any){
   this.loadingService.show();
-   this.alumnoService.obtenerAlumnoPorId(usu).subscribe({
-        next: (data) => {
-          this.alumno = data;
-          this.loadingService.hide(); 
-        error: () => {
-          this.errorMessage = 'No se pudieron cargar los datos del alumno.';
-          this.loadingService.hide(); 
-        }
-      }});
+  this.alumnoService.obtenerAlumnoPorId(usu).subscribe({
+    next: (data) => {
+      this.alumno = data;
+      this.loadingService.hide(); 
+    },
+    error: () => {
+      this.errorMessage = 'No se pudieron cargar los datos del alumno.';
+      this.loadingService.hide(); 
+    }
+  });
 }
-
 }
