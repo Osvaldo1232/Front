@@ -1,0 +1,20 @@
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">TRIMESTRES</h1>
+  </header>
+
+  <!-- Mensaje cuando no hay trimestres -->
+  <div *ngIf="trimestres.length === 0" class="no-data">
+    <p>No hay trimestres registrados.</p>
+  </div>
+
+  <!-- Grid de tarjetas -->
+  <div class="cards-grid" *ngIf="trimestres.length > 0">
+    <div class="card" *ngFor="let trimestre of trimestres">
+      <h2 class="card__title trimestre-nombre">{{ trimestre.nombre }}</h2>
+    </div>
+  </div>
+
+  <app-loading></app-loading>
+</div>
+
