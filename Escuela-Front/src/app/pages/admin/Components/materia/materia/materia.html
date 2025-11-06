@@ -1,0 +1,70 @@
+<div class="container">
+  <header class="header">
+    <h1 class="header__title">MATERIAS</h1>
+  </header>
+
+  <!-- Botón Nuevo -->
+  <div class="button-section">
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+  </div>
+
+  <!-- Mensaje cuando no hay materias -->
+  <div *ngIf="registros.length === 0" class="no-data">
+    <p>No hay materias registradas.</p>
+  </div>
+
+  <!-- Grid de tarjetas -->
+  <div class="cards-grid" *ngIf="registros.length > 0">
+    <div class="card" *ngFor="let materia of materiasPaginadas">
+      <h2 class="card__title">{{ materia.nombre }}</h2>
+      
+      <div class="card__info">
+        <p class="card__detail">Campo Formativo: {{ obtenerNombreCampoFormativo(materia.campoFormativoId) }}</p>
+      </div>
+      
+      <div class="card__footer">
+        <div class="card__status">
+          <span class="status-label">Inactivo</span>
+          <label class="toggle">
+            <input 
+              type="checkbox" 
+              [checked]="materia.estatus === 'ACTIVO'"
+              (change)="cambiarEstatus(materia)">
+            <span class="toggle__slider"></span>
+          </label>
+          <span class="status-label">Activo</span>
+        </div>
+        <button class="btn btn--edit" (click)="editar(materia)">EDITAR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination" *ngIf="totalPaginas > 1">
+    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+    <button
+      *ngFor="let p of totalPaginasArray"
+      class="pagination__btn"
+      [class.pagination__btn--active]="p === paginaActual"
+      (click)="cambiarPagina(p)"
+    >
+      {{ p }}
+    </button>
+    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+  </div>
+</div>
+
+<!-- Modal Nueva Materia -->
+<app-nueva-materia 
+  *ngIf="nuevom" 
+  [nuevo]="nuevom" 
+  (cerrar)="cerrarModal($event)">
+</app-nueva-materia>
+
+<!-- Modal Editar Materia -->
+<app-editar-materia 
+  *ngIf="editarm"
+  [editar]="editarm"
+  [materia]="materiaSeleccionada"
+  (cerrar)="cerrarModalEditar($event)">
+</app-editar-materia>

@@ -1,5 +1,5 @@
 export interface Materia {
-  id: string;              
+  id?: string;              
   nombre: string;          
   campoFormativoId: string;   
   estatus: string;      
