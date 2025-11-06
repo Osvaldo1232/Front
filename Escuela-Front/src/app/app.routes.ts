@@ -28,6 +28,7 @@ import { CalificacionGene } from './pages/usuario/component/calificacion-gene/ca
 import { AsignacionGrado } from './pages/admin/Components/asignacion-grado/asignacion-grado';
 import { TrimestresComponent } from './pages/admin/Components/trimestres/trimestres';
 import { MateriasComponent } from './pages/admin/Components/materia/materia/materia';
+import { ListaGradoMaterias } from './pages/admin/Components/lista-grado-materias/lista-grado-materias';
 
 
 export const routes: Routes = [
@@ -49,6 +50,7 @@ export const routes: Routes = [
             { path: 'ciclos', component: CiclosEscolaresComponent },
             { path: 'trimestres', component: TrimestresComponent },
             { path: 'materias', component: MateriasComponent },
+            { path: 'lista-grado-materias', component: ListaGradoMaterias },
 
 
         ]
