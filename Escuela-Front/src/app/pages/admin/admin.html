@@ -5,7 +5,7 @@
   </div>
   <div class="header-right">
     <ng-container *ngIf="usuario; else cargando">
-      {{ usuario.nombre + ' ' + usuario.apellidoPaterno }}
+      {{ usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno }}
     </ng-container>
     <ng-template #cargando>
       Cargando...
@@ -19,7 +19,8 @@
     <div class="profile-section">
       <img src="assets/img/logoprim.png" alt="Perfil" class="profile-image">
       <ng-container *ngIf="usuario">
-        <p class="profile-name">{{ usuario.nombre }} {{ usuario.apellidoPaterno }}</p>
+        <p class="profile-name">{{ usuario.nombre }} {{ usuario.apellidoPaterno + ' ' + usuario.
+        apellidoMaterno }}</p>
         <p class="profile-role">{{ rolUsuario }}</p>
       </ng-container>
       <ng-container *ngIf="!usuario">
