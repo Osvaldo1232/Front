@@ -16,3 +16,14 @@ export interface InscripcionDTO {
   apellidoPaterno: string;
   apellidoMaterno: string;
 }
+
+export interface AsignacionGradoGrupo {
+  idProfesor: string;
+  nombreProfesor: string;
+  rfc: string;
+  clave: string;
+  nombreGrado: string;
+  nombreGrupo: string;
+  nombreCiclo: string;
+  fechaCreado: string;
+}

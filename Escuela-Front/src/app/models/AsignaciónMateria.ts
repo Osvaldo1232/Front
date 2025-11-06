@@ -24,7 +24,6 @@ export interface MateriaResponse {
 
 
 export interface MateriasCamposFormativos {
- 
     idGrado:any;
     nombreGrado: any,
     idMateria: any,
@@ -32,3 +31,4 @@ export interface MateriasCamposFormativos {
     idCampoFormativo: any;
     nombreCampoFormativo: any
 }
+

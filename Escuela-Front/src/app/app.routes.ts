@@ -25,6 +25,7 @@ import { DatosPersonalesDirec } from './pages/admin/Components/docentes/datos-pe
 import { Alumnos } from './pages/profesor/component/alumnos/alumnos';
 import { CiclosEscolaresComponent } from './pages/admin/Components/ciclos/ciclos/ciclos';
 import { CalificacionGene } from './pages/usuario/component/calificacion-gene/calificacion-gene';
+import { AsignacionGrado } from './pages/admin/Components/asignacion-grado/asignacion-grado';
 
 
 export const routes: Routes = [
@@ -41,6 +42,7 @@ export const routes: Routes = [
             { path: 'grupos', component: GruposComponent },
             { path: 'campoformativo', component: CampoFormativo },
             { path: 'Tutores', component: TutoresComponent },
+            { path: 'asignaciongradogrupo', component: AsignacionGrado },
             { path: 'datos-personalesdirec', component: DatosPersonalesDirec },
             { path: 'ciclos', component: CiclosEscolaresComponent },
 

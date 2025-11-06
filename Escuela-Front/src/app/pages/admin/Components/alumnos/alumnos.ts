@@ -15,7 +15,6 @@ import { ServiciosDirectorCiclos } from '../../Services/servicios-director-ciclo
 import { NuevoAlumno } from './nuevo_alumno/nuevo-alumno/nuevo-alumno';
 import { EditarAlumno } from './editar-alumno/editar-alumno/editar-alumno'; 
 import { Router } from '@angular/router';
-import { PerfilEstudiante } from "./perfil-estudiante/perfil-estudiante/perfil-estudiante";
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
 
@@ -28,9 +27,8 @@ import { LoadingService } from '../../../../shared/loading-service';
     RouterModule,
     NuevoAlumno,
     EditarAlumno,
-    PerfilEstudiante,
     Loading
-  ],
+],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.scss']
 })
