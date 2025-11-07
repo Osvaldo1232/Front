@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../services/login-service';
@@ -14,41 +14,35 @@ import { ServiciosDirectorAlumnos } from './Services/servicios-director-alumnos/
   styleUrl: './admin.scss'
 })
 export class Admin implements OnInit {
-  
   sidebarVisible: boolean = true;
   usuario!: Directivo;
   UsuarioLogueado: any;
   rolUsuario: any;
-
   constructor(
     private router: Router,
     private loginService: LoginService,
     private directorService: ServiciosDirectorAlumnos
   ) {}
-
   ngOnInit(): void {
-    // 1️⃣ Obtener rol del usuario desde localStorage
+
+    const width = window.innerWidth;
+  this.sidebarVisible = width > 900;
+
     const rolesString = localStorage.getItem('roles');
     if (rolesString) {
       const roles: string[] = JSON.parse(rolesString);
       this.rolUsuario = roles[0];
     }
-
-    // 2️⃣ Obtener información del usuario logueado
     this.UsuarioLogueado = this.loginService.Usuario();
-
-    // 3️⃣ Cargar perfil del usuario si existe sesión activa
     if (this.UsuarioLogueado) {
       this.obtenerPerfil();
     }
   }
 
-  // 🔹 Método para obtener el perfil del directivo
   obtenerPerfil(): void {
     this.directorService.obtenerPerfilUsuario(this.UsuarioLogueado).subscribe({
       next: (data: Directivo) => {
         this.usuario = data;
-        console.log('Perfil cargado correctamente:', this.usuario);
       },
       error: (err) => {
         console.error('Error al obtener el perfil:', err);
@@ -56,12 +50,27 @@ export class Admin implements OnInit {
     });
   }
 
-  // 🔹 Alternar visibilidad del sidebar
-  toggleSidebar(): void {
+   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  // 🔹 Cerrar sesión
+ closeSidebar() {
+  if (window.innerWidth <= 900) {
+    this.sidebarVisible = false;
+  }
+  }
+@HostListener('window:resize', [])
+onResize() {
+  const width = window.innerWidth;
+  if (width > 900) {
+    this.sidebarVisible = true;
+  }
+  else {
+    this.sidebarVisible = false;
+  }
+}
+
+
   logout(): void {
     this.loginService.logout();
     this.router.navigate(['/login']);
