@@ -44,7 +44,7 @@ export const routes: Routes = [
             { path: 'grados', component: Grado },
             { path: 'grupos', component: GruposComponent },
             { path: 'campoformativo', component: CampoFormativo },
-            { path: 'Tutores', component: TutoresComponent },
+            { path: 'tutores', component: TutoresComponent },
             { path: 'asignaciongradogrupo', component: AsignacionGrado },
             { path: 'datos-personalesdirec', component: DatosPersonalesDirec },
             { path: 'ciclos', component: CiclosEscolaresComponent },

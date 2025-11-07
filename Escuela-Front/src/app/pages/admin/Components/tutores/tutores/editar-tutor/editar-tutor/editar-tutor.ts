@@ -24,7 +24,8 @@ export class EditarTutor implements OnChanges {
 
   id: any = '';
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   correo: string = '';
   telefono: string = '';
   estatus: string = 'ACTIVO';
@@ -39,7 +40,8 @@ export class EditarTutor implements OnChanges {
     if (this.tutor) {
       this.id = this.tutor.id || '';
       this.nombre = this.tutor.nombre || '';
-      this.apellidos = this.tutor.apellidos || '';
+      this.apellidoPaterno = this.tutor.apellidoPaterno || '';
+      this.apellidoMaterno = this.tutor.apellidoMaterno || '';
       this.correo = this.tutor.correo || '';
       this.telefono = this.tutor.telefono || '';
       this.estatus = this.tutor.estatus || 'ACTIVO';
@@ -50,7 +52,8 @@ export class EditarTutor implements OnChanges {
     const tutorActualizado: Tutores = { 
       id: this.id,
       nombre: this.nombre,
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       correo: this.correo,
       telefono: this.telefono,
       estatus: this.estatus

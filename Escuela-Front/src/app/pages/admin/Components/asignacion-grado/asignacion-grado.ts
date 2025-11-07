@@ -16,35 +16,76 @@ import { Loading } from '../../../../shared/loading/loading';
 })
 export class AsignacionGrado implements OnInit {
   ciclos: any[] = [];
-
   cicloEscolar: string = '';
   inscripciones: AsignacionGradoGrupo[] = [];
 
-  constructor(private servicioDirectorAsignacion: ServiciosDirectorGrupos, private loadingService: LoadingService, private AlertService: AlertService) {}
+  constructor(
+    private servicioDirectorAsignacion: ServiciosDirectorGrupos,
+    private loadingService: LoadingService,
+    private AlertService: AlertService
+  ) {}
 
   ngOnInit(): void {
+    // 🔹 Mostrar loading al entrar a la pantalla
+    this.loadingService.show();
     this.cargarCombos();
   }
+
   cargarCombos(): void {
     this.servicioDirectorAsignacion.obtenerCiclos().subscribe({
-      next: (data) => this.ciclos = data,
-      error: (err) => console.error('Error al cargar ciclos', err)
+      next: (data) => {
+        this.ciclos = data;
+
+        // 🔹 Determinar el ciclo actual o más reciente
+        const cicloActual = this.obtenerCicloActual(this.ciclos);
+
+        if (cicloActual) {
+          this.cicloEscolar = cicloActual.id; // precargar el combo
+          this.buscar(false); // cargar inscripciones sin mostrar loading extra
+        } else {
+          // Si no hay ciclos, ocultar el loading
+          this.loadingService.hide();
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar ciclos', err);
+        this.loadingService.hide();
+      }
     });
   }
 
-  buscar(): void {
+  // 🔹 Buscar el ciclo que incluya el año actual
+  obtenerCicloActual(ciclos: any[]): any {
+    const anioActual = new Date().getFullYear();
+
+    const actual = ciclos.find(c =>
+      anioActual >= c.anioInicio && anioActual <= c.anioFin
+    );
+
+    // Si no hay ciclo activo, tomar el más reciente por año de fin
+    if (!actual) {
+      return ciclos.sort((a, b) => b.anioFin - a.anioFin)[0];
+    }
+
+    return actual;
+  }
+
+  buscar(mostrarLoading: boolean = true): void {
     if (!this.cicloEscolar) {
-      alert('Por favor, llena todos los campos antes de buscar');
+      alert('Por favor, selecciona un ciclo escolar antes de buscar');
       return;
     }
-    this.loadingService.show();
+
+    if (mostrarLoading) {
+      this.loadingService.show();
+    }
 
     this.servicioDirectorAsignacion.filtrarInscripciones(this.cicloEscolar).subscribe({
-        next: (inscripciones) => {
+      next: (inscripciones) => {
         this.inscripciones = inscripciones || [];
         this.loadingService.hide();
 
-        if(inscripciones.length === 0){
+        if (inscripciones.length === 0) {
           this.AlertService.show(
             'Actualmente no se encontraron alumnos para los criterios seleccionados.',
             'danger',
@@ -52,16 +93,16 @@ export class AsignacionGrado implements OnInit {
           );
         }
       },
-        error: (err) => {
-          console.error('Error al obtener inscripciones', err);
-          this.loadingService.hide();
-          this.AlertService.show(
+      error: (err) => {
+        console.error('Error al obtener inscripciones', err);
+        this.loadingService.hide();
+        this.AlertService.show(
           'Ocurrió un error al buscar los alumnos',
           'danger',
           'Error'
         );
-        }
-      });
+      }
+    });
   }
 
   limpiar(): void {

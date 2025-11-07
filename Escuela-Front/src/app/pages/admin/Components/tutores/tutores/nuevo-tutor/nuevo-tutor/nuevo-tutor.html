@@ -11,7 +11,7 @@
     <!-- Cuerpo del modal -->
     <div class="modal-body">
       <form (ngSubmit)="guardar()">
-        
+
         <div class="row">
           <!-- Nombre -->
           <div class="col-md-6 mb-3">
@@ -19,34 +19,42 @@
             <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
           </div>
 
-          <!-- Apellidos -->
+          <!-- Apellido Paterno -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Apellidos: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="apellidos" name="apellidos" required>
+            <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidoPaterno" required>
           </div>
         </div>
 
         <div class="row">
+          <!-- Apellido Materno -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Materno:</label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidoMaterno" >
+          </div>
+
           <!-- Correo -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Correo: <span class="text-danger">*</span></label>
             <input type="email" class="form-control" [(ngModel)]="correo" name="correo" required>
           </div>
+        </div>
 
+        <div class="row">
           <!-- Teléfono -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Teléfono: <span class="text-danger">*</span></label>
             <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono" required>
           </div>
-        </div>
 
-        <!-- Estatus -->
-        <div class="mb-3">
-          <label class="form-label">Estatus:</label>
-          <select class="form-select" [(ngModel)]="estatus" name="estatus">
-            <option value="ACTIVO">Activo</option>
-            <option value="INACTIVO">Inactivo</option>
-          </select>
+          <!-- Estatus -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Estatus:</label>
+            <select class="form-select" [(ngModel)]="estatus" name="estatus">
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
+          </div>
         </div>
 
         <!-- Botones de acción -->

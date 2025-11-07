@@ -1,8 +1,8 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
-            <h2 class="text-uppercase mb-1 titulo-h2">ASIGNACIÓN DOCENTE</h2>
-            <h5 class="text-muted mb-4 titulo-h5">Asiganación de grado y grupo a un Docente</h5>
+            <h2 class="text-uppercase mb-1 titulo-h2">LISTA ASIGNACIÓN DOCENTE</h2>
+            <h5 class="text-muted mb-4 titulo-h5">Lista de grado y grupo asignado a un Docente</h5>
         </div>
     </div>
 
@@ -30,7 +30,6 @@
                         <th class="col-th">CLAVE</th>
                         <th class="col-th">GRADO</th>
                         <th class="col-th">GRUPO</th>
-                        <th class="col-th">FECHA CREADO</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +39,7 @@
                         <td>{{ alumno.clave }}</td>
                         <td>{{ alumno.nombreGrado }}</td>
                         <td>{{ alumno.nombreGrupo }}</td>
-                        <td>{{ alumno.fechaCreado | date:'yyyy-MM-dd' }}</td>
+                    
                     </tr>
                 </tbody>
             </table>

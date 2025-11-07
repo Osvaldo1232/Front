@@ -22,7 +22,8 @@ export class NuevoTutor {
   ) { }
 
   nombre: string = '';
-  apellidos: string = '';
+  apellidoPaterno: string = '';
+  apellidoMaterno: string = '';
   correo: string = '';
   telefono: string = '';
   estatus: string = 'ACTIVO';
@@ -30,7 +31,8 @@ export class NuevoTutor {
   guardar() {
     const tutor: Tutores = { 
       nombre: this.nombre,
-      apellidos: this.apellidos,
+      apellidoPaterno: this.apellidoPaterno,
+      apellidoMaterno: this.apellidoMaterno,
       correo: this.correo,
       telefono: this.telefono,
       estatus: this.estatus
@@ -47,7 +49,8 @@ export class NuevoTutor {
         
         const nuevoTutor = { 
           nombre: this.nombre,
-          apellidos: this.apellidos,
+          apellidoPaterno: this.apellidoPaterno,
+          apellidoMaterno: this.apellidoMaterno,
           correo: this.correo,
           telefono: this.telefono,
           estatus: this.estatus
@@ -74,7 +77,8 @@ export class NuevoTutor {
 
   limpiarCampos() {
     this.nombre = '';
-    this.apellidos = '';
+    this.apellidoPaterno = '';
+    this.apellidoMaterno = '';
     this.correo = '';
     this.telefono = '';
     this.estatus = 'ACTIVO';

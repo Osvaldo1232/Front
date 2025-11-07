@@ -27,30 +27,46 @@ export class TutoresComponent implements OnInit {
   
   terminoBusqueda: string = '';
   registros: Tutores[] = [];
-  nuevom: boolean = false;
-  
-  // Modal editar
-  editarm: boolean = false;
+  nuevom = false;
+  editarm = false;
   tutorSeleccionado: Tutores | null = null;
 
-  // Paginación
   registrosPorPagina = 10;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorTutores,private loadingService: LoadingService,) { }
+  constructor(
+    private servicios: ServiciosDirectorTutores,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit() {
+    this.loadingService.show();
     this.cargarTutores();
+  }
+
+  cargarTutores() {
+    this.servicios.ObtenerTutores().subscribe({
+      next: (res) => {
+        this.registros = res || [];
+        console.log('✅ Tutores cargados:', this.registros);
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar tutores:', err);
+        this.loadingService.hide();
+      }
+    });
   }
 
   get tutoresFiltrados() {
     if (!this.terminoBusqueda.trim()) return this.registros;
     const termino = this.terminoBusqueda.toLowerCase();
     return this.registros.filter(t =>
-      t.nombre.toLowerCase().includes(termino) ||
-      t.apellidos.toLowerCase().includes(termino) ||
-      t.correo.toLowerCase().includes(termino) ||
-      t.telefono.toLowerCase().includes(termino)
+      t.nombre?.toLowerCase().includes(termino) ||
+      t.apellidoPaterno?.toLowerCase().includes(termino) ||
+      t.apellidoMaterno?.toLowerCase().includes(termino) ||
+      t.correo?.toLowerCase().includes(termino) ||
+      t.telefono?.toLowerCase().includes(termino)
     );
   }
 
@@ -105,17 +121,5 @@ export class TutoresComponent implements OnInit {
     if (guardado) {
       this.cargarTutores();
     }
-  }
-
-  cargarTutores() {
-    this.loadingService.show(); 
-    this.Servicios.ObtenerTutores().subscribe({
-      next: (res) => {
-        this.registros = res;
-        console.log('Tutores cargados:', this.registros);
-                    this.loadingService.hide(); 
-      },
-      error: (err) => console.error('Error al cargar Tutores:', err)
-    });
   }
 }

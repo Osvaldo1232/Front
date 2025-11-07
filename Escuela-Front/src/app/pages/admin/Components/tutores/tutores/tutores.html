@@ -7,7 +7,6 @@
   </div>
 
   <div class="card p-4 shadow-lg table-card">
-
     <!-- Barra de búsqueda y botones -->
     <div class="d-flex justify-content-between mb-3 align-items-center">
       <div class="search-container">
@@ -18,6 +17,7 @@
           [(ngModel)]="terminoBusqueda"
           (input)="buscar()">
       </div>
+
       <div class="button-group">
         <button class="btn btn-search" (click)="buscar()">Buscar</button>
         <button class="btn btn-clear" (click)="limpiarBusqueda()">Limpiar</button>
@@ -36,7 +36,8 @@
         <thead class="table-header">
           <tr>
             <th>NOMBRE</th>
-            <th>APELLIDOS</th>
+            <th>APELLIDO PATERNO</th>
+            <th>APELLIDO MATERNO</th>
             <th>CORREO</th>
             <th>TELÉFONO</th>
             <th>ESTATUS</th>
@@ -46,12 +47,14 @@
         <tbody>
           <tr *ngFor="let tutor of tutoresPaginados">
             <td>{{ tutor.nombre }}</td>
-            <td>{{ tutor.apellidos }}</td>
+            <td>{{ tutor.apellidoPaterno }}</td>
+            <td>{{ tutor.apellidoMaterno }}</td>
             <td>{{ tutor.correo }}</td>
             <td>{{ tutor.telefono }}</td>
             <td>
-              <span class="badge" [class.badge-activo]="tutor.estatus === 'ACTIVO'" 
-                                   [class.badge-inactivo]="tutor.estatus === 'INACTIVO'">
+              <span class="badge" 
+                    [class.badge-activo]="tutor.estatus === 'ACTIVO'" 
+                    [class.badge-inactivo]="tutor.estatus === 'INACTIVO'">
                 {{ tutor.estatus }}
               </span>
             </td>
@@ -62,18 +65,13 @@
                   <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.105l-5.313 1.77a.5.5 0 0 1-.606-.606l1.77-5.313a.5.5 0 0 1 .105-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5v-.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5-.5v-.5a.5.5 0 0 1 .176-.358z" />
                 </svg>
               </button>
-              <button class="btn btn-icon-view ms-2" title="Ver">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
-                  class="bi bi-eye" viewBox="0 0 16 16">
-                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                </svg>
-              </button>
+
+
             </td>
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> <!-- ✅ cierre correcto de .table-responsive -->
 
     <!-- Paginación -->
     <div class="pagination-container" *ngIf="totalPaginas > 1">
@@ -90,10 +88,9 @@
           </li>
         </ul>
       </nav>
-    </div>
-
-  </div>
-</div>
+    </div> <!-- ✅ cierre correcto de paginación -->
+  </div> <!-- ✅ cierre correcto de .card -->
+</div> <!-- ✅ cierre correcto de .container-fluid -->
 
 <!-- Modal Nuevo Tutor -->
 <app-nuevo-tutor 
@@ -109,4 +106,6 @@
   [tutor]="tutorSeleccionado"
   (cerrar)="cerrarModalEditar($event)">
 </app-editar-tutor>
+
+<!-- Loading -->
 <app-loading></app-loading>
