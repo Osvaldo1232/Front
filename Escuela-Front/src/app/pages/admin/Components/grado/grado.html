@@ -1,22 +1,26 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">GRADOS</h1>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">GRADOS</h2>
+        <h5 class="titulo-h5">Grados</h5>
+      </div>
+    </div>
+  </div>
 
-  <!-- Botón Nuevo -->
+<div class="container">
+
   <div class="button-section">
     <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
   </div>
 
-  <!-- Mensaje cuando no hay grados -->
   <div *ngIf="registros.length === 0" class="no-data">
     <p>No hay grados registrados.</p>
   </div>
 
-  <!-- Grid de tarjetas -->
   <div class="cards-grid" *ngIf="registros.length > 0">
-    <div class="card" *ngFor="let grado of registros; let i = index">
-      <h2 class="card__title">{{ getNombreGrado(i) }}</h2>
+    <div class="card" *ngFor="let grado of registrosPaginados">
+      <h2 class="card__title">{{ grado.nombre }}</h2>
       
       <div class="card__footer">
         <div class="card__status">
@@ -50,7 +54,6 @@
   </div>
 </div>
 
-<!-- Modal Nuevo Grado -->
 <app-nuevo-grado 
   *ngIf="nuevom" 
   [nuevo]="nuevom" 

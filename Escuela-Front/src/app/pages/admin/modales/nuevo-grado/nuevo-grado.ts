@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import {  Grados } from '../../../../models/grado.models';
+import { AlertService } from '../../../../shared/alert-service';
 
 @Component({
   selector: 'app-nuevo-grado',
@@ -17,7 +18,7 @@ export class NuevoGrado {
 @Output() cerrar = new EventEmitter<Grados | null>();
 
   
-  constructor(private Servicios: ServiciosDirector) { }
+  constructor(private Servicios: ServiciosDirector, private alertService:AlertService) { }
 
   nombre: string = '';
   estatus: string = 'ACTIVO';
@@ -34,7 +35,24 @@ export class NuevoGrado {
       };
       this.cerrar.emit(nuevoGrado); 
       },
-      error: (err) => console.error('Error al crear grado:', err)
+      error: (err) => {
+        if (err.status === 400) {
+      // ✅ ES UN CÓDIGO 400
+      this.alertService.show(
+        err.error?.error || 'Error 400: Datos inválidos o duplicados.',
+        'warning',
+        'Validación'
+      );
+    } else {
+
+      this.alertService.show(
+        'Error inesperado. Intenta más tarde.',
+        'danger',
+        'Error'
+      );
+    }
+    this.cerrarModal();
+      }
     });
   }
 

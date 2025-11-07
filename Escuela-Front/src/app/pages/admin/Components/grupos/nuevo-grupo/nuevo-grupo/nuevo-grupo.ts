@@ -48,12 +48,12 @@ export class NuevoGrupo {
         this.cerrar.emit(nuevoGrupo); 
       },
       error: (err) => {
-        console.error('Error al crear Grupo:', err);
         this.alertService.show(
-          'Error al crear el grupo',
-          'danger',
+          'Ya existe un grupo con ese nombre. Por favor, elige otro nombre.',
+          'warning',
           'Error'
         );
+        this.cerrarModal();
       }
     });
   }

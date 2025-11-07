@@ -24,16 +24,14 @@ import { LoadingService } from '../../../../shared/loading-service';
   styleUrls: ['./grupos.scss']
 })
 export class GruposComponent implements OnInit {
-  
+
   registros: Grupos[] = [];
   nuevom: boolean = false;
-  
-  // Modal editar
+
   editarm: boolean = false;
   grupoSeleccionado: Grupos | null = null;
 
-  // Paginación
-  registrosPorPagina = 6; // 6 cards (3x2)
+  registrosPorPagina = 6;
   paginaActual = 1;
 
   constructor(private Servicios: ServiciosDirectorGrupos, private loadingService: LoadingService,) { }
@@ -55,12 +53,21 @@ export class GruposComponent implements OnInit {
       this.paginaActual = pagina;
     }
   }
+  existeNombreGrupo(nombre: string, idExcluir?: number): boolean {
+    return this.registros.some(grupo =>
+      grupo.nombre.toLowerCase().trim() === nombre.toLowerCase().trim() &&
+      grupo.id !== idExcluir
+    );
+  }
 
   nuevo() {
     this.nuevom = true;
   }
 
   cerrarModal(event: Grupos | null) {
+    if (event && this.existeNombreGrupo(event.nombre)) {
+      return;
+    }
     this.nuevom = false;
     if (event) {
       this.cargarGrupos();
@@ -83,18 +90,17 @@ export class GruposComponent implements OnInit {
   cambiarEstatus(grupo: Grupos) {
     grupo.estatus = grupo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     console.log('Cambiar estatus:', grupo);
-    // Aquí llamarías al servicio para actualizar en el backend si lo necesitas
   }
 
   cargarGrupos() {
-    this.loadingService.show(); 
+    this.loadingService.show();
     this.Servicios.ObtenerGrupos().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Grupos cargados:', this.registros);
-                    this.loadingService.hide(); 
+        this.loadingService.hide();
       },
-      error: (err) => console.error('Error al cargar Grupos:', err)
+      error: (err) => console.error('Ya existe un grupo con ese nombre. Por favor, elige otro nombre.', err)
     });
   }
 }

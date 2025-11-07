@@ -1,20 +1,31 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">TRIMESTRES</h1>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+  </div>
 
-  <!-- Mensaje cuando no hay trimestres -->
+  <div class="card p-4 mb-5 shadow-lg form-card-padding">
+    <div class="row g-4">
+      <div class="col-12">
+      <h2 class="text-uppercase mb-1 titulo-h2">TRIMESTRES</h2>
+      <h5 class="text-muted mb-4 titulo-h5">Trimestres</h5>
+    </div>
+    </div>
+  </div>
+
+  <div class="card p-4 shadow-lg table-grid-card">
   <div *ngIf="trimestres.length === 0" class="no-data">
     <p>No hay trimestres registrados.</p>
   </div>
 
-  <!-- Grid de tarjetas -->
+  <!-- Grid -->
   <div class="cards-grid" *ngIf="trimestres.length > 0">
-    <div class="card" *ngFor="let trimestre of trimestres">
-      <h2 class="card__title trimestre-nombre">{{ trimestre.nombre }}</h2>
+    <div class="trimestre-card" *ngFor="let trimestre of trimestres">
+
+      <h2 class="trimestre-title">{{ trimestre.nombre }}</h2>
+      <div class="trimestre-line"></div>
+
     </div>
   </div>
 
   <app-loading></app-loading>
 </div>
-
+</div>

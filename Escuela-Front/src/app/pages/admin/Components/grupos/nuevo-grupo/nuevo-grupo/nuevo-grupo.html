@@ -11,14 +11,13 @@
     <!-- Cuerpo del modal -->
     <div class="modal-body">
       <form (ngSubmit)="guardar()">
-        
-        <!-- Nombre -->
+
         <div class="mb-3">
           <label class="form-label">Nombre: <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+          <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" style="text-transform: uppercase;"
+            required>
         </div>
 
-        <!-- Estatus -->
         <div class="mb-3">
           <label class="form-label">Estatus:</label>
           <select class="form-select" [(ngModel)]="estatus" name="estatus">
@@ -27,7 +26,6 @@
           </select>
         </div>
 
-        <!-- Botones de acción -->
         <div class="modal-footer">
           <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">Cancelar</button>
           <button type="submit" class="btn btn-guardar">Guardar</button>

@@ -1,19 +1,23 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">GRUPO</h1>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">GRUPOS</h2>
+        <h5 class="titulo-h5">Grupos</h5>
+      </div>
+    </div>
+  </div>
 
-  <!-- Botón Nuevo -->
+<div class="container">
+
   <div class="button-section">
     <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
   </div>
 
-  <!-- Mensaje cuando no hay grupos -->
   <div *ngIf="registros.length === 0" class="no-data">
     <p>No hay grupos registrados.</p>
   </div>
 
-  <!-- Grid de tarjetas -->
   <div class="cards-grid" *ngIf="registros.length > 0">
     <div class="card" *ngFor="let grupo of registros">
       <h2 class="card__title">{{ grupo.nombre }}</h2>
@@ -35,7 +39,6 @@
     </div>
   </div>
 
-  <!-- Paginación -->
   <div class="pagination" *ngIf="totalPaginas > 1">
     <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
     <button
