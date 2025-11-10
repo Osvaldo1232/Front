@@ -1,10 +1,7 @@
 export interface Inscripcion {
-    id?: string;
-    alumnoId: string;
-    docenteId: string;
-    gradoId: string;
-    grupoId: string;
-    cicloId: string;
-    estatus: string;
-    fechaInscripcion?: string;
+  id?: string;
+  alumnoId: string;
+  asignacionId: string; 
+  estatus: string;
+  fechaInscripcion?: string;
 }

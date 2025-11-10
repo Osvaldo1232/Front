@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AlumnoGGC, Alumnos } from '../../../../models/alumnos.model';
 import { Inscripcion } from '../../../../models/inscripcion.model';
+import { AsignacionDocente } from '../../../../models/asignacion-docente.model';
 import { Grados } from '../../../../models/grado.models';
 import { Grupos } from '../../../../models/grupos.models';
 import { Ciclos } from '../../../../models/ciclos.model';
@@ -28,7 +29,7 @@ import { LoadingService } from '../../../../shared/loading-service';
     NuevoAlumno,
     EditarAlumno,
     Loading
-],
+  ],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.scss']
 })
@@ -36,15 +37,15 @@ export class AlumnosComponent implements OnInit {
 
   registros: Alumnos[] = [];
   registrosGGC: AlumnoGGC[] = [];
-
   inscripciones: Inscripcion[] = [];
+  asignaciones: AsignacionDocente[] = [];
   
   // Listas para filtros
   grados: Grados[] = [];
   grupos: Grupos[] = [];
   ciclos: Ciclos[] = [];
 
-  // Filtros (reemplazan searchTerm)
+  // Filtros
   filtroGrado: string = '';
   filtroGrupo: string = '';
   filtroCiclo: string = '';
@@ -56,6 +57,7 @@ export class AlumnosComponent implements OnInit {
   
   verEstudiante: boolean = false;
   idAlumnoSeleccionado: string | null = null;
+  idAl: any;
 
   // Paginación
   registrosPorPagina = 10;
@@ -72,21 +74,24 @@ export class AlumnosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-   // this.cargarDatos();
-   this.GGC();
+    this.GGC();
+    this.cargarAsignaciones();
   }
 
   cargarDatos() {
+    this.loadingService.show();
+    
     // Cargar alumnos
-      this.loadingService.show();
     this.Servicios.ObtenerAlumnos().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('👨‍🎓 Alumnos cargados:', this.registros);
-                  this.loadingService.hide(); 
-
+        this.loadingService.hide(); 
       },
-      error: (err) => console.error('Error al cargar alumnos:', err)
+      error: (err) => {
+        console.error('Error al cargar alumnos:', err);
+        this.loadingService.hide();
+      }
     });
 
     // Cargar inscripciones
@@ -97,8 +102,20 @@ export class AlumnosComponent implements OnInit {
       },
       error: (err) => console.error('Error al cargar inscripciones:', err)
     });
+  }
 
-    // Cargar grados
+  // ✅ CARGAR ASIGNACIONES
+  cargarAsignaciones() {
+    this.serviciosGrados.ObtenerAsignaciones().subscribe({
+      next: (res) => {
+        this.asignaciones = res;
+        console.log('📌 Asignaciones cargadas:', this.asignaciones);
+      },
+      error: (err) => console.error('Error al cargar asignaciones:', err)
+    });
+  }
+
+  GGC() {
     this.serviciosGrados.obtenerGrados().subscribe({
       next: (res) => {
         this.grados = res;
@@ -107,7 +124,6 @@ export class AlumnosComponent implements OnInit {
       error: (err) => console.error('Error al cargar grados:', err)
     });
 
-    // Cargar grupos
     this.serviciosGrupos.ObtenerGrupos().subscribe({
       next: (res) => {
         this.grupos = res;
@@ -116,7 +132,6 @@ export class AlumnosComponent implements OnInit {
       error: (err) => console.error('Error al cargar grupos:', err)
     });
 
-    // Cargar ciclos
     this.serviciosCiclos.ObtenerCiclo().subscribe({
       next: (res) => {
         this.ciclos = res;
@@ -126,61 +141,44 @@ export class AlumnosComponent implements OnInit {
     });
   }
 
-
-  GGC(){
-      this.serviciosGrados.obtenerGrados().subscribe({
-      next: (res) => {
-        this.grados = res;
-        console.log('📚 Grados cargados:', this.grados);
-      },
-      error: (err) => console.error('Error al cargar grados:', err)
-    });
-
-    // Cargar grupos
-    this.serviciosGrupos.ObtenerGrupos().subscribe({
-      next: (res) => {
-        this.grupos = res;
-        console.log('👥 Grupos cargados:', this.grupos);
-      },
-      error: (err) => console.error('Error al cargar grupos:', err)
-    });
-
-    // Cargar ciclos
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
-      next: (res) => {
-        this.ciclos = res;
-        console.log('📅 Ciclos cargados:', this.ciclos);
-      },
-      error: (err) => console.error('Error al cargar ciclos:', err)
-    });
+  // ✅ OBTENER INSCRIPCIÓN DE UN ALUMNO
+  obtenerInscripcionAlumno(alumnoId?: string): Inscripcion | undefined {
+    if (!alumnoId) return undefined;
+    return this.inscripciones.find(i => i.alumnoId === alumnoId);
   }
- // ✅ OBTENER INSCRIPCIÓN DE UN ALUMNO
-obtenerInscripcionAlumno(alumnoId?: string): Inscripcion | undefined {
-  if (!alumnoId) return undefined;
-  return this.inscripciones.find(i => i.alumnoId === alumnoId);
-}
 
-// ✅ OBTENER NOMBRE DEL GRADO
-obtenerNombreGrado(alumnoId?: string): string {
-  if (!alumnoId) return '-';
-  
-  const inscripcion = this.obtenerInscripcionAlumno(alumnoId);
-  if (!inscripcion) return '-';
-  
-  const grado = this.grados.find(g => g.id === inscripcion.gradoId);
-  return grado ? grado.nombre : '-';
-}
+  // ✅ OBTENER ASIGNACIÓN DE UNA INSCRIPCIÓN
+  obtenerAsignacionDeInscripcion(inscripcion: Inscripcion): AsignacionDocente | undefined {
+    return this.asignaciones.find(a => a.id === inscripcion.asignacionId);
+  }
 
-// ✅ OBTENER NOMBRE DEL GRUPO
-obtenerNombreGrupo(alumnoId?: string): string {
-  if (!alumnoId) return '-';
-  
-  const inscripcion = this.obtenerInscripcionAlumno(alumnoId);
-  if (!inscripcion) return '-';
-  
-  const grupo = this.grupos.find(g => g.id === inscripcion.grupoId);
-  return grupo ? grupo.nombre : '-';
-}
+  // ✅ OBTENER NOMBRE DEL GRADO
+  obtenerNombreGrado(alumnoId?: string): string {
+    if (!alumnoId) return '-';
+    
+    const inscripcion = this.obtenerInscripcionAlumno(alumnoId);
+    if (!inscripcion) return '-';
+    
+    const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
+    if (!asignacion) return '-';
+    
+    const grado = this.grados.find(g => g.id === asignacion.idGrado);
+    return grado ? grado.nombre : '-';
+  }
+
+  // ✅ OBTENER NOMBRE DEL GRUPO
+  obtenerNombreGrupo(alumnoId?: string): string {
+    if (!alumnoId) return '-';
+    
+    const inscripcion = this.obtenerInscripcionAlumno(alumnoId);
+    if (!inscripcion) return '-';
+    
+    const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
+    if (!asignacion) return '-';
+    
+    const grupo = this.grupos.find(g => g.id === asignacion.idGrupo);
+    return grupo ? grupo.nombre : '-';
+  }
 
   // ✅ EXTRAER AÑO DE FECHA
   extraerAnio(fecha: string): string {
@@ -188,7 +186,7 @@ obtenerNombreGrupo(alumnoId?: string): string {
     return fecha.split('-')[0];
   }
 
-  // ✅ APLICAR FILTROS (reemplaza alumnosFiltrados)
+  // ✅ APLICAR FILTROS
   get alumnosFiltrados() {
     return this.registros.filter(alumno => {
       const inscripcion = this.obtenerInscripcionAlumno(alumno.id!);
@@ -198,18 +196,24 @@ obtenerNombreGrupo(alumnoId?: string): string {
         return false;
       }
 
+      if (!inscripcion) return true;
+
+      // Obtener la asignación
+      const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
+      if (!asignacion) return false;
+
       // Filtro por grado
-      if (this.filtroGrado && inscripcion && inscripcion.gradoId !== this.filtroGrado) {
+      if (this.filtroGrado && asignacion.idGrado !== this.filtroGrado) {
         return false;
       }
 
       // Filtro por grupo
-      if (this.filtroGrupo && inscripcion && inscripcion.grupoId !== this.filtroGrupo) {
+      if (this.filtroGrupo && asignacion.idGrupo !== this.filtroGrupo) {
         return false;
       }
 
       // Filtro por ciclo
-      if (this.filtroCiclo && inscripcion && inscripcion.cicloId !== this.filtroCiclo) {
+      if (this.filtroCiclo && asignacion.idCiclo !== this.filtroCiclo) {
         return false;
       }
 
@@ -237,7 +241,6 @@ obtenerNombreGrupo(alumnoId?: string): string {
     }
   }
 
-  // ✅ APLICAR FILTROS (reemplaza buscar)
   aplicarFiltros() {
     this.paginaActual = 1;
     console.log('🔍 Filtros aplicados:', {
@@ -246,12 +249,12 @@ obtenerNombreGrupo(alumnoId?: string): string {
       ciclo: this.filtroCiclo
     });
    
-  if (
-  (this.filtroGrado && this.filtroGrado.trim() !== '') &&
-  (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
-  (this.filtroCiclo && this.filtroCiclo.trim() !== '')
-) {
-   this.serviciosCiclos
+    if (
+      (this.filtroGrado && this.filtroGrado.trim() !== '') &&
+      (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
+      (this.filtroCiclo && this.filtroCiclo.trim() !== '')
+    ) {
+      this.serviciosCiclos
         .filtrarAlumnos(this.filtroGrado, this.filtroGrupo, this.filtroCiclo)
         .subscribe({
           next: (data) => {
@@ -262,11 +265,9 @@ obtenerNombreGrupo(alumnoId?: string): string {
             console.error('❌ Error al filtrar alumnos:', err);
           }
         });
-}
-
+    }
   }
 
-  // ✅ LIMPIAR FILTROS (reemplaza limpiar)
   limpiarFiltros() {
     this.filtroGrado = '';
     this.filtroGrupo = '';
@@ -286,15 +287,10 @@ obtenerNombreGrupo(alumnoId?: string): string {
     }
   }
 
-  idAl:any;
   EditarS(alumnoId: string) {
-   this.idAl=alumnoId;
+    this.idAl = alumnoId;
     this.editarm = true;
   }
-/*   editar(alumno: Alumnos) {
-    this.alumnoSeleccionado = alumno;
-    this.editarm = true;
-  } */
 
   irPerfil(alumno: Alumnos): void {
     if (alumno.id) {
@@ -315,7 +311,6 @@ obtenerNombreGrupo(alumnoId?: string): string {
     }
   }
 
-  // Mantener compatibilidad (por si lo usas en otro lado)
   cargarAlumnos() {
     this.cargarDatos();
   }

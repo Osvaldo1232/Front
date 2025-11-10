@@ -104,35 +104,16 @@
 
         <h3 class="section-subtitle">Inscripción</h3>
 
-        <div class="row">
-          <!-- Grado -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Grado: <span class="text-danger">*</span></label>
-            <select class="form-select" [(ngModel)]="gradoId" name="gradoId" required>
-              <option value="">Seleccionar...</option>
-              <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
-            </select>
-          </div>
-
-          <!-- Grupo -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Grupo: <span class="text-danger">*</span></label>
-            <select class="form-select" [(ngModel)]="grupoId" name="grupoId" required>
-              <option value="">Seleccionar...</option>
-              <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
-            </select>
-          </div>
-
-          <!-- Ciclo Escolar -->
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Ciclo Escolar: <span class="text-danger">*</span></label>
-            <select class="form-select" [(ngModel)]="cicloId" name="cicloId" required>
-              <option value="">Seleccionar...</option>
-              <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-                {{ ciclo.anioInicio }}-{{ ciclo.anioFin }}
-              </option>
-            </select>
-          </div>
+        <!-- ✅ NUEVO: Combo único con grado/grupo/ciclo concatenado -->
+        <div class="mb-3">
+          <label class="form-label">Grado, Grupo y Ciclo: <span class="text-danger">*</span></label>
+          <select class="form-select" [(ngModel)]="asignacionId" name="asignacion" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let opcion of opcionesInscripcion" [value]="opcion.id">
+              {{ opcion.value }}
+            </option>
+          </select>
+          <small class="text-muted">Selecciona el grado, grupo y ciclo escolar</small>
         </div>
 
         <!-- Mensaje de error -->

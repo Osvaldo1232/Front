@@ -64,50 +64,51 @@ export class NuevoCiclo implements OnInit {
   }
 
   guardar() {
-    if (!this.fechaInicio || !this.fechaFin) {
-      this.errorValidacion = 'Debe seleccionar ambos años';
-      return;
-    }
-
-    const anioInicio = Number(this.fechaInicio);
-    const anioFin = Number(this.fechaFin);
-
-    if (anioFin !== anioInicio + 1) {
-      this.errorValidacion = 'El año fin debe ser el siguiente al año de inicio';
-      return;
-    }
-
-    // ✅ CONVERTIR A FORMATO YYYY-MM-DD (01 de enero de cada año)
-    const ciclo: Ciclos = { 
-      anioInicio: `${anioInicio}-01-01`,
-      anioFin: `${anioFin}-01-01`,
-      estatus: this.estatus
-    };
-
-    console.log('📤 Enviando ciclo:', ciclo);
-
-    this.Servicios.CrearCiclo(ciclo).subscribe({
-      next: (mensaje) => {
-        console.log('✅ Respuesta del servidor:', mensaje);
-        this.alertService.show(
-          'Ciclo escolar registrado exitosamente',
-          'success',
-          'Éxito'
-        );
-        
-        this.limpiarCampos();
-        this.cerrar.emit(ciclo); 
-      },
-      error: (err) => {
-        console.error('❌ Error al crear Ciclo:', err);
-        this.alertService.show(
-          'Error al crear el ciclo escolar',
-          'danger',
-          'Error'
-        );
-      }
-    });
+  if (!this.fechaInicio || !this.fechaFin) {
+    this.errorValidacion = 'Debe seleccionar ambos años';
+    return;
   }
+
+  const anioInicio = Number(this.fechaInicio);
+  const anioFin = Number(this.fechaFin);
+
+  if (anioFin !== anioInicio + 1) {
+    this.errorValidacion = 'El año fin debe ser el siguiente al año de inicio';
+    return;
+  }
+
+  // ✅ ENVIAR SOLO LOS AÑOS COMO NÚMEROS
+  const ciclo: Ciclos = { 
+    anioInicio: anioInicio,
+    anioFin: anioFin,
+    estatus: this.estatus
+  };
+
+  console.log('📤 Enviando ciclo corregido:', ciclo);
+
+  this.Servicios.CrearCiclo(ciclo).subscribe({
+    next: (mensaje) => {
+      console.log('✅ Respuesta del servidor:', mensaje);
+      this.alertService.show(
+        'Ciclo escolar registrado exitosamente',
+        'success',
+        'Éxito'
+      );
+      
+      this.limpiarCampos();
+      this.cerrar.emit(ciclo); 
+    },
+    error: (err) => {
+      console.error('❌ Error al crear Ciclo:', err);
+      this.alertService.show(
+        'Error al crear el ciclo escolar',
+        'danger',
+        'Error'
+      );
+    }
+  });
+}
+
 
   cerrarModal() {
     this.limpiarCampos();

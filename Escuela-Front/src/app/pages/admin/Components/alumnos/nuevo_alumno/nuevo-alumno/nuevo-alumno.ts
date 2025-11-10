@@ -3,14 +3,9 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Alumnos } from '../../../../../../models/alumnos.model';
 import { Inscripcion } from '../../../../../../models/inscripcion.model';
-import { Grados } from '../../../../../../models/grado.models';
-import { Grupos } from '../../../../../../models/grupos.models';
-import { Ciclos } from '../../../../../../models/ciclos.model';
+import { InscripcionSelect } from '../../../../../../models/inscripcion-select.model';
 import { ServiciosDirectorAlumnos } from '../../../../Services/servicios-director-alumnos/servicios-director-alumnos';
 import { ServiciosDirectorInscripcion } from '../../../../Services/servicios-director-inscripcion/servicios-director-inscripcion';
-import { ServiciosDirector } from '../../../../Services/servicios-director';
-import { ServiciosDirectorGrupos } from '../../../../Services/servicios-director-grupos/servicio-director-grupos';
-import { ServiciosDirectorCiclos } from '../../../../Services/servicios-director-ciclos/servicios-director-ciclos';
 import { AlertService } from '../../../../../../shared/alert-service';
 import { firstValueFrom } from 'rxjs';
 
@@ -28,9 +23,6 @@ export class NuevoAlumno implements OnInit {
   constructor(
     private serviciosAlumnos: ServiciosDirectorAlumnos,
     private serviciosInscripcion: ServiciosDirectorInscripcion,
-    private serviciosGrados: ServiciosDirector,
-    private serviciosGrupos: ServiciosDirectorGrupos,
-    private serviciosCiclos: ServiciosDirectorCiclos,
     private alertService: AlertService
   ) { }
 
@@ -47,69 +39,39 @@ export class NuevoAlumno implements OnInit {
   curp: string = '';
   estatus: string = 'ACTIVO';
 
-  // Datos de inscripción
-  gradoId: string = '';
-  grupoId: string = '';
-  cicloId: string = '';
-  docenteId: string = 'f8b0d04e-cf89-4674-aec5-0d11aff70d8f'; // Este lo asignarás desde Swagger por ahora
+  // ✅ SIMPLIFICADO: Solo el ID de la asignación seleccionada
+  asignacionId: string = '';
 
-  // Listas para los selects
-  grados: Grados[] = [];
-  grupos: Grupos[] = [];
-  ciclos: Ciclos[] = [];
+  // Lista de opciones (grado/grupo/ciclo concatenados)
+  opcionesInscripcion: InscripcionSelect[] = [];
 
   guardando: boolean = false;
   errorMensaje: string = '';
 
   ngOnInit() {
-    this.cargarDatos();
+    this.cargarOpcionesInscripcion();
   }
 
-  // ✅ CARGAR GRADOS, GRUPOS Y CICLOS
-  cargarDatos() {
-    // Cargar grados
-    this.serviciosGrados.obtenerGrados().subscribe({
+  // ✅ Cargar opciones concatenadas
+  cargarOpcionesInscripcion() {
+    this.serviciosInscripcion.ObtenerOpcionesInscripcion().subscribe({
       next: (res) => {
-        this.grados = res;
-        console.log('📚 Grados cargados:', this.grados);
+        this.opcionesInscripcion = res;
+        console.log('📋 Opciones de inscripción:', this.opcionesInscripcion);
       },
-      error: (err) => console.error('Error al cargar grados:', err)
-    });
-
-    // Cargar grupos
-    this.serviciosGrupos.ObtenerGrupos().subscribe({
-      next: (res) => {
-        this.grupos = res;
-        console.log('👥 Grupos cargados:', this.grupos);
-      },
-      error: (err) => console.error('Error al cargar grupos:', err)
-    });
-
-    // Cargar ciclos
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
-      next: (res) => {
-        this.ciclos = res;
-        console.log('📅 Ciclos cargados:', this.ciclos);
-      },
-      error: (err) => console.error('Error al cargar ciclos:', err)
+      error: (err) => console.error('Error al cargar opciones de inscripción:', err)
     });
   }
 
-  // ✅ EXTRAER SOLO EL AÑO DE LA FECHA
-  extraerAnio(fecha: string): string {
-    if (!fecha) return '';
-    return fecha.split('-')[0];
-  }
-
-  // ✅ VALIDAR CONTRASEÑAS
+  // ✅ Validar formulario
   validarFormulario(): boolean {
     if (this.password !== this.confirmPassword) {
       this.errorMensaje = 'Las contraseñas no coinciden';
       return false;
     }
 
-    if (!this.gradoId || !this.grupoId || !this.cicloId) {
-      this.errorMensaje = 'Debe seleccionar Grado, Grupo y Ciclo Escolar';
+    if (!this.asignacionId) {
+      this.errorMensaje = 'Debe seleccionar Grado, Grupo y Ciclo';
       return false;
     }
 
@@ -117,7 +79,7 @@ export class NuevoAlumno implements OnInit {
     return true;
   }
 
-  // ✅ GUARDAR ALUMNO E INSCRIPCIÓN (ASYNC/AWAIT)
+  // ✅ Guardar alumno e inscripción
   async guardar() {
     if (!this.validarFormulario()) {
       return;
@@ -142,14 +104,23 @@ export class NuevoAlumno implements OnInit {
         estatus: this.estatus
       };
 
-      // Convertir Observable a Promise con firstValueFrom
       const respuestaAlumno: any = await firstValueFrom(
         this.serviciosAlumnos.CrearAlumno(alumno)
       );
 
       console.log('✅ Respuesta crear alumno:', respuestaAlumno);
 
-      // Parsear la respuesta (viene como string JSON)
+      // Validar si hay error
+      if (respuestaAlumno.codigo == 1000) {
+        this.alertService.show(
+          respuestaAlumno.mensaje,
+          'danger',
+          'Error'
+        );
+        this.guardando = false;
+        return;
+      }
+
       let alumnoCreado;
       if (typeof respuestaAlumno === 'string') {
         alumnoCreado = JSON.parse(respuestaAlumno);
@@ -164,10 +135,7 @@ export class NuevoAlumno implements OnInit {
       console.log('📤 Paso 2: Creando inscripción...');
       const inscripcion: Inscripcion = {
         alumnoId: alumnoId,
-        docenteId: 'f8b0d04e-cf89-4674-aec5-0d11aff70d8f', // ID temporal, lo cambiarás después
-        gradoId: this.gradoId,
-        grupoId: this.grupoId,
-        cicloId: this.cicloId,
+        asignacionId: this.asignacionId,
         estatus: 'ACTIVO'
       };
 
@@ -223,9 +191,7 @@ export class NuevoAlumno implements OnInit {
     this.matricula = '';
     this.curp = '';
     this.estatus = 'ACTIVO';
-    this.gradoId = '';
-    this.grupoId = '';
-    this.cicloId = '';
+    this.asignacionId = '';
     this.errorMensaje = '';
   }
 }
