@@ -2,6 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tutores } from '../../../../models/tutores.model';
+import { TutorCombo } from '../../../../models/tutor-combo.model';
+import { AlumnoTutor } from '../../../../models/alumno-tutor.model';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +15,8 @@ export class ServiciosDirectorTutores {
   private apiUrlTutoresListar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Tutor';
   private apiUrlTutoresCrear = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Tutor/NuevoTutor';
   private apiUrlTutoresEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Tutor/Actualizar';
+  private apiUrlTutoresCombo = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Tutor/combo';
+  private apiUrlAsignar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Tutor/registrar';
 
 
   constructor(private http: HttpClient) {}
@@ -31,4 +37,12 @@ export class ServiciosDirectorTutores {
       responseType: 'text' as 'json'
     });
   }
+   ObtenerTutoresCombo(): Observable<TutorCombo[]> {
+    return this.http.get<TutorCombo[]>(this.apiUrlTutoresCombo);
+  }
+  AsignarTutorAlumno(asignacion: AlumnoTutor): Observable<any> {
+    return this.http.post(this.apiUrlAsignar, asignacion, {
+      responseType: 'json'
+    });
+}
 }

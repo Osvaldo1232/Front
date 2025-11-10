@@ -18,6 +18,7 @@ import { EditarAlumno } from './editar-alumno/editar-alumno/editar-alumno';
 import { Router } from '@angular/router';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
+import { AsignarTutor } from './asignar-tutor/asignar-tutor';
 
 @Component({
   selector: 'app-alumnos',
@@ -28,6 +29,7 @@ import { LoadingService } from '../../../../shared/loading-service';
     RouterModule,
     NuevoAlumno,
     EditarAlumno,
+    AsignarTutor,
     Loading
   ],
   templateUrl: './alumnos.html',
@@ -54,7 +56,13 @@ export class AlumnosComponent implements OnInit {
   nuevom: boolean = false;
   editarm: boolean = false;
   alumnoSeleccionado: Alumnos | null = null;
-  
+  alumnoParaTutor: Alumnos | null = null;  
+  asignarTutorm: boolean = false;  
+  alumnoIdParaTutor: string | null = null;  
+  nombreAlumnoParaTutor: string = '';       
+
+
+
   verEstudiante: boolean = false;
   idAlumnoSeleccionado: string | null = null;
   idAl: any;
@@ -313,5 +321,22 @@ export class AlumnosComponent implements OnInit {
 
   cargarAlumnos() {
     this.cargarDatos();
+  }
+ // ✅ Método actualizado
+  asignarTutor(alumnoId: string, nombreCompleto: string) {
+    this.alumnoIdParaTutor = alumnoId;
+    this.nombreAlumnoParaTutor = nombreCompleto;
+    this.asignarTutorm = true;
+  }
+
+// ✅ Cerrar modal
+  cerrarModalAsignarTutor(guardado: boolean) {
+    this.asignarTutorm = false;
+    this.alumnoIdParaTutor = null;
+    this.nombreAlumnoParaTutor = '';
+    
+    if (guardado) {
+      console.log('✅ Tutor asignado exitosamente');
+    }
   }
 }
