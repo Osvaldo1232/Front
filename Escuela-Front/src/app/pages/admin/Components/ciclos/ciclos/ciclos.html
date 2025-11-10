@@ -17,7 +17,7 @@
   <div class="cards-grid" *ngIf="registros.length > 0">
     <div class="card" *ngFor="let ciclo of ciclosPaginados">
       <!-- ✅ EXTRAER SOLO EL AÑO -->
-      <h2 class="card__title">{{ extraerAnio(ciclo.fechaInicio) }}-{{ extraerAnio(ciclo.fechaFin) }}</h2>
+      <h2 class="card__title">{{ extraerAnio(ciclo.anioInicio) }}-{{ extraerAnio(ciclo.anioFin) }}</h2>
       
       <div class="card__footer">
         <div class="card__status">

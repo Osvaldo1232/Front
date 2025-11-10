@@ -334,3 +334,38 @@ body {
   color: #2c3e50;
   font-weight: 500;
 }
+
+
+
+// ✅ NUEVO: Botón Asignar Grupo
+.btn-asignar-grupo {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #D4AF37;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  svg {
+    fill: white;
+  }
+
+  &:hover {
+    background: #C19B2E;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+  }
+}
+
+.card {
+  position: relative; 
+}

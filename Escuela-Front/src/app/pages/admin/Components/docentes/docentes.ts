@@ -10,6 +10,7 @@ import { Maestros } from '../../../../models/maestros.model';
 import { ServiciosDirector } from '../../Services/servicios-director';
 import { NuevoDocente } from './nuevo-docente/nuevo-docente/nuevo-docente';
 import { EditarDocente } from './editar-docente/editar-docente/editar-docente';
+import { AsignarGrupoDocente } from '../docentes/asignacion-docente/asigacion-docente/asigacion-docente'; 
 import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
@@ -25,8 +26,8 @@ import { LoadingService } from '../../../../shared/loading-service';
     TableModule,
     NuevoDocente,
     EditarDocente,
+    AsignarGrupoDocente, 
     Loading
-
   ],
   templateUrl: './docentes.html',
   styleUrls: ['./docentes.scss']
@@ -38,14 +39,17 @@ export class DocentesComponent implements OnInit {
   terminoBusqueda: string = '';
   nuevom: boolean = false;
   editarm: boolean = false;
+  asignarGrupom: boolean = false; // ✅ NUEVO
   docenteSeleccionado: Maestros | null = null;
+  docenteParaAsignar: Maestros | null = null; // ✅ NUEVO
   registros: Maestros[] = [];
 
   registrosPorPagina = 9;
   paginaActual = 1;
 
   constructor(
-    private Servicios: ServiciosDirector,private loadingService: LoadingService,
+    private Servicios: ServiciosDirector,
+    private loadingService: LoadingService,
     private alertService: AlertService
   ) { }
 
@@ -126,61 +130,75 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  cambiarEstatus(docente: Maestros) {
-  const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-  const estatusAnterior = docente.estatus;
-  docente.estatus = nuevoEstatus;
-
-  if (docente.id) {
-    console.log(`📤 Cambiando estatus de ${docente.nombre} a ${nuevoEstatus}`);
-
-    // ✅ USAR EL NUEVO MÉTODO DEDICADO
-    this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
-      next: (mensaje) => {
-        console.log('✅ Respuesta del servidor:', mensaje);
-        
-        // Actualizar localmente el registro
-        const index = this.registros.findIndex(d => d.id === docente.id);
-        if (index !== -1) {
-          this.registros[index].estatus = nuevoEstatus;
-        }
-        
-        this.alertService.show(
-          `Estatus cambiado a ${nuevoEstatus}`,
-          'success',
-          'Éxito'
-        );
-      },
-      error: (err) => {
-        console.error('❌ Error completo:', err);
-        console.error('❌ Status:', err.status);
-        console.error('❌ Error del servidor:', err.error);
-        
-        // Revertir el cambio si falla
-        docente.estatus = estatusAnterior;
-        
-        this.alertService.show(
-          'Error al cambiar el estatus',
-          'danger',
-          'Error'
-        );
-      }
-    });
-  } else {
-    console.error('❌ El docente no tiene ID');
-    docente.estatus = estatusAnterior;
+  // ✅ NUEVO: Abrir modal de asignación
+  abrirModalAsignacion(docente: Maestros) {
+    this.docenteParaAsignar = docente;
+    this.asignarGrupom = true;
   }
-}
+
+  // ✅ NUEVO: Cerrar modal de asignación
+  cerrarModalAsignacion(guardado: boolean) {
+    this.asignarGrupom = false;
+    this.docenteParaAsignar = null;
+    
+    if (guardado) {
+      // Opcional: recargar si necesitas actualizar algo
+      console.log('✅ Asignación guardada exitosamente');
+    }
+  }
+
+  cambiarEstatus(docente: Maestros) {
+    const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+    const estatusAnterior = docente.estatus;
+    docente.estatus = nuevoEstatus;
+
+    if (docente.id) {
+      console.log(`📤 Cambiando estatus de ${docente.nombre} a ${nuevoEstatus}`);
+
+      this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
+        next: (mensaje) => {
+          console.log('✅ Respuesta del servidor:', mensaje);
+          
+          const index = this.registros.findIndex(d => d.id === docente.id);
+          if (index !== -1) {
+            this.registros[index].estatus = nuevoEstatus;
+          }
+          
+          this.alertService.show(
+            `Estatus cambiado a ${nuevoEstatus}`,
+            'success',
+            'Éxito'
+          );
+        },
+        error: (err) => {
+          console.error('❌ Error completo:', err);
+          docente.estatus = estatusAnterior;
+          
+          this.alertService.show(
+            'Error al cambiar el estatus',
+            'danger',
+            'Error'
+          );
+        }
+      });
+    } else {
+      console.error('❌ El docente no tiene ID');
+      docente.estatus = estatusAnterior;
+    }
+  }
 
   cargarDocentes() {
-      this.loadingService.show();
+    this.loadingService.show();
     this.Servicios.ObtenerDocentes().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Docentes cargados:', this.registros);
-          this.loadingService.hide(); 
+        this.loadingService.hide(); 
       },
-      error: (err) => console.error('Error al cargar Docentes:', err)
+      error: (err) => {
+        console.error('Error al cargar Docentes:', err);
+        this.loadingService.hide();
+      }
     });
   }
 }

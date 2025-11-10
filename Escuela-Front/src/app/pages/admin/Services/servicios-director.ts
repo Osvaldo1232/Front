@@ -5,6 +5,7 @@ import { Materia, MateriaResponse } from '../../../models/materia.model';
 import { Grados } from '../../../models/grado.models';
 import { Maestros } from '../../../models/maestros.model';
 import { Director } from '../../../models/director.model';
+import { AsignacionDocente } from '../../../models/asignacion-docente.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,12 @@ export class ServiciosDirector {
 
   private apiUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/grados'; 
   private apiUrlEditarGrado = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/grados/Actualizar'; 
-
   private apiUrlProfesores = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores';
   private apiUrlCrearProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/profesor';
   private apiUrlActualizarProfesor = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/Profesores/profesor'; 
   private apiUrlUsuarios = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios';
-
+  private apiUrlCrearAsignacion = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion-docente/guardar';
+  private apiUrlAsignaciones = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion-docente';
 
   constructor(private http: HttpClient) {}
   
@@ -51,12 +52,28 @@ export class ServiciosDirector {
   
   CrearDocente(docente: Maestros): Observable<any> {
     return this.http.post(this.apiUrlCrearProfesor, docente, {
-      responseType: 'text' as 'json'
+      responseType: 'json'
     });
   }
 
   ObtenerDocentes(): Observable<Maestros[]> {
     return this.http.get<Maestros[]>(this.apiUrlProfesores);
+  }
+
+  CrearAsignacion(asignacion: AsignacionDocente): Observable<any> {
+    return this.http.post(this.apiUrlCrearAsignacion, asignacion, {
+      responseType: 'text' as 'json'
+    });
+  }
+
+  // ✅ NUEVO: Obtener todas las asignaciones
+  ObtenerAsignaciones(): Observable<AsignacionDocente[]> {
+    return this.http.get<AsignacionDocente[]>(this.apiUrlAsignaciones);
+  }
+
+  // Obtener asignaciones por ciclo
+  ObtenerAsignacionesPorCiclo(cicloId: string): Observable<AsignacionDocente[]> {
+    return this.http.get<AsignacionDocente[]>(`${this.apiUrlAsignaciones}/por-ciclo/${cicloId}`);
   }
 
   ActualizarDocente(id: string, docente: Maestros): Observable<any> {
@@ -66,17 +83,16 @@ export class ServiciosDirector {
   }
 
   // Obtener perfil del director logueado
-obtenerPerfilUsuario(email: string): Observable<Director> {
-  return this.http.get<Director>(`https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/BuscarUsuario/${email}`);
-}
+  obtenerPerfilUsuario(email: string): Observable<Director> {
+    return this.http.get<Director>(`https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios/BuscarUsuario/${email}`);
+  }
 
-
- // ✅ NUEVO MÉTODO PARA ACTUALIZAR SOLO EL ESTATUS
+  // Actualizar solo el estatus
   ActualizarEstatusDocente(id: string, estatus: string): Observable<any> {
-    // Enviar como query parameter según tu Swagger
     return this.http.patch(
       `${this.apiUrlUsuarios}/${id}/estatus?estatus=${estatus}`,
-      {},  // Body vacío
+      {},
       { responseType: 'text' as 'json' }
     );
-  }}
+  }
+}

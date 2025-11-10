@@ -1,0 +1,68 @@
+<div class="modal-backdrop" *ngIf="mostrar" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h5 class="modal-title">Asignar</h5>
+      <button type="button" class="btn-close" (click)="cerrarModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form (ngSubmit)="guardar()">
+        
+        <!-- Maestro (solo lectura) -->
+        <div class="mb-3">
+          <label class="form-label">Maestro:</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [value]="nombreCompleto" 
+            readonly>
+        </div>
+
+        <!-- Grupo -->
+        <div class="mb-3">
+          <label class="form-label">Grupo</label>
+          <select class="form-select" [(ngModel)]="idGrupo" name="grupo" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Grado -->
+        <div class="mb-3">
+          <label class="form-label">Grado:</label>
+          <select class="form-select" [(ngModel)]="idGrado" name="grado" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Ciclo -->
+        <div class="mb-3">
+          <label class="form-label">Ciclo:</label>
+          <select class="form-select" [(ngModel)]="idCiclo" name="ciclo" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+              {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
+            </option>
+          </select>
+        </div>
+
+
+        <!-- Mensaje de error -->
+        <div class="alert alert-danger" *ngIf="errorMensaje">
+          {{ errorMensaje }}
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">CANCELAR</button>
+            <button type="submit" class="btn btn-guardar" [disabled]="guardando">
+                {{ guardando ? 'Guardando...' : 'GUARDAR' }}
+            </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -27,6 +27,15 @@
           </select>
         </div>
 
+        <!-- ✅ Grado (igual que Campo Formativo) -->
+        <div class="mb-3">
+          <label class="form-label">Grado: <span class="text-danger">*</span></label>
+          <select class="form-select" [(ngModel)]="gradoId" name="gradoId" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+          </select>
+        </div>
+
         <!-- Estatus -->
         <div class="mb-3">
           <label class="form-label">Estatus:</label>
@@ -39,7 +48,9 @@
         <!-- Botones de acción -->
         <div class="modal-footer">
           <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-guardar">Guardar</button>
+          <button type="submit" class="btn btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
         </div>
 
       </form>

@@ -79,8 +79,8 @@ export class NuevoCiclo implements OnInit {
 
     // ✅ CONVERTIR A FORMATO YYYY-MM-DD (01 de enero de cada año)
     const ciclo: Ciclos = { 
-      fechaInicio: `${anioInicio}-01-01`,
-      fechaFin: `${anioFin}-01-01`,
+      anioInicio: `${anioInicio}-01-01`,
+      anioFin: `${anioFin}-01-01`,
       estatus: this.estatus
     };
 

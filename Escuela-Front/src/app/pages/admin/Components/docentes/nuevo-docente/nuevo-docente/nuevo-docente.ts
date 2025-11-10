@@ -19,7 +19,7 @@ export class NuevoDocente {
 
   constructor(
     private Servicios: ServiciosDirector,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) { }
 
   // Campos del formulario
@@ -65,7 +65,15 @@ export class NuevoDocente {
 
     this.Servicios.CrearDocente(maestros).subscribe({
       next: (mensaje) => {
-        console.log(mensaje);
+
+        if(mensaje.codigo==1000){
+          this.alertService.show(
+          mensaje.mensaje,
+          'danger',
+          'Error'
+        ); 
+        return;
+        }        
         this.alertService.show(
           'Docente registrado exitosamente',
           'success',
@@ -108,4 +116,8 @@ export class NuevoDocente {
     this.rfc = '';
     this.clavePresupuestal = '';
   }
+
+
+
+  
 }

@@ -3,9 +3,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Materia } from '../../../../../../../models/materia.model';
 import { CampoFormativoModel } from '../../../../../../../models/campo-formativo.model';
+import { Grados } from '../../../../../../../models/grado.models';
+import { AsignacionMateriaGrado } from '../../../../../../../models/asignacion-materia-grado.model';
 import { ServiciosDirectorMaterias } from '../../../../../Services/servicios-director-materias/servicios-director-materias';
 import { ServiciosCampoFormativo } from '../../../../../Services/servicios-director-campo-formativo/servicios-director-campo-formativo';
+import { ServiciosDirector } from '../../../../../Services/servicios-director';
 import { AlertService } from '../../../../../../../shared/alert-service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-materia',
@@ -21,19 +25,26 @@ export class NuevaMateria implements OnInit {
   constructor(
     private serviciosMaterias: ServiciosDirectorMaterias,
     private serviciosCampoFormativo: ServiciosCampoFormativo,
+    private serviciosGrados: ServiciosDirector,
+    private serviciosAsignacion: ServiciosDirectorMaterias,
     private alertService: AlertService
   ) { }
 
   // Datos de la materia
   nombre: string = '';
   campoFormativoId: string = '';
+  gradoId: string = ''; // ✅ Solo un grado
   estatus: string = 'ACTIVO';
 
-  // Lista de campos formativos
+  // Listas para los selects
   camposFormativos: CampoFormativoModel[] = [];
+  grados: Grados[] = [];
+  
+  guardando: boolean = false;
 
   ngOnInit() {
     this.cargarCamposFormativos();
+    this.cargarGrados();
   }
 
   cargarCamposFormativos() {
@@ -46,8 +57,18 @@ export class NuevaMateria implements OnInit {
     });
   }
 
-  guardar() {
-    if (!this.nombre.trim() || !this.campoFormativoId) {
+  cargarGrados() {
+    this.serviciosGrados.obtenerGrados().subscribe({
+      next: (res) => {
+        this.grados = res;
+        console.log('📚 Grados cargados:', this.grados);
+      },
+      error: (err) => console.error('Error al cargar Grados:', err)
+    });
+  }
+
+  async guardar() {
+    if (!this.nombre.trim() || !this.campoFormativoId || !this.gradoId) {
       this.alertService.show(
         'Por favor complete todos los campos obligatorios',
         'warning',
@@ -56,51 +77,60 @@ export class NuevaMateria implements OnInit {
       return;
     }
 
-    const materia: Materia = {
-      nombre: this.nombre,
-      campoFormativoId: this.campoFormativoId,
-      estatus: this.estatus
-    };
+    this.guardando = true;
 
-    this.serviciosMaterias.CrearMateria(materia).subscribe({
-      next: (res) => {
+    try {
+      // 1️⃣ CREAR MATERIA
+      console.log('📤 Creando materia...');
+      const materia: Materia = {
+        nombre: this.nombre,
+        campoFormativoId: this.campoFormativoId,
+        estatus: this.estatus
+      };
 
+      const respuestaMateria: any = await firstValueFrom(
+        this.serviciosMaterias.CrearMateria(materia)
+      );
 
-        console.log('✅ Materia creada:', res.id);
+      const materiaId = respuestaMateria.id;
+      console.log('✅ Materia creada con ID:', materiaId);
 
-        if(res.id){
+      // 2️⃣ ASIGNAR GRADO A LA MATERIA
+      console.log('📤 Asignando grado...');
+      const asignacion: AsignacionMateriaGrado = {
+        idMateria: materiaId,
+        idGrado: this.gradoId
+      };
 
-        }
-        
-        this.alertService.show(
-          'Materia creada exitosamente',
-          'success',
-          'Éxito'
-        );
+      await firstValueFrom(
+        this.serviciosAsignacion.AsignarMateriaGrado(asignacion)
+      );
 
-        this.limpiarCampos();
-        this.cerrar.emit(materia);
-      },
-      error: (err) => {
-        console.error('❌ Error al crear materia:', err);
-        
-        this.alertService.show(
-          'Error al crear la materia',
-          'danger',
-          'Error'
-        );
-      }
-    });
+      console.log('✅ Grado asignado');
 
+      // 3️⃣ ÉXITO
+      this.alertService.show(
+        'Materia creada y grado asignado exitosamente',
+        'success',
+        'Éxito'
+      );
 
+      this.limpiarCampos();
+      this.cerrar.emit(materia);
 
+    } catch (error: any) {
+      console.error('❌ Error:', error);
+      
+      this.alertService.show(
+        'Error al crear la materia',
+        'danger',
+        'Error'
+      );
+    } finally {
+      this.guardando = false;
+    }
   }
 
-
-  AsignarMt(idmateria:any){
-    
-
-  }
   cerrarModal() {
     this.limpiarCampos();
     this.cerrar.emit(null);
@@ -109,6 +139,7 @@ export class NuevaMateria implements OnInit {
   limpiarCampos() {
     this.nombre = '';
     this.campoFormativoId = '';
+    this.gradoId = '';
     this.estatus = 'ACTIVO';
   }
 }

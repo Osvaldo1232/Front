@@ -2,6 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Materia } from '../../../../models/materia.model';
+import { AsignacionMateriaGrado } from '../../../../models/asignacion-materia-grado.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,8 @@ export class ServiciosDirectorMaterias {
   private apiUrlMateriasListar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/mostrarmaterias';
   private apiUrlMateriasCrear = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/nueva';
   private apiUrlMateriasEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/Actualizar';
+  private apiUrlAsignar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion/guardar';
+
 
   constructor(private http: HttpClient) {}
   
@@ -30,4 +34,15 @@ export class ServiciosDirectorMaterias {
       responseType: 'text' as 'json'
     });
   }
+
+AsignarMateriaGrado(asignacion: AsignacionMateriaGrado): Observable<any> {
+    return this.http.post(this.apiUrlAsignar, asignacion, {
+      responseType: 'json'
+    });
+
+}
+
+ObtenerAsignaciones(idGrado: string): Observable<AsignacionMateriaGrado[]> {
+  return this.http.get<AsignacionMateriaGrado[]>(`https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion/grado/${idGrado}`);
+}
 }

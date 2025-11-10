@@ -22,8 +22,8 @@ export class EditarCiclo implements OnChanges, OnInit {
   ) { }
 
   id: any = '';
-  fechaInicio: string = '';
-  fechaFin: string = '';
+  anioInicio: string = '';
+  anioFin: string = '';
   estatus: string = 'ACTIVO';
   
   aniosDisponibles: number[] = [];
@@ -56,14 +56,14 @@ export class EditarCiclo implements OnChanges, OnInit {
       this.id = this.ciclo.id || '';
       
       // ✅ EXTRAER SOLO EL AÑO DE LA FECHA
-      this.fechaInicio = this.extraerAnio(this.ciclo.fechaInicio);
-      this.fechaFin = this.extraerAnio(this.ciclo.fechaFin);
+      this.anioInicio = this.extraerAnio(this.ciclo.anioInicio);
+      this.anioFin = this.extraerAnio(this.ciclo.anioFin);
       this.estatus = this.ciclo.estatus || 'ACTIVO';
       
-      console.log('📝 Año inicio:', this.fechaInicio);
-      console.log('📝 Año fin:', this.fechaFin);
+      console.log('📝 Año inicio:', this.anioInicio);
+      console.log('📝 Año fin:', this.anioFin);
       
-      if (this.fechaInicio) {
+      if (this.anioInicio) {
         this.validarAnios();
       }
     }
@@ -79,8 +79,8 @@ export class EditarCiclo implements OnChanges, OnInit {
   validarAnios() {
     this.errorValidacion = '';
     
-    if (this.fechaInicio) {
-      const anioInicio = Number(this.fechaInicio);
+    if (this.anioInicio) {
+      const anioInicio = Number(this.anioInicio);
       const anioActual = new Date().getFullYear();
       const anioProximo = anioActual + 1;
       
@@ -92,21 +92,21 @@ export class EditarCiclo implements OnChanges, OnInit {
       
       this.aniosFin = [anioInicio + 1];
       
-      const anioFinActual = Number(this.fechaFin);
-      if (!this.fechaFin || anioFinActual !== anioInicio + 1) {
-        this.fechaFin = (anioInicio + 1).toString();
+      const anioFinActual = Number(this.anioFin);
+      if (!this.anioFin || anioFinActual !== anioInicio + 1) {
+        this.anioFin = (anioInicio + 1).toString();
       }
     }
   }
 
   guardar() {
-    if (!this.fechaInicio || !this.fechaFin) {
+    if (!this.anioInicio || !this.anioFin) {
       this.errorValidacion = 'Debe seleccionar ambos años';
       return;
     }
 
-    const anioInicio = Number(this.fechaInicio);
-    const anioFin = Number(this.fechaFin);
+    const anioInicio = Number(this.anioInicio);
+    const anioFin = Number(this.anioFin);
 
     if (anioFin !== anioInicio + 1) {
       this.errorValidacion = 'El año fin debe ser el siguiente al año de inicio';
@@ -116,8 +116,8 @@ export class EditarCiclo implements OnChanges, OnInit {
     // ✅ CONVERTIR A FORMATO YYYY-MM-DD
     const cicloActualizado: Ciclos = { 
       id: this.id,
-      fechaInicio: `${anioInicio}-01-01`,
-      fechaFin: `${anioFin}-01-01`,
+      anioInicio: `${anioInicio}-01-01`,
+      anioFin: `${anioFin}-01-01`,
       estatus: this.estatus
     };
 
