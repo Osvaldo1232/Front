@@ -129,7 +129,7 @@
             <select class="form-select" [(ngModel)]="cicloId" name="cicloId" required>
               <option value="">Seleccionar...</option>
               <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-                {{ extraerAnio(ciclo.fechaInicio) }}-{{ extraerAnio(ciclo.fechaFin) }}
+                {{ ciclo.anioInicio }}-{{ ciclo.anioFin }}
               </option>
             </select>
           </div>

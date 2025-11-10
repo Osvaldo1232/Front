@@ -44,7 +44,7 @@
             (change)="aplicarFiltros()">
             <option value="">Todos los ciclos</option>
             <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-              {{ extraerAnio(ciclo.fechaInicio) }} - {{ extraerAnio(ciclo.fechaFin) }}
+              {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
             </option>
           </select>
         </div>
