@@ -144,7 +144,9 @@ PROFESOR
     "nombre": "Carlos",
     "apellidos": "Ramírez López",
     "email": "carlos.ramirez@escuela.edu.mx",
-    "password": "Carlos123*",
+    "password": "
+    
+    ",
     "fechaNacimiento": "1985-03-12",
     "sexo": "MASCULINO",
     "especialidad": "Matemáticas",
@@ -469,3 +471,203 @@ INSCRITO ALUMNOS
     });
   }
 
+
+
+   public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+    
+    // ⬇️ AGREGAR ESTE MÉTODO
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
+    }
+    
+    public Object buscarUsuarioPorId(String id) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+        if (usuario instanceof Estudiante) {
+            return (Estudiante) usuario;
+        } else if (usuario instanceof Profesor) {
+            return (Profesor) usuario;
+        } else if (usuario instanceof Director) {
+            return (Director) usuario;
+        } else {
+            return usuario;
+        }
+    }
+
+
+
+
+    package com.primaria.app.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.primaria.app.Model.Director;
+import com.primaria.app.Model.Estudiante;
+import com.primaria.app.Model.Profesor;
+import com.primaria.app.Model.Usuario;
+import com.primaria.app.exception.BusinessException;
+import com.primaria.app.repository.UsuarioRepository;
+
+@Service
+public class UsuarioService {
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+
+    public Usuario save(Usuario usuario) {
+        // 🔍 Validar correo duplicado
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            throw new BusinessException(1000, "El correo ya está en uso");
+        }
+
+        // 🔍 Validar matrícula si es estudiante
+        if (usuario instanceof Estudiante estudiante) {
+            boolean existe = usuarioRepository.findAll().stream()
+                    .filter(u -> u instanceof Estudiante)
+                    .map(u -> (Estudiante) u)
+                    .anyMatch(u -> u.getMatricula().equalsIgnoreCase(estudiante.getMatricula()));
+            if (existe) {
+                throw new BusinessException(1000, "La matrícula ya está en uso");
+            }
+        }
+
+        // 🔍 Validar RFC y Clave Presupuestal si es profesor
+        if (usuario instanceof Profesor profesor) {
+            boolean rfcExiste = usuarioRepository.findAll().stream()
+                    .filter(u -> u instanceof Profesor)
+                    .map(u -> (Profesor) u)
+                    .anyMatch(u -> u.getRfc() != null && u.getRfc().equalsIgnoreCase(profesor.getRfc()));
+
+            if (rfcExiste) {
+                throw new BusinessException(1000, "El RFC ya está en uso");
+            }
+
+            boolean claveExiste = usuarioRepository.findAll().stream()
+                    .filter(u -> u instanceof Profesor)
+                    .map(u -> (Profesor) u)
+                    .anyMatch(u -> u.getClavePresupuestal() != null &&
+                                   u.getClavePresupuestal().equalsIgnoreCase(profesor.getClavePresupuestal()));
+
+            if (claveExiste) {
+                throw new BusinessException(1000, "La clave presupuestal ya está en uso");
+            }
+        }
+
+        // 🔐 Hashear la contraseña antes de guardar
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        return usuarioRepository.save(usuario);
+    }
+
+    public Optional<Usuario> findById(String id) {
+        return usuarioRepository.findById(id);
+    }
+
+    public Usuario update(Usuario usuario, String nuevaPassword) {
+        if (nuevaPassword != null && !nuevaPassword.isBlank()) {
+            usuario.setPassword(passwordEncoder.encode(nuevaPassword));
+        }
+        return usuarioRepository.save(usuario);
+    }
+
+    public Optional<Usuario> authenticate(String email, String password) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            if (passwordEncoder.matches(password, usuario.getPassword())) {
+                return Optional.of(usuario);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+    
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
+    }
+
+    public Object buscarUsuarioPorId(String id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(1000, "Usuario no encontrado"));
+    }
+}
+
+
+package com.primaria.app.controller;
+
+
+import com.primaria.app.DTO.LoginRequest;
+import com.primaria.app.Model.Usuario;
+import com.primaria.app.Service.UsuarioService;
+import com.primaria.app.security.JwtUtil;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/Autenticacion")
+@Tag(name = "Autenticación", description = "Operaciones relacionadas con login y autenticación de usuarios")
+public class AuthController {
+
+    private final UsuarioService usuarioService;
+    private final JwtUtil jwtUtil;
+
+    public AuthController(UsuarioService usuarioService, JwtUtil jwtUtil) {
+        this.usuarioService = usuarioService;
+        this.jwtUtil = jwtUtil;
+    }
+
+    @Operation(
+        summary = "RF1.1 y RF1.2 Iniciar sesión",
+        description = "Autentica al usuario con su email y contraseña. Devuelve un token JWT si las credenciales son válidas.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Login exitoso",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6...\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "401", description = "Credenciales inválidas",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = "{\"error\":\"Credenciales inválidas\"}")
+                )
+            )
+        }
+    )
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
+
+        Optional<Usuario> usuarioOpt = usuarioService.authenticate(email, password);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String token = jwtUtil.generateToken(usuario.getId(), usuario.getRol().name());
+            return ResponseEntity.ok(Map.of("token", token,  "rol", usuario.getRol().name(), "uuid", usuario.getId() ));
+        } else {
+            return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
+        }
+    }
+}
