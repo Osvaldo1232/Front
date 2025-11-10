@@ -1,10 +1,13 @@
 <div class="container py-4">
   <h2 class="text-center mb-4">CALIFICACIÓN GENERAL POR GRADOS</h2>
+
   <div class="row">
-    <div class="col-6 col-md-4" *ngFor="let grade of grades">
+    <!-- Recorremos las calificaciones -->
+    <div class="col-6 col-md-4" *ngFor="let grado of calificaciones">
       <div class="grade-box">
-        <div class="grade-title">{{ grade.label }}</div>
-        <div *ngIf="grade.score !== null" class="grade-score">{{ grade.score }}</div>
+        <div class="grade-title">{{ grado.nombreGrado }}</div>
+        <div *ngIf="grado.promedioGeneral !== null" class="grade-score">{{ grado.promedioGeneral }}</div>
+        <div *ngIf="grado.promedioGeneral === null" class="grade-score">Sin calificación</div>
       </div>
     </div>
   </div>

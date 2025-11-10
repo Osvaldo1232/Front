@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Alumnos, InscripcionReciente, MateriasCalifica} from '../../../models/alumnos.model';
+import { Alumnos, CalifCF, Calificacionesgra, InscripcionReciente, MateriasCalifica} from '../../../models/alumnos.model';
 
 
 // ✅ Nueva interfaz para la respuesta del servicio de inscripciones recientes
@@ -31,4 +31,11 @@ export class AlumnoService {
     return this.http.get<MateriasCalifica[]>(`${this.apiUrl}/calificaciones-finales/alumno/${almId}/ciclo/${cicloid}`);
  
 }
+ obtenerCalificaciones(alumnoId: string): Observable<Calificacionesgra[]> {
+    return this.http.get<Calificacionesgra []>(`${this.apiUrl}/calificaciones-finales/promedios/${alumnoId}`);
+}
+  obtenerCalCF(idCiclo: string): Observable<CalifCF[]> {
+    return this.http.get<CalifCF[]>(`${this.apiUrl}/calificaciones-finales/promedio-campos/${idCiclo}`);
+  
+  }
 }

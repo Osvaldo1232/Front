@@ -43,3 +43,16 @@ export interface AlumnoGGC {
   grupoNombre: string;
   estatus: string;
 } 
+
+export interface Calificacionesgra {
+  idGrado: string;
+  nombreGrado: string;
+  idCiclo: string;
+  cicloEscolar: string;
+  promedioGeneral: any;
+}
+export interface CalifCF{
+  campoFormativo: any;
+  promedioCampo: any;
+}
+
