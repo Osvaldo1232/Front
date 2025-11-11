@@ -8,6 +8,7 @@ import { EditarGrupo } from '../grupos/editar-grupo/editar-grupo/editar-grupo';
 import { NuevoGrupo } from '../grupos/nuevo-grupo/nuevo-grupo/nuevo-grupo';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
+import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
 
 @Component({
   selector: 'app-grupos',
@@ -34,7 +35,8 @@ export class GruposComponent implements OnInit {
   registrosPorPagina = 6;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorGrupos, private loadingService: LoadingService,) { }
+  constructor(private Servicios: ServiciosDirectorGrupos, private loadingService: LoadingService,
+    private alerta:AlertaConfirmacionService) { }
 
   ngOnInit() {
     this.cargarGrupos();
@@ -87,7 +89,12 @@ export class GruposComponent implements OnInit {
     }
   }
 
-  cambiarEstatus(grupo: Grupos) {
+  async cambiarEstatus(grupo: Grupos) {
+        const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     grupo.estatus = grupo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     console.log('Cambiar estatus:', grupo);
   }

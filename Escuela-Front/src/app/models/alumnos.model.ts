@@ -51,8 +51,11 @@ export interface Calificacionesgra {
   cicloEscolar: string;
   promedioGeneral: any;
 }
-export interface CalifCF{
-  campoFormativo: any;
-  promedioCampo: any;
+export interface CalifTri{
+  nombreAlumno: string;
+  nombreMateria: string;
+  calificacionesPorTrimestre: {
+    [trimestre: string]: number; // ejemplo: {"trimestre1": 8, "trimestre2": 9, "trimestre3": 10}
+  };
 }
 

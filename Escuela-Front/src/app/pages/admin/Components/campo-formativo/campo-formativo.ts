@@ -6,6 +6,8 @@ import { ServiciosCampoFormativo } from '../../Services/servicios-director-campo
 import { CampoFormativoModel } from '../../../../models/campo-formativo.model';
 import { CampoFormativoNuevo } from './campo-formativo-nuevo/campo-formativo-nuevo/campo-formativo-nuevo';
 import { CampoFormativoEditar } from './campo-formativo-editar/campo-formativo-editar/campo-formativo-editar';
+import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
+import { LoadingService } from '../../../../shared/loading-service';
 
 @Component({
   selector: 'app-campo-formativo',
@@ -34,7 +36,8 @@ export class CampoFormativo implements OnInit {
   registrosPorPagina = 6; // 6 cards por página (3x2)
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosCampoFormativo) { }
+  constructor(private Servicios: ServiciosCampoFormativo,  private loadingService: LoadingService,
+    private alerta:AlertaConfirmacionService) { }
 
   ngOnInit() {
     this.cargarCampos();
@@ -128,7 +131,12 @@ getNombreCampo(index: number): string {
     }
   }
 
-  cambiarEstatus(campo: CampoFormativoModel) {
+  async cambiarEstatus(campo: CampoFormativoModel) {
+        const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     // Implementar cambio de estatus
     campo.estatus = campo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     console.log('Cambiar estatus:', campo);

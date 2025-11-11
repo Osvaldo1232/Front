@@ -108,6 +108,7 @@ export class CiclosEscolaresComponent implements OnInit {
   }
 
   cambiarEstatus(ciclo: Ciclos) {
+    
     const nuevoEstatus = ciclo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const estatusAnterior = ciclo.estatus;
     ciclo.estatus = nuevoEstatus;
