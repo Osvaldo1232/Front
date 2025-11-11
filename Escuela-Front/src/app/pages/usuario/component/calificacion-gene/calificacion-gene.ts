@@ -4,10 +4,11 @@ import { LoginService } from '../../../../services/login-service';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlumnoService } from '../../Services/alumno-service';
 import {Calificacionesgra } from '../../../../models/alumnos.model';
+import { Loading } from '../../../../shared/loading/loading';
 
 @Component({
   selector: 'app-calificacion-gene',
-  imports: [CommonModule ],
+  imports: [CommonModule, Loading ],
   templateUrl: './calificacion-gene.html',
   styleUrl: './calificacion-gene.scss'
 })
@@ -23,6 +24,7 @@ errorMessage = '';
     ) {}
 
   ngOnInit(): void {
+     this.loadingService.show();
    this.usuario= this.loginService.Usuario();
    if (this.usuario) {
       this.cargarCalificac(this.usuario);

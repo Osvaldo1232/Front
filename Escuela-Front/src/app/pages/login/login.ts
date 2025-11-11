@@ -27,12 +27,7 @@ export class Login {
     private alertService: AlertService, private loadingService: LoadingService,
   private alerta:AlertaConfirmacionService) {}
 
-   async login() {
-    const confirmado = await this.alerta.mostrar('¿Estás seguro de iniciar sesión?');
-
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
+   login() {
     const credentials = {
       email: this.email,
       password: this.password

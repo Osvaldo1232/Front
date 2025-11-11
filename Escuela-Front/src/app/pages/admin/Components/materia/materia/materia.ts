@@ -9,6 +9,7 @@ import { ServiciosCampoFormativo } from '../../../Services/servicios-director-ca
 import { NuevaMateria } from '../materia/nueva-materia/nueva-materia/nueva-materia';
 import { EditarMateria } from '../editar-materia/editar-materia/editar-materia';
 import { AlertService } from '../../../../../shared/alert-service';
+import { AlertaConfirmacionService } from '../../../../../shared/alerta-confirmacion-service';
 
 @Component({
   selector: 'app-materias',
@@ -39,7 +40,7 @@ export class MateriasComponent implements OnInit {
   constructor(
     private serviciosMaterias: ServiciosDirectorMaterias,
     private serviciosCamposFormativos: ServiciosCampoFormativo,
-    private alertService: AlertService
+    private alertService: AlertService, private alerta:AlertaConfirmacionService
   ) { }
 
   ngOnInit() {
@@ -115,7 +116,12 @@ export class MateriasComponent implements OnInit {
     }
   }
 
-  cambiarEstatus(materia: Materia) {
+  async cambiarEstatus(materia: Materia) {
+       const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     const nuevoEstatus = materia.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const estatusAnterior = materia.estatus;
     materia.estatus = nuevoEstatus;

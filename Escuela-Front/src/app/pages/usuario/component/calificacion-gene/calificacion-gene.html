@@ -1,14 +1,28 @@
 <div class="container py-4">
   <h2 class="text-center mb-4">CALIFICACIÓN GENERAL POR GRADOS</h2>
 
-  <div class="row">
-    <!-- Recorremos las calificaciones -->
+  <div *ngIf="calificaciones && calificaciones.length > 0; else sinMaterias" class="row">
     <div class="col-6 col-md-4" *ngFor="let grado of calificaciones">
       <div class="grade-box">
         <div class="grade-title">{{ grado.nombreGrado }}</div>
-        <div *ngIf="grado.promedioGeneral !== null" class="grade-score">{{ grado.promedioGeneral }}</div>
-        <div *ngIf="grado.promedioGeneral === null" class="grade-score">Sin calificación</div>
+        <div *ngIf="grado.promedioGeneral !== null" class="grade-score">
+          {{ grado.promedioGeneral }}
+        </div>
+        <div *ngIf="grado.promedioGeneral === null" class="grade-score">
+          Sin calificación
+        </div>
       </div>
     </div>
   </div>
+
+  <ng-template #sinMaterias>
+    <div class="alert alert-light text-center py-5 shadow-sm rounded">
+      <p class="mb-0 fs-5 text-secondary">
+        Aún no hay calificaciones Registradas.
+      </p>
+    </div>
+  </ng-template>
 </div>
+
+    <app-loading></app-loading>
+ 
