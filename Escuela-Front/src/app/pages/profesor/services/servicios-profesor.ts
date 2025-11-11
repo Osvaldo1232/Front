@@ -80,7 +80,21 @@ export class ServiciosProfesor {
       idGrado: calificacion.idGrado,
       promedio: parseFloat(calificacion.promedio)
     };
+    return this.http.post(`${this.apiUrlBase}/calificaciones/asignaruna`, payload);
+  }
+  obtenerCalificacionesPorGrado(
+    idCiclo: string,
+    idGrado: string,
+    idMateria: string
+  ): Observable<any[]> {
+    const params = new HttpParams()
+      .set('idCiclo', idCiclo)
+      .set('idGrado', idGrado)
+      .set('idMateria', idMateria);
 
-    return this.http.post(`${this.apiUrlBase}/calificaciones/asignar`, payload);
+    return this.http.get<any[]>(
+      `${this.apiUrlBase}/calificaciones/por-grado`,
+      { params }
+    );
   }
 }

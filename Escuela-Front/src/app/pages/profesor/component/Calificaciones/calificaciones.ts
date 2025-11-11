@@ -50,13 +50,7 @@ export class CalificacionesComponent implements OnInit {
   cargando = false;
   Math = Math;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private servicios: ServiciosProfesor,
-    private loadingService: LoadingService,
-    private alertService: AlertService
-  ) {}
+  constructor( private route: ActivatedRoute, private router: Router, private servicios: ServiciosProfesor, private loadingService: LoadingService, private alertService: AlertService ) {}
 
   ngOnInit(): void {
     this.obtenerParametrosNavegacion();
@@ -110,6 +104,10 @@ export class CalificacionesComponent implements OnInit {
 
         this.alumnos = resultado.inscripciones;
         this.inicializarCalificaciones();
+        
+        setTimeout(() => {
+          this.cargarCalificacionesExistentes();
+        }, 100);
 
         this.loadingService.hide();
         this.cargando = false;
@@ -417,5 +415,52 @@ export class CalificacionesComponent implements OnInit {
 
   volver(): void {
     this.router.navigate(['/profesor/materias']);
+  }
+
+  cargarCalificacionesExistentes(): void {
+    if (!this.idMateria || !this.idCiclo || !this.idGrado) {
+      return;
+    }
+
+    if (!this.idTrimestre1 || !this.idTrimestre2 || !this.idTrimestre3) {
+      return;
+    }
+
+    this.servicios.obtenerCalificacionesPorGrado(
+      this.idCiclo,
+      this.idGrado,
+      this.idMateria
+    ).subscribe({
+      next: (calificaciones: any[]) => {
+        if (calificaciones && calificaciones.length > 0) {
+          calificaciones.forEach(cal => {
+            const alumno = this.alumnosCalificaciones.find(
+              a => a.idAlumno === cal.idAlumno
+            );
+
+            if (alumno) {
+              if (cal.trimestre1 !== null && cal.trimestre1 !== undefined) {
+                alumno.calificacionT1 = cal.trimestre1;
+              }
+              
+              if (cal.trimestre2 !== null && cal.trimestre2 !== undefined) {
+                alumno.calificacionT2 = cal.trimestre2;
+              }
+              
+              if (cal.trimestre3 !== null && cal.trimestre3 !== undefined) {
+                alumno.calificacionT3 = cal.trimestre3;
+              }
+              
+              alumno.promedioFinal = this.calcularPromedioFinal(alumno);
+            }
+          });
+          
+          this.alumnosFiltrados = [...this.alumnosCalificaciones];
+          this.calcularPaginacion();
+        }
+      },
+      error: () => {
+      }
+    });
   }
 }
