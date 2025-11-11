@@ -3,7 +3,7 @@ import { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServiciosProfesor } from '../../services/servicios-profesor';
 import { CommonModule } from '@angular/common';
-import { InscripcionDTO } from '../../../../models/Materia';
+import { AlumnoCiclo } from '../../../../models/Materia';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from "../../../../shared/loading/loading";
@@ -17,72 +17,92 @@ import { Loading } from "../../../../shared/loading/loading";
   styleUrl: './alumnos.scss'
 })
 export class Alumnos implements OnInit {
-  grados: any[] = [];
-  grupos: any[] = [];
   ciclos: any[] = [];
-
-  gradoId: string = '';
-  grupoId: string = '';
   cicloEscolar: string = '';
-  inscripciones: InscripcionDTO[] = [];
+  inscripciones: AlumnoCiclo[] = [];
 
-  constructor(private servicioProfesor: ServiciosProfesor, private loadingService: LoadingService, private AlertService: AlertService) {}
+  constructor(
+    private servicioDirectorAsignacion: ServiciosProfesor,
+    private loadingService: LoadingService,
+    private AlertService: AlertService
+  ) {}
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.cargarCombos();
   }
+
   cargarCombos(): void {
-    this.servicioProfesor.obtenerGradosUno().subscribe({
-      next: (data) => this.grados = data,
-      error: (err) => console.error('Error al cargar grados', err)
-    });
+    this.servicioDirectorAsignacion.obtenerCiclos1().subscribe({
+      next: (data) => {
+        this.ciclos = data;
 
-    this.servicioProfesor.obtenerGrupos().subscribe({
-      next: (data) => this.grupos = data,
-      error: (err) => console.error('Error al cargar grupos', err)
-    });
+        const cicloActual = this.obtenerCicloActual(this.ciclos);
 
-    this.servicioProfesor.obtenerCiclos().subscribe({
-      next: (data) => this.ciclos = data,
-      error: (err) => console.error('Error al cargar ciclos', err)
+        if (cicloActual) {
+          this.cicloEscolar = cicloActual.id; 
+          this.buscar(false); 
+        } else {
+          this.loadingService.hide();
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar ciclos', err);
+        this.loadingService.hide();
+      }
     });
   }
 
-  buscar(): void {
-    if (!this.gradoId || !this.grupoId || !this.cicloEscolar) {
-      alert('Por favor, llena todos los campos antes de buscar');
+  obtenerCicloActual(ciclos: any[]): any {
+    const anioActual = new Date().getFullYear();
+
+    const actual = ciclos.find(c =>
+      anioActual >= c.anioInicio && anioActual <= c.anioFin
+    );
+
+    if (!actual) {
+      return ciclos.sort((a, b) => b.anioFin - a.anioFin)[0];
+    }
+
+    return actual;
+  }
+
+  buscar(mostrarLoading: boolean = true): void {
+    if (!this.cicloEscolar) {
+      alert('Por favor, selecciona un ciclo escolar antes de buscar');
       return;
     }
-    this.loadingService.show();
 
-    this.servicioProfesor.filtrarInscripciones(this.gradoId, this.grupoId, this.cicloEscolar).subscribe({
-        next: (inscripciones) => {
+    if (mostrarLoading) {
+      this.loadingService.show();
+    }
+
+    this.servicioDirectorAsignacion.filtrarInscripciones1(this.cicloEscolar).subscribe({
+      next: (inscripciones) => {
         this.inscripciones = inscripciones || [];
         this.loadingService.hide();
 
-        if(inscripciones.length === 0){
+        if (inscripciones.length === 0) {
           this.AlertService.show(
             'Actualmente no se encontraron alumnos para los criterios seleccionados.',
-            'danger',
+            'warning',
             'Error'
           );
         }
       },
-        error: (err) => {
-          console.error('Error al obtener inscripciones', err);
-          this.loadingService.hide();
-          this.AlertService.show(
+      error: (err) => {
+        console.error('Error al obtener inscripciones', err);
+        this.loadingService.hide();
+        this.AlertService.show(
           'Ocurrió un error al buscar los alumnos',
           'danger',
           'Error'
         );
-        }
-      });
+      }
+    });
   }
 
   limpiar(): void {
-    this.gradoId = '';
-    this.grupoId = '';
     this.cicloEscolar = '';
     this.inscripciones = [];
   }

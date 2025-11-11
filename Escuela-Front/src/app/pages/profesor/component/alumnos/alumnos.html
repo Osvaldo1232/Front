@@ -1,60 +1,58 @@
-<div class="alumnos-container">
-    <h1 class="title">ALUMNOS</h1>
-
-    <div class="header-section">
-        <div class="search-group">
-            <label>Grado</label>
-            <select class="input-field" [(ngModel)]="gradoId">
-                <option value="">Seleccione un grado</option>
-                <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
-            </select>
-        </div>
-
-        <div class="search-group">
-            <label>Grupo</label>
-            <select class="input-field" [(ngModel)]="grupoId">
-                <option value="">Seleccione un grupo</option>
-                <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
-            </select>
-        </div>
-
-        <div class="search-group">
-            <label>Ciclo Escolar</label>
-            <select class="input-field" [(ngModel)]="cicloEscolar">
-                <option value="">Seleccione un ciclo</option>
-                <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">{{ ciclo.fechaInicio | date:'yyyy'}}  -  {{ ciclo.fechaFin | date:'yyyy'}}</option>
-            </select>
-        </div>
-
-        <div class="action-buttons">
-            <button class="btn btn-buscar" (click)="buscar()">Buscar</button>
-            <button class="btn btn-limpiar" (click)="limpiar()">Limpiar</button>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-uppercase mb-1 titulo-h2">ALUMNOS</h2>
+            <h5 class="text-muted mb-4 titulo-h5">Alumnos</h5>
         </div>
     </div>
 
-    <table class="alumnos-table">
-        <thead>
-            <tr>
-                <th>MATRICULA</th>
-                <th>NOMBRE<span class="filter-icon">▼</span></th>
-                <th>APELLIDO PATERNO</th>
-                <th>APELLIDO MATERNO</th>
-                <th>CURP</th>
-                <th>GRADO</th>
-                <th>GRUPO</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let alumno of inscripciones; let i = index" [class.row-alternate]="i % 2 === 1">
-                <td>{{ alumno.matricula }}</td>
-                <td>{{ alumno.nombre }}</td>
-                <td>{{ alumno.apellidoPaterno }}</td>
-                <td>{{ alumno.apellidoMaterno }}</td>
-                <td>{{ alumno.curp }}</td>
-                <td>{{ alumno.gradoNombre }}</td>
-                <td>{{ alumno.grupoNombre }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<app-loading></app-loading>
+    <div class="card p-4 mb-5 shadow-lg form-card-padding">
+        <div class="row g-4">
+
+            <div class="col-md-4 col-sm-6">
+                <label for="ciclo" class="form-label required-label">Ciclo:*</label>
+                <select id="materia" class="form-select" [(ngModel)]="cicloEscolar" (change)="buscar()">
+                    <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+                        {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 shadow-lg table-grid-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover grid-table align-middle">
+                <thead class="grid-header text-whit">
+                    <tr>
+                        <th class="col-th">NOMBRE</th>
+                        <th class="col-th">APELLIDO PATERNO</th>
+                        <th class="col-th">APELLIDO MATERNO</th>
+                        <th class="col-th">MATRICULA</th>
+                        <th class="col-th">CURP</th>
+                        <th class="col-th">GRADO</th>
+                        <th class="col-th">GRUPO</th>
+                        <th class="col-th">NOMBRE TUTOR</th>
+                        <th class="col-th">APELLIDO PATERNO</th>
+                        <th class="col-th">APELLIDO MATERNO</th>
+                        <th class="col-th">NUMERO TUTOR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let alumno of inscripciones; let i = index" [class.row-alternate]="i % 2 === 1">
+                        <td>{{ alumno.nombre }}</td>
+                        <td>{{ alumno.apellidoPaterno }}</td>
+                        <td>{{ alumno.apellidoMaterno }}</td>
+                        <td>{{ alumno.matricula }}</td>
+                        <td>{{ alumno.curp }}</td>
+                        <td>{{ alumno.grado }}</td>
+                        <td>{{ alumno.grupo }}</td>
+                        <td>{{ alumno.tutorNombre }}</td>
+                        <td>{{ alumno.tutorApellidoPaterno }}</td>
+                        <td>{{ alumno.tutorApellidoMaterno }}</td>
+                        <td>{{ alumno.numeroTutor }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-loading></app-loading>

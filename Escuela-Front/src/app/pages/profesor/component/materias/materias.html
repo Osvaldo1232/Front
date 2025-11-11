@@ -1,25 +1,56 @@
-<div class="materias-container">
-  <h1 class="titulo-principal">MATERIAS</h1>
-
-  <div class="info-docente" *ngIf="asignacionDocente && !cargando">
-    <p><strong>Grado:</strong> {{ asignacionDocente.grado }}</p>
-    <p><strong>Grupo:</strong> {{ asignacionDocente.grupo }}</p>
-    <p><strong>Ciclo:</strong> {{ asignacionDocente.ciclo }}</p>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-uppercase mb-1 titulo-h2">MATERIAS</h2>
+      <h5 class="text-muted mb-4 titulo-h5">Materias</h5>
+    </div>
   </div>
+  <div class="card p-4 mb-5 shadow-lg form-card-padding">
+    <div class="info-docente-container" *ngIf="asignacionDocente && !cargando">
 
-  <div class="materias-grid" *ngIf="!cargando && materias.length > 0">
-    <div class="materia-card" *ngFor="let materia of materias">
-      <h2 class="materia-nombre">{{ materia.nombreMateria }}</h2>
-      <div class="materia-info">
-        <p class="campo-formativo">CAMPO FORMATIVO:</p>
-        <p class="campo-valor">{{ materia.nombreCampoFormativo }}</p>
+      <div class="info-item">
+        <label>Grado</label>
+        <p>{{ asignacionDocente.nombreGrado }}</p>
       </div>
-      <button class="btn-calificar" (click)="abrirCalificaciones(materia)">Calificar</button>
+
+      <div class="info-item">
+        <label>Grupo</label>
+        <p>{{ asignacionDocente.nombreGrupo }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Ciclo</label>
+        <p>{{ asignacionDocente.ciclo }}</p>
+      </div>
+
     </div>
   </div>
 
-  <div class="sin-datos" *ngIf="!cargando && materias.length === 0">
-    <button class="btn-recargar" (click)="recargarMaterias()">Recargar</button>
+  <div class="card p-4 mb-5 shadow-lg form-card-padding">
+    <div class="row g-4">
+
+      <div class="materias-container">
+
+        <div class="materias-grid" *ngIf="!cargando && materias.length > 0">
+          <div class="materia-card" *ngFor="let materia of materias">
+            <h2 class="materia-nombre">{{ materia.nombreMateria }}</h2>
+
+            <div class="materia-info">
+              <p class="campo-formativo">CAMPO FORMATIVO:</p>
+              <p class="campo-valor">{{ materia.nombreCampoFormativo }}</p>
+            </div>
+
+            <button class="btn-calificar" (click)="abrirCalificaciones(materia)">Calificar</button>
+          </div>
+        </div>
+
+        <div class="sin-datos" *ngIf="!cargando && materias.length === 0">
+          <button class="btn-recargar" (click)="recargarMaterias()">Recargar</button>
+        </div>
+
+      </div>
+
+      <app-loading></app-loading>
+    </div>
   </div>
 </div>
-<app-loading></app-loading>

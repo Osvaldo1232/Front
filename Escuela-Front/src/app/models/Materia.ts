@@ -27,3 +27,17 @@ export interface AsignacionGradoGrupo {
   nombreCiclo: string;
   fechaCreado: string;
 }
+
+export interface AlumnoCiclo {
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  matricula: string;
+  curp: string;
+  grado: string;
+  grupo: string;
+  tutorNombre: string;
+  tutorApellidoPaterno: string;
+  tutorApellidoMaterno: string;
+  numeroTutor: string;
+}

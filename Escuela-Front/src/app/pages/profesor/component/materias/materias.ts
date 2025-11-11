@@ -41,10 +41,11 @@ export class Materias implements OnInit {
     this.cargando = true;
     this.servicios.obtenerAsignacionDocente(this.usuariologuado).subscribe({
       next: (asignacion) => {
+        this.asignacionDocente = asignacion;
         if (asignacion.idGrado) {
           this.cargarMateriasPorGrado(asignacion.idGrado);
           this.AlumnosIns(asignacion.idGrado, asignacion.idGrupo, asignacion.idCiclo)
-        } 
+        }
       },
       error: (err) => {
         this.loadingService.hide();
@@ -98,16 +99,20 @@ export class Materias implements OnInit {
       return;
     }
 
-    this.router.navigate(['/pages/usuario/component/calificaciones/calificaciones', materia.idMateria], {
-      state: {
-        materia,
-        
-        grado: this.asignacionDocente.grado,
-        grupo: this.asignacionDocente.grupo,
-        ciclo: this.asignacionDocente.ciclo,
-        idAsignacion: this.asignacionDocente.id
+    this.router.navigate(
+      ['/profesor/calificaciones', materia.idMateria],
+      {
+        state: {
+          materia: {
+            idMateria: materia.idMateria,
+            nombreMateria: materia.nombreMateria,
+            idGrado: this.asignacionDocente.idGrado,
+            idGrupo: this.asignacionDocente.idGrupo,
+            idCiclo: this.asignacionDocente.idCiclo
+          }
+        }
       }
-    });
+    );
   }
 
   recargarMaterias(): void {

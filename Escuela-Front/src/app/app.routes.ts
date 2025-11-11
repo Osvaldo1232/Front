@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Admin } from './pages/admin/admin';
 import { Usuario } from './pages/usuario/usuario';
-import { ProfesorComponent } from './pages/profesor/profesor'; 
+import { ProfesorComponent } from './pages/profesor/profesor';
 import { DocentesComponent } from './pages/admin/Components/docentes/docentes';
 import { AuthGuard } from './guards/auth-guard';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized';
-import { AlumnosComponent } from './pages/admin/Components/alumnos/alumnos'; 
+import { AlumnosComponent } from './pages/admin/Components/alumnos/alumnos';
 import { Grado } from './pages/admin/Components/grado/grado';
-import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones'; 
+import { Calificaciones } from './pages/usuario/component/calificaciones/calificaciones';
 import { Historial } from './pages/usuario/component/historial/historial';
 import { GruposComponent } from './pages/admin/Components/grupos/grupos';
 import { NuevoAlumno } from './pages/admin/Components/alumnos/nuevo_alumno/nuevo-alumno/nuevo-alumno';
@@ -56,14 +56,14 @@ export const routes: Routes = [
         ]
     },
     {
-         path: 'usuario', component: Usuario, canActivate: [AuthGuard], canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },
+        path: 'usuario', component: Usuario, canActivate: [AuthGuard], canActivateChild: [AuthGuard], data: { roles: ['ESTUDIANTE'] },
 
         children: [
             { path: '', redirectTo: 'calificaciones', pathMatch: 'full' },
             { path: 'calificaciones', component: Calificaciones },
             { path: 'historial', component: Historial },
-            {path: 'info-personal', component: InfoPersonalComponent },
-            {path: 'calificacion-gene', component:CalificacionGene},
+            { path: 'info-personal', component: InfoPersonalComponent },
+            { path: 'calificacion-gene', component: CalificacionGene },
 
 
         ]
@@ -77,12 +77,12 @@ export const routes: Routes = [
         data: { roles: ['PROFESOR'] },
         children: [
             { path: '', redirectTo: 'registro-calificaciones', pathMatch: 'full' },
-            { path: 'registro-calificaciones', component: CalificacionesComponent },
             { path: 'datos-personales', component: DatosPersonales },
             { path: 'materias', component: Materias },
             { path: 'Historial-academico', component: HistorialAcademico },
             { path: 'Historial-alumno', component: Historial },
-            { path: 'alumnoss', component: Alumnos }
+            { path: 'alumnoss', component: Alumnos },
+            { path: 'calificaciones/:idMateria', component: CalificacionesComponent}
         ]
     },
 

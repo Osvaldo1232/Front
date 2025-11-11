@@ -26,7 +26,6 @@ export class AsignacionGrado implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 🔹 Mostrar loading al entrar a la pantalla
     this.loadingService.show();
     this.cargarCombos();
   }
@@ -36,14 +35,12 @@ export class AsignacionGrado implements OnInit {
       next: (data) => {
         this.ciclos = data;
 
-        // 🔹 Determinar el ciclo actual o más reciente
         const cicloActual = this.obtenerCicloActual(this.ciclos);
 
         if (cicloActual) {
-          this.cicloEscolar = cicloActual.id; // precargar el combo
-          this.buscar(false); // cargar inscripciones sin mostrar loading extra
+          this.cicloEscolar = cicloActual.id; 
+          this.buscar(false); 
         } else {
-          // Si no hay ciclos, ocultar el loading
           this.loadingService.hide();
         }
       },
@@ -54,7 +51,6 @@ export class AsignacionGrado implements OnInit {
     });
   }
 
-  // 🔹 Buscar el ciclo que incluya el año actual
   obtenerCicloActual(ciclos: any[]): any {
     const anioActual = new Date().getFullYear();
 
@@ -62,7 +58,6 @@ export class AsignacionGrado implements OnInit {
       anioActual >= c.anioInicio && anioActual <= c.anioFin
     );
 
-    // Si no hay ciclo activo, tomar el más reciente por año de fin
     if (!actual) {
       return ciclos.sort((a, b) => b.anioFin - a.anioFin)[0];
     }

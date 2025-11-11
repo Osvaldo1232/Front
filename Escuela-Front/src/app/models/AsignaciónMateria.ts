@@ -1,9 +1,12 @@
 export interface AsignacionDocente {
   id: string;
   idProfesor: string;
-  grado: string;
-  grupo: string;
+  nombreGrado: string;
+  nombreGrupo: string;
   ciclo: string;
+  idGrado: string;
+  idGrupo: string;
+  idCiclo: string;
 }
 
 export interface MateriaAsignada {

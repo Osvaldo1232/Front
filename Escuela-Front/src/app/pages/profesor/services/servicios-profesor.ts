@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CalificacionRegistro, CalificacionResponse, ParametrosCalificacion } from '../../../models/calificacion';
+import { CalificacionRegistro, CalificacionResponse } from '../../../models/calificacion';
 import { Profesor } from '../../../models/Profesor';
 import { MateriasCamposFormativos } from '../../../models/AsignaciónMateria';
-import { InscripcionDTO } from '../../../models/Materia';
+import { AlumnoCiclo, InscripcionDTO } from '../../../models/Materia';
+import { RegistroHistorial } from '../../../models/HistorialAcademico';
 
 
 
@@ -42,6 +43,14 @@ export class ServiciosProfesor {
     return this.http.get<InscripcionDTO[]>(`${this.apiUrlBase}/inscripcion/filtrarAlumnos?`, { params });
   }
 
+  filtrarInscripciones1(cicloId: string): Observable<AlumnoCiclo[]> {
+    return this.http.get<AlumnoCiclo[]>(`${this.apiUrlBase}/inscripcion/alumnos/${cicloId}`);
+  }
+
+  filtrarInscripciones2(cicloId: string): Observable<RegistroHistorial[]> {
+    return this.http.get<[RegistroHistorial]>(`${this.apiUrlBase}/calificaciones-finales/promedio/ciclo/${cicloId}`);
+  }
+
   obtenerGradosUno(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrlBase}/grados`);
   }
@@ -50,25 +59,28 @@ export class ServiciosProfesor {
     return this.http.get<any[]>(`${this.apiUrlBase}/grupos`);
   }
 
-  obtenerCiclos(): Observable<any[]> {
+  obtenerCiclos1(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrlBase}/ciclosescolares`);
   }
-  
-  //guardarCalificacion(calificacion: ParametrosCalificacion): Observable<any> {
-  //  return this.http.post<any>(`${this.apiUrlBase}/cicloses`);
-  //}
 
-  getMaterias(page: number = 0, size: number = 10, sortBy: string = 'id'): Observable<CalificacionResponse> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString())
-      .set('sortBy', sortBy);
-    return this.http.get<CalificacionResponse>(`${this.apiUrlBase}/materias`, { params });
+  obtenerCiclos(idDocente: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrlBase}/asignacion-docente/${idDocente}/ciclos`);
   }
 
+  obtenerTrimestres(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlBase}/Trimestres`);
+  }
+  asignarCalificacion(calificacion: any): Observable<any> {
+    const payload = {
+      idAlumno: calificacion.idAlumno,
+      idMateria: calificacion.idMateria,
+      idTrimestre: calificacion.idTrimestre,
+      idCicloEscolar: calificacion.idCicloEscolar,
+      idGrado: calificacion.idGrado,
+      promedio: parseFloat(calificacion.promedio)
+    };
 
-  editarCalificacion(calificacion: CalificacionRegistro): Observable<CalificacionRegistro> {
-
-    return this.http.post<CalificacionRegistro>(`${this.apiUrlBase}/NuevaCalificacion`, calificacion);
+    return this.http.post(`${this.apiUrlBase}/calificaciones/asignar`, payload);
   }
 }

@@ -30,3 +30,10 @@ export interface ProfesorUno {
   clavePresupuestal: string;
   rol: string;
 }
+export interface ProfesorAsigancionCompleta {
+  idGrado: String;
+  nombreGrado: string;
+  idGrupo: String;
+  nombreGrupo: string;
+  ciclo: string;
+}

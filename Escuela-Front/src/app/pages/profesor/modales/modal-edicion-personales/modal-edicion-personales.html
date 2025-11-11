@@ -1,4 +1,3 @@
-<!-- Fondo modal -->
 <div class="modal-backdrop" *ngIf="registro">
   <div class="modal-content p-4 shadow-lg">
 
@@ -14,7 +13,6 @@
             <label class="form-label required-label">Nombre:</label>
             <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Apellido Paterno:</label>
             <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidoPaterno" required>
@@ -26,57 +24,38 @@
             <label class="form-label required-label">Apellido Materno</label>
             <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidoMaterno" required>
           </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label required-label">Email:</label>
-            <input type="text" class="form-control" [(ngModel)]="email" name="email" required>
-          </div>
-        </div>
-
-        <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Teléfono:</label>
             <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono" required>
           </div>
+        </div>
 
+        <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Fecha de Nacimiento:</label>
             <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
           </div>
-        </div>
-
-        <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">RFC:</label>
             <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" required maxlength="13">
           </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label required-label">Clave Presupuestal:</label>
-            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label required-label">Especialidad:</label>
-          <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label required-label">Grado:</label>
-            <input type="text" class="form-control" [(ngModel)]="grado" name="grado" required>
+            <label class="form-label required-label">Clave Presupuestal:</label>
+            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required>
           </div>
-
-          <div class="col-md-6 mb-3">
-            <label class="form-label required-label">Grupo:</label>
-            <input type="text" class="form-control" [(ngModel)]="grupo" name="grupo" required>
-          </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label required-label">Especialidad:</label>
+          <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required>
+        </div>
         </div>
 
         <div class="text-end mt-3">
           <button type="button" class="btn btn-limpiar me-2" (click)="cerrarModal()">Cerrar</button>
-          <button type="submit" class="btn btn-guardar" [disabled]="guardando">{{ guardando ? 'Guardando...' : 'Guardar' }}</button>
+          <button type="submit" class="btn btn-guardar" [disabled]="guardando">{{ guardando ? 'Guardando...' : 'Guardar'
+            }}</button>
         </div>
       </form>
     </div>

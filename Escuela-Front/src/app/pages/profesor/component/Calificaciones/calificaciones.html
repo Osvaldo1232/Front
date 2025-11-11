@@ -1,111 +1,132 @@
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
-      <h2 class="text-uppercase mb-1 titulo-h2">Registro de Calificaciones</h2>
-      <h5 class="text-muted mb-4 titulo-h5">Gestión detallada de las evaluaciones por estudiante y periodo académico.
-      </h5>
+      <h2 class="text-uppercase mb-1 titulo-h2">Calificar Materias</h2>
+      <h5 class="text-muted mb-4 titulo-h5">{{ nombreMateria }}</h5>
     </div>
   </div>
 
-  <div class="card p-4 mb-5 shadow-lg form-card-padding">
+
+
+  <div class="card p-4 mb-4 shadow-lg form-card-padding">
     <div class="row g-4">
 
-      <div class="col-md-4 col-sm-6">
-        <label for="materia" class="form-label required-label">Materia:</label>
-        <input type="text" id="estudiante" class="form-control" [(ngModel)]="formulario.materia">
-      </div>
 
-      <div class="col-12 d-flex justify-content-end align-items-end pt-md-4 pt-sm-3">
-        <button type="button" class="btn btn-action btn-guardar me-3" (click)="guardar()">Guardar</button>
-        <button type="button" class="btn btn-action btn-limpiar" (click)="limpiar()">Limpiar</button>
+      <div class="col-12 d-flex justify-content-end align-items-end gap-3">
+        <button type="button" class="btn btn-action btn-limpiar" (click)="volver()">Volver</button>
+        <button type="button" class="btn btn-action btn-limpiar" [disabled]="modoEdicion" (click)="Editar()">{{
+          modoEdicion ? '✓ Modo Edición Activo' : 'Editar' }}</button>
+        <button type="button" class="btn btn-action btn-guardar" [disabled]="!modoEdicion"
+          (click)="guardar()">Guardar</button>
       </div>
     </div>
   </div>
 
   <div class="card p-4 shadow-lg table-grid-card">
-
     <div class="table-responsive">
       <table class="table table-striped table-hover grid-table align-middle">
-        <thead class="grid-header text-whit">
+        <thead class="grid-header text-white">
           <tr>
-            <th class="col-th">MATRICULA</th>
-            <th class="col-th">NOMBRE ESTUDIANTE</th>
-            <th class="col-th">MATERIA</th>
-            <th class="col-th">GRADO</th>
-            <th class="col-th">GRUPO</th>
-            <th class="col-th">TRIMESTRE</th>
-            <th class="col-th">CICLO</th>
-            <th class="col-th">CALIFICACIÓN</th>
-            <th class="col-th">ACCIÓN</th>
+            <th class="col-th">ALUMNO</th>
+            <th class="col-th">CALIFICACIÓN TRIMESTRE 1</th>
+            <th class="col-th">CALIFICACIÓN TRIMESTRE 2</th>
+            <th class="col-th">CALIFICACIÓN TRIMESTRE 3</th>
+            <th class="col-th">CALIFICACIÓN FINAL</th>
           </tr>
           <tr class="filter-row">
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.matricula"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.nombreEstudiante"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.materia"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.grado"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.grupo"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.trimestre"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.ciclo"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td><input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.calificacion"
-                (ngModelChange)="aplicarFiltros()" placeholder="Buscar..." /></td>
-            <td></td>
+            <td>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="filtros.nombreEstudiante"
+                (ngModelChange)="aplicarFiltros()" placeholder="Buscar alumno..." />
+            </td>
+            <td colspan="5"></td>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let registro of registrosPaginados">
-            <td>{{ registro.matricula }}</td>
-            <td>{{ registro.nombreEstudiante }}</td>
-            <td>{{ registro.materia }}</td>
-            <td>{{ registro.grado }}</td>
-            <td>{{ registro.grupo }}</td>
-            <td>{{ registro.trimestre }}</td>
-            <td>{{ registro.ciclo }}</td>
-            <td class="fw-bold">{{ registro.calificacion }}</td>
+
+          <tr *ngIf="cargando">
+            <td colspan="6" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-2 text-muted">Cargando alumnos...</p>
+            </td>
+          </tr>
+
+          <tr *ngIf="!cargando && alumnosPaginados.length === 0">
+            <td colspan="6" class="text-center py-5">
+              <div class="text-muted">
+                <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                <p class="mt-2">No hay alumnos inscritos en este grado, grupo y ciclo.</p>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngFor="let alumno of alumnosPaginados">
+            <td class="fw-bold">{{ alumno.nombreAlumno }}</td>
+
             <td>
-              <button class="btn btn-icon-circular" (click)="editar(registro)" title="Editar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
-                  viewBox="0 0 16 16">
-                  <path
-                    d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.105l-5.313 1.77a.5.5 0 0 1-.606-.606l1.77-5.313a.5.5 0 0 1 .105-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5v-.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5-.5v-.5a.5.5 0 0 1 .176-.358z" />
-                </svg>
-              </button>
+              <input type="number" class="form-control form-control-sm text-center" [(ngModel)]="alumno.calificacionT1"
+                (ngModelChange)="onCalificacionChange(alumno)" [disabled]="!modoEdicion" min="0" max="10" step="0.1"
+                placeholder="0" />
+            </td>
+
+            <td>
+              <input type="number" class="form-control form-control-sm text-center" [(ngModel)]="alumno.calificacionT2"
+                (ngModelChange)="onCalificacionChange(alumno)" [disabled]="!modoEdicion || !puedeEditarTrimestre2()"
+                [class.bg-light]="!puedeEditarTrimestre2()" min="0" max="10" step="0.1" placeholder="0"
+                [title]="!puedeEditarTrimestre2() ? 'Complete todas las calificaciones del Trimestre 1 primero' : ''" />
+              <small class="text-danger" *ngIf="!puedeEditarTrimestre2()">
+                Bloqueado
+              </small>
+            </td>
+
+            <td>
+              <input type="number" class="form-control form-control-sm text-center" [(ngModel)]="alumno.calificacionT3"
+                (ngModelChange)="onCalificacionChange(alumno)" [disabled]="!modoEdicion || !puedeEditarTrimestre3()"
+                [class.bg-light]="!puedeEditarTrimestre3()" min="0" max="10" step="0.1" placeholder="0"
+                [title]="!puedeEditarTrimestre3() ? 'Complete todas las calificaciones del Trimestre 2 primero' : ''" />
+              <small class="text-danger" *ngIf="!puedeEditarTrimestre3()">
+                Bloqueado
+              </small>
+            </td>
+
+            <td class="fw-bold text-center" [class.text-success]="alumno.promedioFinal && alumno.promedioFinal >= 6"
+              [class.text-danger]="alumno.promedioFinal && alumno.promedioFinal < 6">
+              {{ alumno.promedioFinal !== null ? (alumno.promedioFinal | number:'1.1-1') : '-' }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="d-flex justify-content-center mt-4">
+    <div class="d-flex justify-content-center mt-4" *ngIf="!cargando && alumnosFiltrados.length > 0">
       <nav aria-label="Paginación de registros">
         <ul class="pagination pagination-standard shadow-sm">
           <li class="page-item" [class.disabled]="paginaActual === 1">
-            <a class="page-link" href="#" (click)="irAPagina(paginaActual - 1)" aria-label="Anterior">
+            <a class="page-link" href="javascript:void(0)" (click)="irAPagina(paginaActual - 1)" aria-label="Anterior">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
           <li class="page-item" *ngFor="let num of [].constructor(totalPaginas); let i = index"
             [class.active]="paginaActual === i + 1">
-            <a class="page-link" href="#" (click)="irAPagina(i + 1)">{{ i + 1 }}</a>
+            <a class="page-link" href="javascript:void(0)" (click)="irAPagina(i + 1)">{{ i + 1 }}</a>
           </li>
 
           <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
-            <a class="page-link" href="#" (click)="irAPagina(paginaActual + 1)" aria-label="Siguiente">
+            <a class="page-link" href="javascript:void(0)" (click)="irAPagina(paginaActual + 1)" aria-label="Siguiente">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
         </ul>
       </nav>
     </div>
-  </div>
 
-  <app-modal-edicion-calificacion [registro]="registroParaEditar" (cerrar)="cerrarModal($event)">
-  </app-modal-edicion-calificacion>
+    <div class="text-center text-muted mt-3" *ngIf="!cargando && alumnosFiltrados.length > 0">
+      Mostrando {{ (paginaActual - 1) * registrosPorPagina + 1 }} -
+      {{ Math.min(paginaActual * registrosPorPagina, alumnosFiltrados.length) }}
+      de {{ alumnosFiltrados.length }} alumnos
+    </div>
+  </div>
 </div>
+<app-loading></app-loading>

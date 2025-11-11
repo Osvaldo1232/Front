@@ -1,132 +1,195 @@
-.materias-container {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  .titulo-principal {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 300;
-    letter-spacing: 0.3rem;
-    margin-bottom: 3rem;
-    color: #333;
-    font-family: 'Garamond', serif;
-  }
-
-  .materias-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 0 1rem;
-  }
-
-  .materia-card {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .materia-nombre {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: #333;
-      letter-spacing: 0.05rem;
-    }
-
-    .materia-info {
-      margin-bottom: 1.5rem;
-      width: 100%;
-
-      .campo-formativo {
-        font-size: 0.75rem;
-        color: #666;
-        margin-bottom: 0.25rem;
-        font-weight: 500;
-        letter-spacing: 0.05rem;
-      }
-
-      .campo-valor {
-        font-size: 0.875rem;
-        color: #333;
-        font-weight: 400;
-      }
-    }
-
-    .btn-calificar {
-      background-color: #8B0000;
-      color: white;
-      border: none;
-      padding: 0.6rem 2rem;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 100%;
-      max-width: 150px;
-
-      &:hover {
-        background-color: #660000;
-        transform: scale(1.02);
-      }
-
-      &:active {
-        transform: scale(0.98);
-      }
-
-      &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-        transform: none;
-      }
-    }
-  }
+.info-docente-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  padding-left: 20px;
 }
 
-// Responsive
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item label {
+  font-weight: 600;
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+
+.info-item input {
+  width: 340px;
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.info-item p {
+  width: 340px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 15px;
+}
+
 @media (max-width: 768px) {
-  .materias-container {
-    padding: 1.5rem;
+  .info-docente-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+  }
 
-    .titulo-principal {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
+  .info-item {
+    width: 100%;
+  }
 
-    .materias-grid {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 0;
-    }
-
-    .materia-card {
-      padding: 1.5rem 1rem;
-    }
+  .info-item input,
+  .info-item p {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .materias-container {
-    .materias-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
+  .info-docente-container {
+    padding: 12px;
+    gap: 15px;
+  }
 
-    .titulo-principal {
-      font-size: 1.75rem;
-      letter-spacing: 0.2rem;
-    }
+  .info-item p {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}
+
+.materias-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.materias-container .titulo-principal {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.3rem;
+  margin-bottom: 3rem;
+  color: #333;
+  font-family: 'Garamond', serif;
+}
+
+.materias-container .materias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.materias-container .materia-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.materias-container .materia-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.materias-container .materia-nombre {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+  letter-spacing: 0.05rem;
+}
+
+.materias-container .materia-info {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.materias-container .campo-formativo {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+}
+
+.materias-container .campo-valor {
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 400;
+}
+
+.materias-container .btn-calificar {
+  background-color: #8B0000;
+  color: white;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 150px;
+}
+
+.materias-container .btn-calificar:hover {
+  background-color: #660000;
+  transform: scale(1.02);
+}
+
+.materias-container .btn-calificar:active {
+  transform: scale(0.98);
+}
+
+.materias-container .btn-calificar:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .materias-container {
+    padding: 1.5rem;
+  }
+
+  .materias-container .titulo-principal {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .materias-container .materias-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .materias-container .materia-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .materias-container .materias-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .materias-container .titulo-principal {
+    font-size: 1.75rem;
+    letter-spacing: 0.2rem;
   }
 }

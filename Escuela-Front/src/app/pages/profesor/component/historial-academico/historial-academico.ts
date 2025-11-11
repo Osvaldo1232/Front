@@ -2,108 +2,117 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegistroHistorial } from '../../../../models/HistorialAcademico';
-import { FiltrosHistorial } from '../../../../models/HistorialAcademico';
+import { LoadingService } from '../../../../shared/loading-service';
+import { ServiciosProfesor } from '../../services/servicios-profesor';
+import { AlertService } from '../../../../shared/alert-service';
+import { Loading } from "../../../../shared/loading/loading";
+import { LoginService } from '../../../../services/login-service';
 
 @Component({
   selector: 'app-historial-academico',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Loading],
   templateUrl: './historial-academico.html',
   styleUrl: './historial-academico.scss'
 })
 export class HistorialAcademico implements OnInit {
-  registros: RegistroHistorial[] = [];
-  registrosFiltrados: RegistroHistorial[] = [];
-  ciclosDisponibles: string[] = [];
-  cargando: boolean = false;
+  ciclos: any[] = [];
+  cicloEscolar: string = '';
+  inscripciones: RegistroHistorial[] = [];
+  idUsuario: string = '';
 
-  filtros: FiltrosHistorial = {
-    cicloEscolar: '',
-    alumno: ''
-  };
-
-  constructor() { }
+  constructor(
+    private servicioDirectorAsignacion: ServiciosProfesor,
+    private loginService: LoginService,
+    private loadingService: LoadingService,
+    private AlertService: AlertService
+  ) {}
 
   ngOnInit(): void {
-    this.cargarHistorial();
+    this.loadingService.show();
+
+    this.idUsuario = this.loginService.Usuario(); 
+
+    if (!this.idUsuario) {
+      console.error('No se encontró usuario logueado');
+      this.loadingService.hide();
+      return;
+    }
+
+    this.cargarCombos();
   }
 
-  cargarHistorial(): void {
-    this.cargando = true;
+  cargarCombos(): void {
+    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).subscribe({
+      next: (data) => {
+        this.ciclos = data;
 
-    this.registros = [
-      {
-        id: '1',
-        alumno: 'Esteban Jaimes',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 10
+        const cicloActual = this.obtenerCicloActual(this.ciclos);
+
+        if (cicloActual) {
+          this.cicloEscolar = cicloActual.id;
+          this.buscar(false);
+        }
+
+        this.loadingService.hide();
       },
-      {
-        id: '2',
-        alumno: 'Perla Tinoco',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 10
-      },
-      {
-        id: '3',
-        alumno: 'Melquiades Gomez',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 9
-      },
-      {
-        id: '4',
-        alumno: 'Himaldo Juarez',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 10
-      },
-      {
-        id: '5',
-        alumno: 'Nicodemo Soto',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 9
-      },
-      {
-        id: '6',
-        alumno: 'Fidencio Minotios',
-        cicloEscolar: '2024-2025',
-        grado: '1',
-        grupo: 'A',
-        calificacion: 10
+      error: (err) => {
+        console.error('Error al cargar ciclos', err);
+        this.loadingService.hide();
       }
-    ];
-
-    this.ciclosDisponibles = [...new Set(this.registros.map(r => r.cicloEscolar))];
-
-    this.registrosFiltrados = [...this.registros];
-    this.cargando = false;
-  }
-
-  aplicarFiltros(): void {
-    this.registrosFiltrados = this.registros.filter(registro => {
-      const cumpleCiclo = !this.filtros.cicloEscolar ||
-        registro.cicloEscolar === this.filtros.cicloEscolar;
-
-      const cumpleAlumno = !this.filtros.alumno ||
-        registro.alumno.toLowerCase().includes(this.filtros.alumno.toLowerCase());
-
-      return cumpleCiclo && cumpleAlumno;
     });
   }
 
-  limpiarFiltros(): void {
-    this.filtros = {
-      cicloEscolar: '',
-      alumno: ''
-    };
-    this.registrosFiltrados = [...this.registros];
+  obtenerCicloActual(ciclos: any[]): any {
+    const anioActual = new Date().getFullYear();
+
+    const actual = ciclos.find(c =>
+      anioActual >= c.anioInicio && anioActual <= c.anioFin
+    );
+
+    if (!actual) {
+      return ciclos.sort((a, b) => b.anioFin - a.anioFin)[0];
+    }
+
+    return actual;
+  }
+
+  buscar(mostrarLoading: boolean = true): void {
+    if (!this.cicloEscolar) {
+      alert('Por favor, selecciona un ciclo escolar antes de buscar');
+      return;
+    }
+
+    if (mostrarLoading) {
+      this.loadingService.show();
+    }
+
+    this.servicioDirectorAsignacion.filtrarInscripciones2(this.cicloEscolar).subscribe({
+      next: (inscripciones) => {
+        this.inscripciones = inscripciones || [];
+        this.loadingService.hide();
+
+        if (!this.inscripciones.length) {
+          this.AlertService.show(
+            'Actualmente no se encontraron alumnos para los criterios seleccionados.',
+            'warning',
+            'Error'
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener inscripciones', err);
+        this.loadingService.hide();
+        this.AlertService.show(
+          'Ocurrió un error al buscar los alumnos',
+          'danger',
+          'Error'
+        );
+      }
+    });
+  }
+
+  limpiar(): void {
+    this.cicloEscolar = '';
+    this.inscripciones = [];
   }
 }
