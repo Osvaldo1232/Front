@@ -14,6 +14,7 @@ import { AsignarGrupoDocente } from '../docentes/asignacion-docente/asigacion-do
 import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
+import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
 
 @Component({
   selector: 'app-docentes',
@@ -50,7 +51,7 @@ export class DocentesComponent implements OnInit {
   constructor(
     private Servicios: ServiciosDirector,
     private loadingService: LoadingService,
-    private alertService: AlertService
+    private alertService: AlertService, private alerta:AlertaConfirmacionService
   ) { }
 
   get usuariosFiltrados() {
@@ -147,7 +148,12 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  cambiarEstatus(docente: Maestros) {
+  async cambiarEstatus(docente: Maestros) {
+     const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const estatusAnterior = docente.estatus;
     docente.estatus = nuevoEstatus;

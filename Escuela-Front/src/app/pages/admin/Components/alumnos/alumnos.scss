@@ -487,4 +487,55 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
   }
+
+  // ✅ Switch de estatus
+.switch-estatus {
+  cursor: pointer;
+  width: 45px;
+  height: 24px;
+  color: #5D1F3C;
+  
+  &:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  &:not(:checked) {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+}
+
+.switch-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  user-select: none;
+  min-width: 65px;
+  text-align: left;
+}
+
+// Alinear switch en el centro
+.form-check {
+  margin: 0;
+  padding: 0;
+}
+
+.form-switch .form-check-input {
+  margin-left: 0;
+}
+
+// Estilo responsive para la tabla
+@media (max-width: 768px) {
+  .switch-label {
+    display: none;
+  }
+  
+  .switch-estatus {
+    margin: 0 auto;
+  }
+}
 }

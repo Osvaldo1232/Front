@@ -1,3 +1,4 @@
+<h2 class="text-center mb-4">Materias Actuales</h2>
 <div *ngIf="alumse" class="inscripcion-bar">
   <div class="rigth-section">
     <strong>Ciclo Escolar:</strong> {{ alumse.ciclo }} |
@@ -6,7 +7,8 @@
   </div>
 </div>
 
-<div *ngIf="materias && materias.length > 0; else cargando" class="container mt-3">
+<!-- Si hay materias -->
+<div *ngIf="materias && materias.length > 0; else sinMaterias" class="container mt-3">
   <div class="row g-3">
     <div class="col-6 col-md-4 col-lg-3" *ngFor="let mat of materias">
       <div 
@@ -37,7 +39,15 @@
   </div>
 </div>
 
-<!-- Cargando -->
-<ng-template #cargando>
-  <app-loading></app-loading>
+<!-- Cuando no hay materias -->
+<ng-template #sinMaterias>
+  <div class="alert alert-light text-center py-5 shadow-sm rounded">
+    <p class="mb-0 fs-5 text-secondary">
+      No hay materias registradas.
+    </p>
+  </div>
 </ng-template>
+
+
+<!-- Cargando -->
+  <app-loading></app-loading>

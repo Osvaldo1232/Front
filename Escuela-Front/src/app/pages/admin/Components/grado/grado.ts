@@ -13,6 +13,7 @@ import { EditarGrado } from './editar-grado/editar-grado/editar-grado';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlertService } from '../../../../shared/alert-service';
+import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
 
 @Component({
   selector: 'app-grado',
@@ -46,7 +47,8 @@ export class Grado implements OnInit {
   constructor(
     private Servicios: ServiciosDirector,
     private loadingService: LoadingService,
-    private alertService: AlertService
+    private alertService: AlertService,
+      private alerta:AlertaConfirmacionService
   ) { }
 
   ngOnInit() {
@@ -130,7 +132,12 @@ export class Grado implements OnInit {
     }
   }
 
-  cambiarEstatus(grado: Grados) {
+  async cambiarEstatus(grado: Grados) {
+        const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+
+  if (!confirmado) {
+    return; // El usuario canceló
+  }
     grado.estatus = grado.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
   }
 
