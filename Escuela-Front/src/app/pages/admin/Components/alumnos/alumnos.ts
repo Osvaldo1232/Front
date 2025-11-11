@@ -15,10 +15,12 @@ import { ServiciosDirectorGrupos } from '../../Services/servicios-director-grupo
 import { ServiciosDirectorCiclos } from '../../Services/servicios-director-ciclos/servicios-director-ciclos';
 import { NuevoAlumno } from './nuevo_alumno/nuevo-alumno/nuevo-alumno';
 import { EditarAlumno } from './editar-alumno/editar-alumno/editar-alumno'; 
+import { AsignarTutor } from './asignar-tutor/asignar-tutor';
 import { Router } from '@angular/router';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
-import { AsignarTutor } from './asignar-tutor/asignar-tutor';
+import { AlertService } from '../../../../shared/alert-service';
+import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
 
 @Component({
   selector: 'app-alumnos',
@@ -55,17 +57,13 @@ export class AlumnosComponent implements OnInit {
   // Modales
   nuevom: boolean = false;
   editarm: boolean = false;
-  alumnoSeleccionado: Alumnos | null = null;
-  alumnoParaTutor: Alumnos | null = null;  
-  asignarTutorm: boolean = false;  
-  alumnoIdParaTutor: string | null = null;  
-  nombreAlumnoParaTutor: string = '';       
-
-
+  asignarTutorm: boolean = false;
+  alumnoIdParaTutor: string | null = null;
+  nombreAlumnoParaTutor: string = '';
 
   verEstudiante: boolean = false;
   idAlumnoSeleccionado: string | null = null;
-  idAl: any;
+  idAl: string = '';
 
   // Paginación
   registrosPorPagina = 10;
@@ -79,17 +77,19 @@ export class AlumnosComponent implements OnInit {
     private serviciosCiclos: ServiciosDirectorCiclos,
     private router: Router,
     private loadingService: LoadingService,
+    private alertService: AlertService,
+    private alerta:AlertaConfirmacionService
   ) { }
 
   ngOnInit() {
     this.GGC();
     this.cargarAsignaciones();
+    this.cargarCicloMasReciente();
   }
 
   cargarDatos() {
     this.loadingService.show();
     
-    // Cargar alumnos
     this.Servicios.ObtenerAlumnos().subscribe({
       next: (res) => {
         this.registros = res;
@@ -102,7 +102,6 @@ export class AlumnosComponent implements OnInit {
       }
     });
 
-    // Cargar inscripciones
     this.serviciosInscripcion.ObtenerInscripciones().subscribe({
       next: (res) => {
         this.inscripciones = res;
@@ -112,7 +111,6 @@ export class AlumnosComponent implements OnInit {
     });
   }
 
-  // ✅ CARGAR ASIGNACIONES
   cargarAsignaciones() {
     this.serviciosGrados.ObtenerAsignaciones().subscribe({
       next: (res) => {
@@ -124,22 +122,40 @@ export class AlumnosComponent implements OnInit {
   }
 
   GGC() {
+    // Cargar grados
     this.serviciosGrados.obtenerGrados().subscribe({
       next: (res) => {
         this.grados = res;
         console.log('📚 Grados cargados:', this.grados);
+        
+        // ✅ Seleccionar automáticamente el primer grado
+        if (this.grados.length > 0) {
+          this.filtroGrado = this.grados[0].id!;
+          console.log('✅ Primer grado seleccionado:', this.grados[0].nombre);
+        }
       },
       error: (err) => console.error('Error al cargar grados:', err)
     });
 
+    // Cargar grupos
     this.serviciosGrupos.ObtenerGrupos().subscribe({
       next: (res) => {
         this.grupos = res;
         console.log('👥 Grupos cargados:', this.grupos);
+        
+        // ✅ Seleccionar automáticamente el primer grupo
+        if (this.grupos.length > 0) {
+          this.filtroGrupo = this.grupos[0].id!;
+          console.log('✅ Primer grupo seleccionado:', this.grupos[0].nombre);
+        }
+        
+        // ✅ Después de cargar grado, grupo y ciclo, aplicar filtros automáticamente
+        this.verificarYAplicarFiltros();
       },
       error: (err) => console.error('Error al cargar grupos:', err)
     });
 
+    // Cargar ciclos
     this.serviciosCiclos.ObtenerCiclo().subscribe({
       next: (res) => {
         this.ciclos = res;
@@ -149,18 +165,69 @@ export class AlumnosComponent implements OnInit {
     });
   }
 
-  // ✅ OBTENER INSCRIPCIÓN DE UN ALUMNO
+  // ✅ Cargar automáticamente el ciclo más reciente
+  cargarCicloMasReciente() {
+    this.serviciosCiclos.ObtenerCiclo().subscribe({
+      next: (res) => {
+        if (res && res.length > 0) {
+          // Ordenar ciclos por año de inicio (descendente) para obtener el más reciente
+          const ciclosOrdenados = res.sort((a, b) => {
+            return b.anioInicio - a.anioInicio;
+          });
+          
+          // Seleccionar el más reciente
+          const cicloMasReciente = ciclosOrdenados[0];
+          this.filtroCiclo = cicloMasReciente.id!;
+          
+          console.log('📅 Ciclo más reciente seleccionado:', cicloMasReciente);
+          console.log(`✅ ${cicloMasReciente.anioInicio}-${cicloMasReciente.anioFin} cargado automáticamente`);
+          
+          // ✅ Después de cargar el ciclo, verificar si ya podemos aplicar filtros
+          this.verificarYAplicarFiltros();
+        }
+      },
+      error: (err) => console.error('Error al cargar ciclo más reciente:', err)
+    });
+  }
+
+  // ✅ NUEVO: Verificar si los 3 filtros están cargados y aplicarlos automáticamente
+  verificarYAplicarFiltros() {
+    // Esperar un momento para asegurar que todos los valores estén asignados
+    setTimeout(() => {
+      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
+        console.log('🎯 Filtros iniciales cargados, aplicando automáticamente...');
+        this.aplicarFiltros();
+      }
+    }, 500);
+  }
+
+  // ✅ Detectar cuando los 3 filtros están seleccionados
+  onFiltroChange() {
+    console.log('🔄 Cambio en filtros:', {
+      grado: this.filtroGrado,
+      grupo: this.filtroGrupo,
+      ciclo: this.filtroCiclo
+    });
+
+    // Si los 3 filtros tienen valor, aplicar automáticamente
+    if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
+      console.log('✅ Todos los filtros seleccionados, aplicando...');
+      this.aplicarFiltros();
+    } else {
+      // Si falta algún filtro, limpiar la tabla
+      this.registrosGGC = [];
+    }
+  }
+
   obtenerInscripcionAlumno(alumnoId?: string): Inscripcion | undefined {
     if (!alumnoId) return undefined;
     return this.inscripciones.find(i => i.alumnoId === alumnoId);
   }
 
-  // ✅ OBTENER ASIGNACIÓN DE UNA INSCRIPCIÓN
   obtenerAsignacionDeInscripcion(inscripcion: Inscripcion): AsignacionDocente | undefined {
     return this.asignaciones.find(a => a.id === inscripcion.asignacionId);
   }
 
-  // ✅ OBTENER NOMBRE DEL GRADO
   obtenerNombreGrado(alumnoId?: string): string {
     if (!alumnoId) return '-';
     
@@ -174,7 +241,6 @@ export class AlumnosComponent implements OnInit {
     return grado ? grado.nombre : '-';
   }
 
-  // ✅ OBTENER NOMBRE DEL GRUPO
   obtenerNombreGrupo(alumnoId?: string): string {
     if (!alumnoId) return '-';
     
@@ -188,39 +254,32 @@ export class AlumnosComponent implements OnInit {
     return grupo ? grupo.nombre : '-';
   }
 
-  // ✅ EXTRAER AÑO DE FECHA
   extraerAnio(fecha: string): string {
     if (!fecha) return '';
     return fecha.split('-')[0];
   }
 
-  // ✅ APLICAR FILTROS
   get alumnosFiltrados() {
     return this.registros.filter(alumno => {
       const inscripcion = this.obtenerInscripcionAlumno(alumno.id!);
       
-      // Si no tiene inscripción, no mostrarlo cuando hay filtros activos
       if (!inscripcion && (this.filtroGrado || this.filtroGrupo || this.filtroCiclo)) {
         return false;
       }
 
       if (!inscripcion) return true;
 
-      // Obtener la asignación
       const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
       if (!asignacion) return false;
 
-      // Filtro por grado
       if (this.filtroGrado && asignacion.idGrado !== this.filtroGrado) {
         return false;
       }
 
-      // Filtro por grupo
       if (this.filtroGrupo && asignacion.idGrupo !== this.filtroGrupo) {
         return false;
       }
 
-      // Filtro por ciclo
       if (this.filtroCiclo && asignacion.idCiclo !== this.filtroCiclo) {
         return false;
       }
@@ -262,26 +321,47 @@ export class AlumnosComponent implements OnInit {
       (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
       (this.filtroCiclo && this.filtroCiclo.trim() !== '')
     ) {
+      this.loadingService.show();
       this.serviciosCiclos
         .filtrarAlumnos(this.filtroGrado, this.filtroGrupo, this.filtroCiclo)
         .subscribe({
           next: (data) => {
             this.registrosGGC = data;
             console.log('🔍 Alumnos encontrados:', data);
+            this.loadingService.hide();
           },
           error: (err) => {
             console.error('❌ Error al filtrar alumnos:', err);
+            this.loadingService.hide();
           }
         });
     }
   }
 
   limpiarFiltros() {
-    this.filtroGrado = '';
-    this.filtroGrupo = '';
-    this.filtroCiclo = '';
+    this.registrosGGC = [];
     this.paginaActual = 1;
-    console.log('🧹 Filtros limpiados');
+    
+    // ✅ Restaurar primer grado
+    if (this.grados.length > 0) {
+      this.filtroGrado = this.grados[0].id!;
+      console.log('✅ Primer grado restaurado:', this.grados[0].nombre);
+    } else {
+      this.filtroGrado = '';
+    }
+    
+    // ✅ Restaurar primer grupo
+    if (this.grupos.length > 0) {
+      this.filtroGrupo = this.grupos[0].id!;
+      console.log('✅ Primer grupo restaurado:', this.grupos[0].nombre);
+    } else {
+      this.filtroGrupo = '';
+    }
+    
+    // ✅ Restaurar el ciclo más reciente
+    this.cargarCicloMasReciente();
+    
+    console.log('🧹 Filtros restaurados a valores iniciales');
   }
 
   nuevo() {
@@ -290,12 +370,19 @@ export class AlumnosComponent implements OnInit {
 
   cerrarModal(event: Alumnos | null) {
     this.nuevom = false;
+    
     if (event) {
-      this.cargarDatos();
+      console.log('✅ Nuevo alumno creado');
+      
+      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
+        console.log('🔄 Reaplicando filtros...');
+        this.aplicarFiltros();
+      }
     }
   }
 
   EditarS(alumnoId: string) {
+    console.log('📝 Abriendo modal de editar para alumno:', alumnoId);
     this.idAl = alumnoId;
     this.editarm = true;
   }
@@ -314,22 +401,28 @@ export class AlumnosComponent implements OnInit {
 
   cerrarModalEditar(event: boolean) {
     this.editarm = false;
+    
     if (event) {
-      this.cargarDatos();
+      console.log('✅ Alumno editado exitosamente');
+      
+      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
+        console.log('🔄 Reaplicando filtros para actualizar la tabla...');
+        this.aplicarFiltros();
+      }
     }
   }
 
   cargarAlumnos() {
     this.cargarDatos();
   }
- // ✅ Método actualizado
+
   asignarTutor(alumnoId: string, nombreCompleto: string) {
+    console.log('👨‍👩‍👧‍👦 Abriendo modal para asignar tutor a:', nombreCompleto);
     this.alumnoIdParaTutor = alumnoId;
     this.nombreAlumnoParaTutor = nombreCompleto;
     this.asignarTutorm = true;
   }
 
-// ✅ Cerrar modal
   cerrarModalAsignarTutor(guardado: boolean) {
     this.asignarTutorm = false;
     this.alumnoIdParaTutor = null;
@@ -339,4 +432,50 @@ export class AlumnosComponent implements OnInit {
       console.log('✅ Tutor asignado exitosamente');
     }
   }
+
+// ✅ Cambiar estatus del alumno con confirmación
+async cambiarEstatus(alumno: AlumnoGGC) {
+  const nuevoEstatus = alumno.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+
+  // 🟡 Mostrar alerta de confirmación antes de proceder
+  const confirmado = await this.alerta.mostrar(
+    `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} al alumno ${alumno.nombre}?`
+  );
+
+  if (!confirmado) {
+    return; // 🚫 El usuario canceló
+  }
+
+  console.log(`🔄 Cambiando estatus de ${alumno.nombre} de ${alumno.estatus} a ${nuevoEstatus}`);
+  this.loadingService.show();
+
+  this.Servicios.CambiarEstatusAlumno(alumno.alumnoId, nuevoEstatus).subscribe({
+    next: (res) => {
+      console.log('✅ Estatus cambiado exitosamente:', res);
+
+      alumno.estatus = nuevoEstatus; // Actualiza la tabla localmente
+
+      this.alertService.show(
+        `Alumno ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
+        'success',
+        'Éxito'
+      );
+
+      this.loadingService.hide();
+    },
+    error: (err) => {
+      console.error('❌ Error al cambiar estatus:', err);
+
+      this.alertService.show(
+        'Error al cambiar el estatus del alumno',
+        'danger',
+        'Error'
+      );
+
+      this.loadingService.hide();
+    }
+  });
+}
+
+
 }

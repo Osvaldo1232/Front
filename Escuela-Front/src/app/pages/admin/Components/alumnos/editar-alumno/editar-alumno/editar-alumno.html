@@ -10,7 +10,16 @@
 
     <!-- Cuerpo del modal con scroll -->
     <div class="modal-body">
-      <form (ngSubmit)="guardar()">
+      <!-- ✅ Mensaje de carga -->
+      <div *ngIf="cargando" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando datos del alumno...</p>
+      </div>
+
+      <!-- ✅ Formulario -->
+      <form (ngSubmit)="guardar()" *ngIf="!cargando">
         
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -19,31 +28,49 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Apellido Paterno:</label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidomaterno" required>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Apellido Materno:</label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidopaterno" required>
+            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidopaterno" required>
           </div>
         </div>
 
         <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido Materno:</label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidomaterno" required>
+          </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Matrícula:</label>
             <input type="text" class="form-control" [(ngModel)]="matricula" name="matricula" required>
           </div>
+        </div>
+
+        <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">CURP:</label>
-            <input type="text" class="form-control" [(ngModel)]="curp" name="curp">
+            <input type="text" class="form-control" [(ngModel)]="curp" name="curp" maxlength="18">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sexo:</label>
+            <select class="form-select" [(ngModel)]="sexo" name="sexo" required>
+              <option value="">Seleccionar...</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMENINO">Femenino</option>
+            </select>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
+            <label class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+          </div>
+          <div class="col-md-6 mb-3">
             <label class="form-label">Correo:</label>
             <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
           </div>
-         <!-- Contraseña -->
+        </div>
+
+        <div class="row">
+          <!-- Contraseña -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Contraseña:</label>
             <input 
@@ -54,8 +81,8 @@
               placeholder="Dejar vacío para no cambiar">
             <small class="text-muted">Solo ingresa contraseña si deseas cambiarla</small>
           </div>
-        </div>
-        <!-- Confirmar Contraseña -->
+
+          <!-- Confirmar Contraseña -->
           <div class="col-md-6 mb-3" *ngIf="password">
             <label class="form-label">Confirmar Contraseña:</label>
             <input 
@@ -67,7 +94,9 @@
               ⚠️ Las contraseñas no coinciden.
             </small>
           </div>
+        </div>
 
+        <!-- Estatus -->
         <div class="mb-3">
           <label class="form-label">Estatus:</label>
           <select class="form-select" [(ngModel)]="estatus" name="estatus">

@@ -55,9 +55,17 @@ export class EditarMateria implements OnInit, OnChanges {
 
   cargarDatosMateria() {
     if (this.materia) {
+      console.log('📥 Cargando datos de materia:', this.materia);
+      
       this.nombre = this.materia.nombre;
       this.campoFormativoId = this.materia.campoFormativoId;
       this.estatus = this.materia.estatus;
+      
+      console.log('✅ Datos cargados en el formulario:', {
+        nombre: this.nombre,
+        campoFormativoId: this.campoFormativoId,
+        estatus: this.estatus
+      });
     }
   }
 
@@ -80,15 +88,22 @@ export class EditarMateria implements OnInit, OnChanges {
       return;
     }
 
+    // ✅ INCLUIR EL ID en el body (según el Swagger)
     const materiaActualizada: Materia = {
+      id: this.materia.id,           // ✅ INCLUIR ID
       nombre: this.nombre,
       campoFormativoId: this.campoFormativoId,
       estatus: this.estatus
     };
 
+    console.log('📋 Materia ORIGINAL:', this.materia);
+    console.log('📤 Materia ACTUALIZADA a enviar:', materiaActualizada);
+    console.log('🆔 ID de la materia:', this.materia.id);
+    console.log('📝 Campo Formativo seleccionado:', this.campoFormativoId);
+
     this.serviciosMaterias.ActualizarMateria(this.materia.id, materiaActualizada).subscribe({
       next: (mensaje) => {
-        console.log('✅ Materia actualizada:', mensaje);
+        console.log('✅ Respuesta del servidor:', mensaje);
         
         this.alertService.show(
           'Materia actualizada exitosamente',
@@ -99,10 +114,12 @@ export class EditarMateria implements OnInit, OnChanges {
         this.cerrar.emit(true);
       },
       error: (err) => {
-        console.error('❌ Error al actualizar materia:', err);
+        console.error('❌ Error completo:', err);
+        console.error('❌ Status:', err.status);
+        console.error('❌ Error response:', err.error);
         
         this.alertService.show(
-          'Error al actualizar la materia',
+          err.error || 'Error al actualizar la materia',
           'danger',
           'Error'
         );

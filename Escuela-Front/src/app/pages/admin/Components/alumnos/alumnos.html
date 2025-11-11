@@ -8,67 +8,66 @@
 
   <div class="card p-4 shadow-lg table-card">
 
-    <!-- ✅ SECCIÓN DE FILTROS -->
-    <div class="filter-section mb-4">
-      <div class="row align-items-end">
-        <!-- Filtro Grado -->
-        <div class="col-md-3 mb-3">
-          <label class="form-label fw-bold">Grado:</label>
-          <select 
-            class="form-select" 
-            [(ngModel)]="filtroGrado" 
-            (change)="aplicarFiltros()">
-            <option value="">Todos los grados</option>
-            <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
-          </select>
-        </div>
-
-        <!-- Filtro Grupo -->
-        <div class="col-md-3 mb-3">
-          <label class="form-label fw-bold">Grupo:</label>
-          <select 
-            class="form-select" 
-            [(ngModel)]="filtroGrupo" 
-            (change)="aplicarFiltros()">
-            <option value="">Todos los grupos</option>
-            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
-          </select>
-        </div>
-
-        <!-- Filtro Ciclo Escolar -->
-        <div class="col-md-3 mb-3">
-          <label class="form-label fw-bold">Ciclo Escolar:</label>
-          <select 
-            class="form-select" 
-            [(ngModel)]="filtroCiclo" 
-            (change)="aplicarFiltros()">
-            <option value="">Todos los ciclos</option>
-            <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-              {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Botones -->
-        <div class="col-md-3 mb-3">
-          <button class="btn btn-clear me-2" (click)="limpiarFiltros()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-            </svg>
-            Limpiar
-          </button>
-          <button class="btn btn-new" (click)="nuevo()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-            </svg>
-            Nuevo
-          </button>
-        </div>
-      </div>
+   <!-- ✅ SECCIÓN DE FILTROS -->
+<div class="filter-section mb-4">
+  <div class="row align-items-end">
+    <!-- Filtro Grado -->
+    <div class="col-md-3 mb-3">
+      <label class="form-label fw-bold">Grado: <span class="text-danger">*</span></label>
+      <select 
+        class="form-select" 
+        [(ngModel)]="filtroGrado" 
+        (change)="onFiltroChange()">
+<!--         <option value="">Seleccionar grado...</option>
+ -->        <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+      </select>
     </div>
 
+    <!-- Filtro Grupo -->
+    <div class="col-md-3 mb-3">
+      <label class="form-label fw-bold">Grupo: <span class="text-danger">*</span></label>
+      <select 
+        class="form-select" 
+        [(ngModel)]="filtroGrupo" 
+        (change)="onFiltroChange()">
+<!--         <option value="">Seleccionar grupo...</option>
+ -->        <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+      </select>
+    </div>
+
+    <!-- Filtro Ciclo Escolar -->
+    <div class="col-md-3 mb-3">
+      <label class="form-label fw-bold">Ciclo Escolar: <span class="text-danger">*</span></label>
+      <select 
+        class="form-select" 
+        [(ngModel)]="filtroCiclo" 
+        (change)="onFiltroChange()">
+<!--         <option value="">Seleccionar ciclo...</option>
+ -->        <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+          {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Botones -->
+    <div class="col-md-3 mb-3">
+      <button class="btn btn-clear me-2" (click)="limpiarFiltros()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+        </svg>
+        Limpiar
+      </button>
+      <button class="btn btn-new" (click)="nuevo()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>
+        Nuevo
+      </button>
+    </div>
+  </div>
+</div>
     <!-- Mensaje cuando no hay alumnos -->
     <div *ngIf="registrosGGC.length === 0" class="no-data">
       <p>No hay alumnos registrados.</p>
@@ -88,48 +87,61 @@
             <th>ACCIONES</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let alumno of registrosGGC">
-            <td>{{ alumno.matricula }}</td>
-            <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
-            <td>{{ alumno.curp }}</td>
-            <td>{{ alumno.gradoNombre }}</td>
-            <td>{{ alumno.grupoNombre }}</td>
-            <td>
-              <span 
-                class="badge" 
-                [class.badge-activo]="alumno.estatus === 'ACTIVO'" 
-                [class.badge-inactivo]="alumno.estatus === 'INACTIVO'">
-                {{ alumno.estatus }}
-              </span>
-            </td>
-            <td class="text-center">
-              <!-- Botón Editar -->
-              <button class="btn btn-icon-edit" (click)="EditarS(alumno.alumnoId)" title="Editar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.105l-5.313 1.77a.5.5 0 0 1-.606-.606l1.77-5.313a.5.5 0 0 1 .105-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5v-.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5-.5v-.5a.5.5 0 0 1 .176-.358z"/>
-                </svg>
-              </button>
-              
-              <!-- Botón Ver -->
-              <button class="btn btn-icon-view" title="Ver">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                </svg>
-              </button>
+       <tbody>
+  <tr *ngFor="let alumno of registrosGGC">
+    <td>{{ alumno.matricula }}</td>
+    <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
+    <td>{{ alumno.curp }}</td>
+    <td>{{ alumno.gradoNombre }}</td>
+    <td>{{ alumno.grupoNombre }}</td>
+    
+    <!-- ✅ NUEVO: Switch de estatus -->
+    <td class="text-center">
+      <div class="form-check form-switch d-flex justify-content-center">
+        <input 
+          class="form-check-input switch-estatus" 
+          type="checkbox" 
+          role="switch"
+          [checked]="alumno.estatus === 'ACTIVO'"
+          (change)="cambiarEstatus(alumno)"
+          [id]="'switch-' + alumno.alumnoId">
+        <label 
+          class="form-check-label ms-2 switch-label" 
+          [for]="'switch-' + alumno.alumnoId">
+          {{ alumno.estatus }}
+        </label>
+      </div>
+    </td>
+    
+    <td class="text-center">
+      <!-- Botón Editar -->
+      <button class="btn btn-icon-edit" (click)="EditarS(alumno.alumnoId)" title="Editar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.105l-5.313 1.77a.5.5 0 0 1-.606-.606l1.77-5.313a.5.5 0 0 1 .105-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5v-.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5-.5v-.5a.5.5 0 0 1 .176-.358z"/>
+        </svg>
+      </button>
+      
+      <!-- Botón Ver -->
+      <button class="btn btn-icon-view" title="Ver">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+        </svg>
+      </button>
 
-              <!-- ✅ NUEVO: Botón Asignar Tutor -->
-              <button class="btn btn-icon-tutor" (click)="asignarTutor(alumno.alumnoId, alumno.nombre + ' ' + alumno.apellidoPaterno + ' ' + alumno.apellidoMaterno)" title="Asignar Tutor">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
+      <!-- Botón Asignar Tutor -->
+      <button 
+        class="btn btn-icon-tutor" 
+        (click)="asignarTutor(alumno.alumnoId, alumno.nombre + ' ' + alumno.apellidoPaterno + ' ' + alumno.apellidoMaterno)" 
+        title="Asignar Tutor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+        </svg>
+      </button>
+    </td>
+  </tr>
+</tbody>
       </table>
-    </div>
 
     <!-- Paginación -->
     <div class="pagination-container" *ngIf="totalPaginas > 1">

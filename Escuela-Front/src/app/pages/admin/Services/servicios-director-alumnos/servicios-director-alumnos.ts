@@ -14,6 +14,8 @@ export class ServiciosDirectorAlumnos {
   private apiUrlAlumnosEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/alumno';
   private apiUrlAlumnosId= 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/usuario/';
   private apiUrlDirectivoId= 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app';
+  private apiUrlCambiarEstatus = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios'; // ✅ CORREGIDO
+
 
   constructor(private http: HttpClient) {}
   
@@ -36,6 +38,21 @@ export class ServiciosDirectorAlumnos {
       responseType: 'text' as 'json'
     });
   }
+
+// ✅ NUEVO: Cambiar estatus del alumno usando query params
+  CambiarEstatusAlumno(id: string, estatus: string): Observable<any> {
+    const params = new HttpParams().set('estatus', estatus);
+    
+    return this.http.patch(
+      `${this.apiUrlCambiarEstatus}/${id}/estatus`, 
+      null,  // No body
+      { 
+        params: params,
+        responseType: 'text' as 'json' 
+      }
+    );
+  }
+
    obtenerPerfilUsuario(idUsuario: string): Observable<Directivo> {
        return this.http.get<Directivo>(`${this.apiUrlDirectivoId}/usuarios/BuscarUsuario/${idUsuario}`);
      }
