@@ -25,9 +25,10 @@ export interface InscripcionReciente {
 export interface MateriasCalifica {
   idMateria: string;
   nombreMateria: string;
-  calificacionActual: any;
+  calificacionActual: number | null;
   idGrado: string;
   nombreGrado: string;
+  nombreCampoFormativo: string;
 }
 
 export interface AlumnoGGC {
@@ -56,6 +57,35 @@ export interface CalifTri{
   nombreMateria: string;
   calificacionesPorTrimestre: {
     [trimestre: string]: number; // ejemplo: {"trimestre1": 8, "trimestre2": 9, "trimestre3": 10}
-  };
+  };}
+
+  export interface CalificacionesAlumno {
+  idAlumno: string;
+  calificacionesPorGrado: CalificacionPorGrado[];
+}
+
+export interface CalificacionPorGrado {
+  grado: string;
+  materias: MateriaCalificacion[];
+  promedioFinalGrado: number;
+}
+
+export interface MateriaCalificacion {
+  idGrado: string;
+  nombreGrado: string;
+  idMateria: string;
+  nombreMateria: string;
+  idCampoFormativo: string;
+  nombreCampoFormativo: string;
+  promedio: number;
+}
+export interface DetalleMateria {
+  nombreAlumno: string;
+  nombreGrado: string;
+  nombreMateria: string;
+  trimestre1: number | null;
+  trimestre2: number | null;
+  trimestre3: number | null;
+  promedioFinal: number | null;
 }
 

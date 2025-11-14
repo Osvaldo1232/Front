@@ -1,6 +1,8 @@
-<h2 class="text-center mb-4">Materias Actuales</h2>
-<div *ngIf="alumse" class="inscripcion-bar">
-  <div class="rigth-section">
+<h2 class="text-center mb-4 fw-bold text-vino">Materias Actuales</h2>
+
+<!-- Barra de inscripción -->
+<div *ngIf="alumse" class="inscripcion-bar p-3 mb-3 rounded shadow-sm bg-light">
+  <div class="right-section text-center text-md-start">
     <strong>Ciclo Escolar:</strong> {{ alumse.ciclo }} |
     <strong>Grado:</strong> {{ alumse.nombreGrado }} |
     <strong>Grupo:</strong> {{ alumse.nombreGrupo }}
@@ -11,28 +13,46 @@
 <div *ngIf="materias && materias.length > 0; else sinMaterias" class="container mt-3">
   <div class="row g-3">
     <div class="col-6 col-md-4 col-lg-3" *ngFor="let mat of materias">
-      <div 
-        class="card shadow-sm border-0 h-100 text-center" 
-        [ngClass]="mat.calificacionActual < 6 
-          ? ['bg-danger', 'text-white'] 
-          : ['bg-white', 'text-dark']"
+      <div
+        class="card shadow-sm border-0 h-100 text-center"
+        [ngClass]="{
+          'bg-danger text-white': mat.calificacionActual !== null && mat.calificacionActual > 0 && mat.calificacionActual < 6,
+          'bg-white text-dark': mat.calificacionActual === null || mat.calificacionActual >= 6
+        }"
       >
-        <div class="card-body">
-          <h5 
-            class="card-title fw-bold mb-3"
-            [ngClass]="mat.calificacionActual < 6 ? 'text-white' : 'text-vino'"
+        <div class="card-body d-flex flex-column justify-content-between">
+          <div>
+            <h5
+              class="card-title fw-bold mb-3"
+              [ngClass]="mat.calificacionActual !== null && mat.calificacionActual > 0 && mat.calificacionActual < 6 ? 'text-white' : 'text-vino'"
+            >
+              {{ mat.nombreMateria }}
+            </h5>
+
+            <p class="card-text mb-1">
+              <strong>Calificación:</strong>
+              <span *ngIf="mat.calificacionActual !== null; else sinCalif">
+                {{ mat.calificacionActual }}
+              </span>
+              <ng-template #sinCalif>Sin calificar</ng-template>
+            </p>
+            <p class="card-text mb-1">
+              <strong>Campo Formativo:</strong> {{ mat.nombreCampoFormativo }}
+            </p>
+
+            <p class="card-text">
+              <strong>Grado:</strong> {{ mat.nombreGrado }}
+            </p>
+          </div>
+
+          <!-- 🔘 Botón Ver Detalles -->
+          <button
+            class="btn mt-3 text-white fw-semibold"
+            style="background-color: #800020;"
+            (click)="abrirCalificaciones(mat)"
           >
-            {{ mat.nombreMateria }}
-          </h5>
-          <p class="card-text mb-1">
-            <strong>Calificación:</strong> {{ mat.calificacionActual }}
-          </p>
-          <p class="card-text mb-1">
-            <strong>Campo Formativo:</strong> {{ mat.nombreMateria }}
-          </p>
-          <p class="card-text">
-            <strong>Grado:</strong> {{ mat.nombreGrado }}
-          </p>
+            Ver detalles
+          </button>
         </div>
       </div>
     </div>
@@ -42,12 +62,9 @@
 <!-- Cuando no hay materias -->
 <ng-template #sinMaterias>
   <div class="alert alert-light text-center py-5 shadow-sm rounded">
-    <p class="mb-0 fs-5 text-secondary">
-      No hay materias registradas.
-    </p>
+    <p class="mb-0 fs-5 text-secondary">No hay materias registradas.</p>
   </div>
 </ng-template>
 
-
-<!-- Cargando -->
-  <app-loading></app-loading>
+<!-- Loader -->
+<app-loading></app-loading>

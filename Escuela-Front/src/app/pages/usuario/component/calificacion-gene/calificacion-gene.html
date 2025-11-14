@@ -1,28 +1,66 @@
-<div class="container py-4">
-  <h2 class="text-center mb-4">CALIFICACIÓN GENERAL POR GRADOS</h2>
+<div class="container-fluid py-4">
 
-  <div *ngIf="calificaciones && calificaciones.length > 0; else sinMaterias" class="row">
-    <div class="col-6 col-md-4" *ngFor="let grado of calificaciones">
-      <div class="grade-box">
-        <div class="grade-title">{{ grado.nombreGrado }}</div>
-        <div *ngIf="grado.promedioGeneral !== null" class="grade-score">
-          {{ grado.promedioGeneral }}
-        </div>
-        <div *ngIf="grado.promedioGeneral === null" class="grade-score">
-          Sin calificación
-        </div>
-      </div>
-    </div>
+<h2 class="text-center mb-4 fw-bold text-vino text-uppercase">
+  {{ nombreMateria }}
+</h2>
+
+<!-- Barra tipo inscripción -->
+<div class="inscripcion-bar p-3 mb-3 shadow-sm bg-light">
+  <div class="right-section text-center text-md-start">
+     <strong>Ciclo Escolar:</strong> {{ ciclo }}|
+    <strong>Grado:</strong> {{ nombreGrado }} &nbsp; |
+    <strong>Grupo:</strong> {{ nombreGrupo }} &nbsp; 
+   
   </div>
-
-  <ng-template #sinMaterias>
-    <div class="alert alert-light text-center py-5 shadow-sm rounded">
-      <p class="mb-0 fs-5 text-secondary">
-        Aún no hay calificaciones Registradas.
-      </p>
-    </div>
-  </ng-template>
 </div>
 
-    <app-loading></app-loading>
- 
+
+  
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="card p-4 shadow-lg form-card-padding mb-4">
+
+    <!-- CARGANDO -->
+    <div *ngIf="cargando" class="text-center my-4">
+      <div class="spinner-border" role="status"></div>
+      <p>Cargando información...</p>
+    </div>
+
+    <!-- SIN DATOS -->
+    <div *ngIf="!cargando && detalleMateria.length === 0" class="alert alert-warning">
+      No hay calificaciones registradas para esta materia.
+    </div>
+
+    <!-- TABLA -->
+    <div *ngIf="!cargando && detalleMateria.length > 0" class="table-responsive table-grid-card">
+
+      <table class="table table-striped table-hover grid-table align-middle">
+        <thead class="grid-header text-white">
+          <tr>
+            <th class="col-th">ALUMNO</th>
+            <th class="col-th">TRIMESTRE 1</th>
+            <th class="col-th">TRIMESTRE 2</th>
+            <th class="col-th">TRIMESTRE 3</th>
+            <th class="col-th">PROMEDIO FINAL</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let item of detalleMateria; let i = index"
+            [class.row-alternate]="i % 2 === 1"
+          >
+            <td>{{ item.nombreAlumno }}</td>
+            <td>{{ item.trimestre1 ?? '-' }}</td>
+            <td>{{ item.trimestre2 ?? '-' }}</td>
+            <td>{{ item.trimestre3 ?? '-' }}</td>
+            <td class="fw-bold">{{ item.promedioFinal ?? '-' }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+
+</div>

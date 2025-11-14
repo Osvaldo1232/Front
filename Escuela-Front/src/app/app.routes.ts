@@ -63,9 +63,7 @@ export const routes: Routes = [
             { path: 'calificaciones', component: Calificaciones },
             { path: 'historial', component: Historial },
             { path: 'info-personal', component: InfoPersonalComponent },
-            { path: 'calificacion-gene', component: CalificacionGene },
-
-
+            {path: 'calificacion-gene/:idMateria',component:CalificacionGene}
         ]
     },
 
@@ -83,6 +81,7 @@ export const routes: Routes = [
             { path: 'Historial-alumno', component: Historial },
             { path: 'alumnoss', component: Alumnos },
             { path: 'calificaciones/:idMateria', component: CalificacionesComponent}
+            
         ]
     },
 

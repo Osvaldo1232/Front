@@ -1,9 +1,12 @@
 .grade-box {
   border: 2px solid #4b2c20; /* Marrón oscuro */
-  border-radius: 8px;
+  border-radius: 0px;
   overflow: hidden;
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.form-card-padding {
+  border-radius: 0 !important;
 }
 
 .grade-title {

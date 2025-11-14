@@ -4,77 +4,90 @@ import { LoginService } from '../../../../services/login-service';
 import { CommonModule } from '@angular/common';
 import { LoadingService } from '../../../../shared/loading-service';
 import { Loading } from '../../../../shared/loading/loading';
-import {InscripcionReciente,MateriasCalifica } from '../../../../models/alumnos.model';
+import { InscripcionReciente, MateriasCalifica } from '../../../../models/alumnos.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calificaciones',
-  imports: [CommonModule,Loading],
+  standalone: true,
+  imports: [CommonModule, Loading],
   templateUrl: './calificaciones.html',
-  styleUrl: './calificaciones.scss',
-  standalone:true
+  styleUrl: './calificaciones.scss'
 })
 export class Calificaciones {
-materias?: MateriasCalifica[] = [];
-inscripcion?: InscripcionReciente;
-usuario:any;
-ciclo:any;
-cali:any;
-alumse:any;
-datos:InscripcionReciente[]=[];
+  materias: MateriasCalifica[] = [];
+  inscripcion?: InscripcionReciente;
+  usuario: any;
+  alumse: any;
+  datos: InscripcionReciente[] = [];
 
- constructor(
+  constructor(
     private alumnoService: AlumnoService,
     private loginService: LoginService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.usuario= this.loginService.Usuario(); // Obtenemos el UUID del alumno
-    if(this.usuario){
+    this.usuario = this.loginService.Usuario(); 
+    if (this.usuario) {
       this.AlumnosServ(this.usuario);
     }
-}
-
-AlumnosServ(alumnoId:any){
-  this.loadingService.show();
-  this.alumnoService.obtenerInscripcionReciente(alumnoId).subscribe({
-  next: (alumnosrecientes) => {
-    this.alumse =alumnosrecientes;
-    if(this.alumse ){
-        console.log("oihi")
-
-      this.ObtenerMater(this.usuario, this.alumse.idCiclo)
-   } else {
-        this.loadingService.hide(); // ✅ si no hay datos, ocultamos
-      }
-  },
-  error: (err) => {
-    console.error('❌ Error al obtener inscripciones:', err);
-    this.loadingService.hide();
   }
-});
-}
 
-ObtenerMater(almId: string, cicloid: string) {
-  this.loadingService.show();
-  this.alumnoService.obtenerMaterias(almId, cicloid).subscribe({
-    next: (inscripciones) => {
-      this.materias = inscripciones; // ✅ ahora sí es array
-
-      console.log(this.materias);
-      if(this.materias.length===0){
-        console.log("oihi")
+  AlumnosServ(alumnoId: string) {
+    this.loadingService.show();
+    this.alumnoService.obtenerInscripcionReciente(alumnoId).subscribe({
+      next: (alumnosrecientes) => {
+        this.alumse = alumnosrecientes;
+        if (this.alumse) {
+          this.ObtenerMater(this.alumse.idGrado, this.usuario, this.alumse.idCiclo);
+        } else {
+          this.loadingService.hide(); 
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
       }
-      this.loadingService.hide();
-    },
-    error: (err) => {
-      console.error('❌ Error al obtener Calificaciones:', err);
-      this.loadingService.hide();
+    });
+  }
+
+  ObtenerMater(idGrado: string, idAlumno: string, idCicloEscolar: string) {
+    this.loadingService.show();
+    this.alumnoService.obtenerMaterias(idGrado, idAlumno, idCicloEscolar).subscribe({
+      next: (materias) => {
+        this.materias = materias || [];
+        if (this.materias.length === 0) {
+        }
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        this.loadingService.hide();
+      }
+    });
+  }
+
+  abrirCalificaciones(materia: any): void {
+    if (!this.alumse) {
+      return;
     }
-  });
+    this.router.navigate(
+      
+      ['/usuario/calificacion-gene', materia.idMateria],
+      {
+        state: {
+          materia: {
+            idMateria: materia.idMateria,
+            nombreMateria: materia.nombreMateria,
+            idGrado: this.alumse.idGrado,
+            idGrupo: this.alumse.idGrupo,
+            idCiclo: this.alumse.idCiclo,
+            nombreGrado: this.alumse.nombreGrado,
+            nombreGrupo: this.alumse.nombreGrupo,
+            ciclo: this.alumse.ciclo
+          }
+        }
+      }
+    );
+  }
 }
-
-}
-
-
-
