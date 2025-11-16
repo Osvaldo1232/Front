@@ -204,21 +204,36 @@ export class CalificacionesComponent implements OnInit {
 
   validarCalificacion(valor: number | null): boolean {
     if (valor === null || valor === undefined) return true;
-    return Number.isInteger(valor) && valor >= 0 && valor <= 10;
+    return valor >= 0 && valor <= 10;
   }
 
   validarYLimitarInput(event: any, alumno: AlumnoCalificacion, trimestre: number): void {
     let valor = event.target.value;
 
-    valor = valor.replace(/[^0-9]/g, '');
+    // Permitir números y un solo punto decimal
+    valor = valor.replace(/[^0-9.]/g, '');
 
-    let numero = parseInt(valor);
+    // Asegurar que solo haya un punto decimal
+    const partes = valor.split('.');
+    if (partes.length > 2) {
+      valor = partes[0] + '.' + partes.slice(1).join('');
+    }
 
+    // Limitar a 2 decimales
+    if (partes.length === 2 && partes[1].length > 2) {
+      valor = partes[0] + '.' + partes[1].substring(0, 2);
+    }
+
+    let numero = parseFloat(valor);
+
+    // Validar rango 0-10
     if (numero > 10) {
       numero = 10;
+      valor = '10';
     }
     if (numero < 0) {
       numero = 0;
+      valor = '0';
     }
 
     if (trimestre === 1) {
@@ -229,12 +244,17 @@ export class CalificacionesComponent implements OnInit {
       alumno.calificacionT3 = isNaN(numero) ? null : numero;
     }
 
-    event.target.value = isNaN(numero) ? '' : numero.toString();
+    event.target.value = isNaN(numero) ? '' : valor;
     this.onCalificacionChange(alumno);
   }
 
   convertirCalificacionALetras(calificacion: number | null): string {
     if (calificacion === null || calificacion === undefined) return '';
+
+    // Si es decimal, devolver la representación textual con decimales
+    if (!Number.isInteger(calificacion)) {
+      return calificacion.toFixed(2);
+    }
 
     const numerosALetras: { [key: number]: string } = {
       0: 'Cero',
@@ -250,7 +270,7 @@ export class CalificacionesComponent implements OnInit {
       10: 'Diez'
     };
 
-    return numerosALetras[calificacion] || '';
+    return numerosALetras[calificacion] || calificacion.toString();
   }
 
   calcularPromedioFinal(alumno: AlumnoCalificacion): number | null {
@@ -264,7 +284,9 @@ export class CalificacionesComponent implements OnInit {
 
     const suma = calificaciones.reduce((acc, cal) => acc + cal, 0);
     const promedio = suma / calificaciones.length;
-    return Math.round(promedio);
+    
+    // Retornar el promedio con 2 decimales sin redondear hacia arriba
+    return Math.floor(promedio * 100) / 100;
   }
 
   puedeEditarTrimestre1(alumno: AlumnoCalificacion): boolean {
@@ -334,7 +356,7 @@ export class CalificacionesComponent implements OnInit {
 
     if (calificacionesInvalidas.length > 0) {
       this.alertService.show(
-        'Todas las calificaciones deben ser números enteros entre 0 y 10.',
+        'Todas las calificaciones deben ser números entre 0 y 10.',
         'warning',
         'Validación'
       );

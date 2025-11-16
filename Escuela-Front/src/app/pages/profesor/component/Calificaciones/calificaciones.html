@@ -114,7 +114,6 @@
               <div *ngIf="alumno.promedioFinal !== null">
                 <div>{{ alumno.promedioFinal }}</div>
                 <small class="text-muted d-block" style="font-size: 0.75rem;">
-                  {{ convertirCalificacionALetras(alumno.promedioFinal) }}
                 </small>
               </div>
               <span *ngIf="alumno.promedioFinal === null">-</span>

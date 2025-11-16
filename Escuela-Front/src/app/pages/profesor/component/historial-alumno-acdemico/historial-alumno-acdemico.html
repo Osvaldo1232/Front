@@ -21,7 +21,6 @@
             <div class="col-md-4 col-sm-6">
                 <label for="alumno" class="form-label required-label">Alumno:*</label>
                 <select id="alumno" class="form-select" [(ngModel)]="alumnoSeleccionado" (change)="onAlumnoChange()" [disabled]="!cicloEscolar || alumnos.length === 0">
-                    <option value="">Seleccione un alumno</option>
                     <option *ngFor="let alumno of alumnos" [value]="obtenerIdAlumno(alumno)">
                         {{ obtenerNombreAlumno(alumno) }}
                     </option>
