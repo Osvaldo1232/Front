@@ -6,6 +6,7 @@ import { Profesor } from '../../../models/Profesor';
 import { MateriasCamposFormativos } from '../../../models/AsignaciónMateria';
 import { AlumnoCiclo, InscripcionDTO } from '../../../models/Materia';
 import { RegistroHistorial } from '../../../models/HistorialAcademico';
+import { HistorialAlumno } from '../../../models/HistorialAcademicoAlumno';
 
 
 
@@ -71,16 +72,18 @@ export class ServiciosProfesor {
   obtenerTrimestres(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrlBase}/Trimestres`);
   }
-  asignarCalificacion(calificacion: any): Observable<any> {
-    const payload = {
-      idAlumno: calificacion.idAlumno,
-      idMateria: calificacion.idMateria,
-      idTrimestre: calificacion.idTrimestre,
-      idCicloEscolar: calificacion.idCicloEscolar,
-      idGrado: calificacion.idGrado,
-      promedio: parseFloat(calificacion.promedio)
-    };
-    return this.http.post(`${this.apiUrlBase}/calificaciones/asignaruna`, payload);
+  asignarCalificacionesMultiples(calificaciones: any[]): Observable<any> {
+    const payload = calificaciones.map(cal => ({
+      id: cal.id || undefined,
+      idAlumno: cal.idAlumno,
+      idMateria: cal.idMateria,
+      idTrimestre: cal.idTrimestre,
+      idCicloEscolar: cal.idCicloEscolar,
+      idGrado: cal.idGrado,
+      promedio: parseFloat(cal.promedio)
+    }));
+
+    return this.http.post(`${this.apiUrlBase}/calificaciones/asignar-multiples`, payload);
   }
   obtenerCalificacionesPorGrado(
     idCiclo: string,
@@ -94,6 +97,19 @@ export class ServiciosProfesor {
 
     return this.http.get<any[]>(
       `${this.apiUrlBase}/calificaciones/por-grado`,
+      { params }
+    );
+  }
+  obtenerAlumnosConIdPorCiclo(cicloId: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrlBase}/alumnos/por-ciclo/${cicloId}`);
+}
+
+  obtenerHistorialAlumnoPorCiclo(idAlumno: string, idCiclo: string): Observable<HistorialAlumno> {
+    const params = new HttpParams()
+      .set('idAlumno', idAlumno)
+      .set('idCiclo', idCiclo);
+    return this.http.get<HistorialAlumno>(
+      `${this.apiUrlBase}/calificaciones-finales/por-ciclo`,
       { params }
     );
   }

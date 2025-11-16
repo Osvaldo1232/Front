@@ -39,6 +39,12 @@ export class CalificacionesComponent implements OnInit {
   alumnosFiltrados: AlumnoCalificacion[] = [];
   alumnosPaginados: AlumnoCalificacion[] = [];
 
+  calificacionesIdsMap: Map<string, {
+    idCalT1?: string,
+    idCalT2?: string,
+    idCalT3?: string
+  }> = new Map();
+
   filtros = {
     nombreEstudiante: ''
   };
@@ -50,7 +56,13 @@ export class CalificacionesComponent implements OnInit {
   cargando = false;
   Math = Math;
 
-  constructor( private route: ActivatedRoute, private router: Router, private servicios: ServiciosProfesor, private loadingService: LoadingService, private alertService: AlertService ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private servicios: ServiciosProfesor,
+    private loadingService: LoadingService,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit(): void {
     this.obtenerParametrosNavegacion();
@@ -59,7 +71,7 @@ export class CalificacionesComponent implements OnInit {
 
   obtenerParametrosNavegacion(): void {
     this.idMateria = this.route.snapshot.paramMap.get('idMateria') || '';
-    
+
     const state = history.state;
 
     if (state.materia) {
@@ -67,7 +79,7 @@ export class CalificacionesComponent implements OnInit {
       this.idGrado = state.materia.idGrado;
       this.idGrupo = state.materia.idGrupo;
       this.idCiclo = state.materia.idCiclo;
-      
+
       if (!this.idMateria && state.materia.idMateria) {
         this.idMateria = state.materia.idMateria;
       }
@@ -104,7 +116,7 @@ export class CalificacionesComponent implements OnInit {
 
         this.alumnos = resultado.inscripciones;
         this.inicializarCalificaciones();
-        
+
         setTimeout(() => {
           this.cargarCalificacionesExistentes();
         }, 100);
@@ -127,7 +139,7 @@ export class CalificacionesComponent implements OnInit {
   ordenarYAsignarTrimestres(): void {
     this.trimestres.forEach(t => {
       const nombre = t.nombre.toLowerCase();
-      
+
       if (nombre.includes('1') || nombre.includes('primero')) {
         this.idTrimestre1 = t.id;
       } else if (nombre.includes('2') || nombre.includes('segundo')) {
@@ -139,9 +151,11 @@ export class CalificacionesComponent implements OnInit {
   }
 
   inicializarCalificaciones(): void {
+    this.calificacionesIdsMap.clear();
+
     this.alumnosCalificaciones = this.alumnos.map(alumno => {
       const id = (alumno as any).alumnoId || alumno.idAlumno;
-      
+
       return {
         idAlumno: id,
         nombreAlumno: `${alumno.nombre} ${alumno.apellidoPaterno} ${alumno.apellidoMaterno}`,
@@ -158,7 +172,7 @@ export class CalificacionesComponent implements OnInit {
 
   aplicarFiltros(): void {
     const busqueda = this.filtros.nombreEstudiante.toLowerCase().trim();
-    
+
     if (busqueda === '') {
       this.alumnosFiltrados = [...this.alumnosCalificaciones];
     } else {
@@ -190,7 +204,53 @@ export class CalificacionesComponent implements OnInit {
 
   validarCalificacion(valor: number | null): boolean {
     if (valor === null || valor === undefined) return true;
-    return valor >= 0 && valor <= 10;
+    return Number.isInteger(valor) && valor >= 0 && valor <= 10;
+  }
+
+  validarYLimitarInput(event: any, alumno: AlumnoCalificacion, trimestre: number): void {
+    let valor = event.target.value;
+
+    valor = valor.replace(/[^0-9]/g, '');
+
+    let numero = parseInt(valor);
+
+    if (numero > 10) {
+      numero = 10;
+    }
+    if (numero < 0) {
+      numero = 0;
+    }
+
+    if (trimestre === 1) {
+      alumno.calificacionT1 = isNaN(numero) ? null : numero;
+    } else if (trimestre === 2) {
+      alumno.calificacionT2 = isNaN(numero) ? null : numero;
+    } else if (trimestre === 3) {
+      alumno.calificacionT3 = isNaN(numero) ? null : numero;
+    }
+
+    event.target.value = isNaN(numero) ? '' : numero.toString();
+    this.onCalificacionChange(alumno);
+  }
+
+  convertirCalificacionALetras(calificacion: number | null): string {
+    if (calificacion === null || calificacion === undefined) return '';
+
+    const numerosALetras: { [key: number]: string } = {
+      0: 'Cero',
+      1: 'Uno',
+      2: 'Dos',
+      3: 'Tres',
+      4: 'Cuatro',
+      5: 'Cinco',
+      6: 'Seis',
+      7: 'Siete',
+      8: 'Ocho',
+      9: 'Nueve',
+      10: 'Diez'
+    };
+
+    return numerosALetras[calificacion] || '';
   }
 
   calcularPromedioFinal(alumno: AlumnoCalificacion): number | null {
@@ -201,37 +261,28 @@ export class CalificacionesComponent implements OnInit {
     ].filter(c => c !== null && c !== undefined) as number[];
 
     if (calificaciones.length === 0) return null;
-    
+
     const suma = calificaciones.reduce((acc, cal) => acc + cal, 0);
-    return parseFloat((suma / calificaciones.length).toFixed(1));
+    const promedio = suma / calificaciones.length;
+    return Math.round(promedio);
+  }
+
+  puedeEditarTrimestre1(alumno: AlumnoCalificacion): boolean {
+    return this.modoEdicion;
+  }
+
+  puedeEditarTrimestre2(alumno: AlumnoCalificacion): boolean {
+    return this.modoEdicion && alumno.calificacionT1 !== null && alumno.calificacionT1 !== undefined;
+  }
+
+  puedeEditarTrimestre3(alumno: AlumnoCalificacion): boolean {
+    return this.modoEdicion &&
+      alumno.calificacionT1 !== null && alumno.calificacionT1 !== undefined &&
+      alumno.calificacionT2 !== null && alumno.calificacionT2 !== undefined;
   }
 
   onCalificacionChange(alumno: AlumnoCalificacion): void {
     alumno.promedioFinal = this.calcularPromedioFinal(alumno);
-  }
-
-  validarTrimestre1Completo(): boolean {
-    return this.alumnosCalificaciones.every(
-      a => a.calificacionT1 !== null && 
-           a.calificacionT1 !== undefined &&
-           this.validarCalificacion(a.calificacionT1)
-    );
-  }
-
-  validarTrimestre2Completo(): boolean {
-    return this.alumnosCalificaciones.every(
-      a => a.calificacionT2 !== null && 
-           a.calificacionT2 !== undefined &&
-           this.validarCalificacion(a.calificacionT2)
-    );
-  }
-
-  puedeEditarTrimestre2(): boolean {
-    return this.validarTrimestre1Completo();
-  }
-
-  puedeEditarTrimestre3(): boolean {
-    return this.validarTrimestre1Completo() && this.validarTrimestre2Completo();
   }
 
   Editar(): void {
@@ -246,16 +297,16 @@ export class CalificacionesComponent implements OnInit {
   guardar(): void {
     if (!this.idMateria || !this.idGrado || !this.idGrupo || !this.idCiclo) {
       this.alertService.show(
-        'Error: Faltan datos necesarios. Regrese y vuelva a entrar.',
+        'Error: Faltan datos necesarios.',
         'danger',
-        'Error de Datos'
+        'Error'
       );
       return;
     }
 
     if (!this.idTrimestre1 || !this.idTrimestre2 || !this.idTrimestre3) {
       this.alertService.show(
-        'Error: No se pudieron cargar los trimestres correctamente.',
+        'Error: No se pudieron cargar los trimestres.',
         'danger',
         'Error'
       );
@@ -268,7 +319,7 @@ export class CalificacionesComponent implements OnInit {
 
     if (!tieneCalificaciones) {
       this.alertService.show(
-        'Debe ingresar al menos una calificación antes de guardar.',
+        'Debe ingresar al menos una calificación.',
         'warning',
         'Validación'
       );
@@ -277,139 +328,168 @@ export class CalificacionesComponent implements OnInit {
 
     const calificacionesInvalidas = this.alumnosCalificaciones.filter(
       a => !this.validarCalificacion(a.calificacionT1) ||
-           !this.validarCalificacion(a.calificacionT2) ||
-           !this.validarCalificacion(a.calificacionT3)
+        !this.validarCalificacion(a.calificacionT2) ||
+        !this.validarCalificacion(a.calificacionT3)
     );
 
     if (calificacionesInvalidas.length > 0) {
       this.alertService.show(
-        'Todas las calificaciones deben estar entre 0 y 10.',
+        'Todas las calificaciones deben ser números enteros entre 0 y 10.',
         'warning',
         'Validación'
       );
       return;
     }
 
-    const hayCalificacionesT2 = this.alumnosCalificaciones.some(a => a.calificacionT2 !== null);
-    if (hayCalificacionesT2 && !this.validarTrimestre1Completo()) {
-      this.alertService.show(
-        'Debe completar todas las calificaciones del Trimestre 1 antes de calificar el Trimestre 2.',
-        'warning',
-        'Validación'
-      );
-      return;
-    }
+    const alumnosOrdenIncorrecto = this.alumnosCalificaciones.filter(alumno => {
 
-    const hayCalificacionesT3 = this.alumnosCalificaciones.some(a => a.calificacionT3 !== null);
-    if (hayCalificacionesT3 && !this.validarTrimestre2Completo()) {
-      this.alertService.show(
-        'Debe completar todas las calificaciones del Trimestre 2 antes de calificar el Trimestre 3.',
-        'warning',
-        'Validación'
-      );
-      return;
-    }
-    
-    const calificacionesAGuardar: any[] = [];
-
-    this.alumnosCalificaciones.forEach(alumno => {
-      if (alumno.calificacionT1 !== null && alumno.calificacionT1 !== undefined) {
-        calificacionesAGuardar.push({
-          idAlumno: alumno.idAlumno,
-          idMateria: this.idMateria,
-          idTrimestre: this.idTrimestre1,
-          idCicloEscolar: this.idCiclo,
-          idGrado: this.idGrado,
-          promedio: Number(alumno.calificacionT1)
-        });
+      if ((alumno.calificacionT2 !== null && alumno.calificacionT2 !== undefined) &&
+        (alumno.calificacionT1 === null || alumno.calificacionT1 === undefined)) {
+        return true;
       }
 
-      if (alumno.calificacionT2 !== null && alumno.calificacionT2 !== undefined) {
-        calificacionesAGuardar.push({
-          idAlumno: alumno.idAlumno,
-          idMateria: this.idMateria,
-          idTrimestre: this.idTrimestre2,
-          idCicloEscolar: this.idCiclo,
-          idGrado: this.idGrado,
-          promedio: Number(alumno.calificacionT2)
-        });
+      if ((alumno.calificacionT3 !== null && alumno.calificacionT3 !== undefined) &&
+        ((alumno.calificacionT1 === null || alumno.calificacionT1 === undefined) ||
+          (alumno.calificacionT2 === null || alumno.calificacionT2 === undefined))) {
+        return true;
       }
-
-      if (alumno.calificacionT3 !== null && alumno.calificacionT3 !== undefined) {
-        calificacionesAGuardar.push({
-          idAlumno: alumno.idAlumno,
-          idMateria: this.idMateria,
-          idTrimestre: this.idTrimestre3,
-          idCicloEscolar: this.idCiclo,
-          idGrado: this.idGrado,
-          promedio: Number(alumno.calificacionT3)
-        });
-      }
+      return false;
     });
 
-    const calificacionesConErrores = calificacionesAGuardar.filter(
-      c => !c.idAlumno || !c.idMateria || !c.idTrimestre || !c.idCicloEscolar || !c.idGrado
-    );
-
-    if (calificacionesConErrores.length > 0) {
+    if (alumnosOrdenIncorrecto.length > 0) {
       this.alertService.show(
-        'Error: Faltan datos necesarios para guardar.',
-        'danger',
-        'Error de Datos'
+        'Debe calificar los trimestres en orden: primero el Trimestre 1, luego el 2 y finalmente el 3.',
+        'warning',
+        'Orden incorrecto'
       );
       return;
     }
 
     this.loadingService.show();
-    
-    let contador = 0;
-    let errores = 0;
-    const total = calificacionesAGuardar.length;
 
-    calificacionesAGuardar.forEach((calificacion) => {
-      this.servicios.asignarCalificacion(calificacion).subscribe({
-        next: () => {
-          contador++;
-          if (contador + errores === total) {
-            this.loadingService.hide();
-            
-            if (errores === 0) {
-              this.modoEdicion = false;
-              this.alertService.show(
-                `Se guardaron ${total} calificaciones exitosamente.`,
-                'success',
-                'Éxito'
-              );
-            } else {
-              this.alertService.show(
-                `Se guardaron ${contador} de ${total} calificaciones. ${errores} fallaron.`,
-                'warning',
-                'Parcialmente exitoso'
-              );
-            }
+    const calificacionesAGuardar: any[] = [];
+    const calificacionesUnicas = new Set<string>();
+
+    this.alumnosCalificaciones.forEach(alumno => {
+      const idsExistentes = this.calificacionesIdsMap.get(alumno.idAlumno);
+
+      if (alumno.calificacionT1 !== null && alumno.calificacionT1 !== undefined) {
+        const key = `${alumno.idAlumno}-${this.idTrimestre1}`;
+
+        if (!calificacionesUnicas.has(key)) {
+          calificacionesUnicas.add(key);
+
+          const payload: any = {
+            idAlumno: alumno.idAlumno,
+            idMateria: this.idMateria,
+            idTrimestre: this.idTrimestre1,
+            idCicloEscolar: this.idCiclo,
+            idGrado: this.idGrado,
+            promedio: Number(alumno.calificacionT1)
+          };
+
+          if (idsExistentes?.idCalT1) {
+            payload.id = idsExistentes.idCalT1;
           }
-        },
-        error: () => {
-          errores++;
-          if (contador + errores === total) {
-            this.loadingService.hide();
-            
-            if (contador === 0) {
-              this.alertService.show(
-                'Error al guardar las calificaciones.',
-                'danger',
-                'Error'
-              );
-            } else {
-              this.alertService.show(
-                `Se guardaron ${contador} de ${total} calificaciones. ${errores} fallaron.`,
-                'warning',
-                'Parcialmente exitoso'
-              );
-            }
-          }
+
+          calificacionesAGuardar.push(payload);
+        } else {
+          console.warn('Calificación duplicada detectada y omitida:', key);
         }
-      });
+      }
+
+      if (alumno.calificacionT2 !== null && alumno.calificacionT2 !== undefined) {
+        const key = `${alumno.idAlumno}-${this.idTrimestre2}`;
+
+        if (!calificacionesUnicas.has(key)) {
+          calificacionesUnicas.add(key);
+
+          const payload: any = {
+            idAlumno: alumno.idAlumno,
+            idMateria: this.idMateria,
+            idTrimestre: this.idTrimestre2,
+            idCicloEscolar: this.idCiclo,
+            idGrado: this.idGrado,
+            promedio: Number(alumno.calificacionT2)
+          };
+
+          if (idsExistentes?.idCalT2) {
+            payload.id = idsExistentes.idCalT2;
+          }
+
+          calificacionesAGuardar.push(payload);
+        } else {
+          console.warn('Calificación duplicada detectada y omitida:', key);
+        }
+      }
+
+      if (alumno.calificacionT3 !== null && alumno.calificacionT3 !== undefined) {
+        const key = `${alumno.idAlumno}-${this.idTrimestre3}`;
+
+        if (!calificacionesUnicas.has(key)) {
+          calificacionesUnicas.add(key);
+
+          const payload: any = {
+            idAlumno: alumno.idAlumno,
+            idMateria: this.idMateria,
+            idTrimestre: this.idTrimestre3,
+            idCicloEscolar: this.idCiclo,
+            idGrado: this.idGrado,
+            promedio: Number(alumno.calificacionT3)
+          };
+
+          if (idsExistentes?.idCalT3) {
+            payload.id = idsExistentes.idCalT3;
+          }
+
+          calificacionesAGuardar.push(payload);
+        } else {
+          console.warn('Calificación duplicada detectada y omitida:', key);
+        }
+      }
+    });
+
+    this.guardarCalificacionesMultiples(calificacionesAGuardar);
+  }
+
+  guardarCalificacionesMultiples(calificaciones: any[]): void {
+    if (calificaciones.length === 0) {
+      this.loadingService.hide();
+      this.alertService.show(
+        'No hay calificaciones para guardar.',
+        'warning',
+        'Validación'
+      );
+      return;
+    }
+
+    this.servicios.asignarCalificacionesMultiples(calificaciones).subscribe({
+      next: (response) => {
+        this.loadingService.hide();
+        this.modoEdicion = false;
+
+        this.alertService.show(
+          `Se guardaron ${calificaciones.length} calificaciones exitosamente.`,
+          'success',
+          'Éxito'
+        );
+
+        setTimeout(() => {
+          this.cargarCalificacionesExistentes();
+        }, 500);
+      },
+      error: (err) => {
+        this.loadingService.hide();
+
+        console.error('Error al guardar calificaciones:', err);
+        console.error('Respuesta del servidor:', err.error);
+
+        this.alertService.show(
+          'Error al guardar las calificaciones. Revise la consola para más detalles.',
+          'danger',
+          'Error'
+        );
+      }
     });
   }
 
@@ -432,8 +512,16 @@ export class CalificacionesComponent implements OnInit {
       this.idMateria
     ).subscribe({
       next: (calificaciones: any[]) => {
+        this.calificacionesIdsMap.clear();
+
         if (calificaciones && calificaciones.length > 0) {
           calificaciones.forEach(cal => {
+            this.calificacionesIdsMap.set(cal.idAlumno, {
+              idCalT1: cal.idCalificacionTrimestre1,
+              idCalT2: cal.idCalificacionTrimestre2,
+              idCalT3: cal.idCalificacionTrimestre3
+            });
+
             const alumno = this.alumnosCalificaciones.find(
               a => a.idAlumno === cal.idAlumno
             );
@@ -442,24 +530,25 @@ export class CalificacionesComponent implements OnInit {
               if (cal.trimestre1 !== null && cal.trimestre1 !== undefined) {
                 alumno.calificacionT1 = cal.trimestre1;
               }
-              
+
               if (cal.trimestre2 !== null && cal.trimestre2 !== undefined) {
                 alumno.calificacionT2 = cal.trimestre2;
               }
-              
+
               if (cal.trimestre3 !== null && cal.trimestre3 !== undefined) {
                 alumno.calificacionT3 = cal.trimestre3;
               }
-              
+
               alumno.promedioFinal = this.calcularPromedioFinal(alumno);
             }
           });
-          
+
           this.alumnosFiltrados = [...this.alumnosCalificaciones];
           this.calcularPaginacion();
         }
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error al cargar calificaciones existentes:', err);
       }
     });
   }

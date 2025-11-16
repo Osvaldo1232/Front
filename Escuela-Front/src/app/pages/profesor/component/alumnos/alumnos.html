@@ -13,7 +13,7 @@
                 <label for="ciclo" class="form-label required-label">Ciclo:*</label>
                 <select id="materia" class="form-select" [(ngModel)]="cicloEscolar" (change)="buscar()">
                     <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-                        {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
+                        {{ ciclo.nombre }}
                     </option>
                 </select>
             </div>

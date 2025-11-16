@@ -29,6 +29,7 @@ import { AsignacionGrado } from './pages/admin/Components/asignacion-grado/asign
 import { TrimestresComponent } from './pages/admin/Components/trimestres/trimestres';
 import { MateriasComponent } from './pages/admin/Components/materia/materia/materia';
 import { ListaGradoMaterias } from './pages/admin/Components/lista-grado-materias/lista-grado-materias';
+import { HistorialAlumnoAcdemico } from './pages/profesor/component/historial-alumno-acdemico/historial-alumno-acdemico';
 
 
 export const routes: Routes = [
@@ -78,7 +79,7 @@ export const routes: Routes = [
             { path: 'datos-personales', component: DatosPersonales },
             { path: 'materias', component: Materias },
             { path: 'Historial-academico', component: HistorialAcademico },
-            { path: 'Historial-alumno', component: Historial },
+            { path: 'Historial-alumno', component: HistorialAlumnoAcdemico },
             { path: 'alumnoss', component: Alumnos },
             { path: 'calificaciones/:idMateria', component: CalificacionesComponent}
             

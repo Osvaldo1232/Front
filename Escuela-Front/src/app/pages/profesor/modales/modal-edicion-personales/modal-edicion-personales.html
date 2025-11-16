@@ -11,51 +11,65 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Nombre:</label>
-            <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+            <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required
+              (input)="eliminarEspaciosInicio($event, 'nombre')" (keypress)="soloLetras($event)" maxlength="50">
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Apellido Paterno:</label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidoPaterno" required>
+            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidoPaterno" required
+              (input)="eliminarEspaciosInicio($event, 'apellidoPaterno')" (keypress)="soloLetras($event)"
+              maxlength="50">
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label required-label">Apellido Materno</label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidoMaterno" required>
+            <label class="form-label required-label">Apellido Materno:</label>
+            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidoMaterno" required
+              (input)="eliminarEspaciosInicio($event, 'apellidoMaterno')" (keypress)="soloLetras($event)"
+              maxlength="50">
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Teléfono:</label>
-            <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono" required>
+            <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono" required
+              (input)="validarTelefono($event); eliminarEspaciosInicio($event, 'telefono')"
+              (keypress)="soloNumeros($event)" placeholder="10 dígitos" maxlength="10">
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required
+              [max]="fechaMaxima">
+            <small class="text-muted">No puede ser mayor a la fecha actual</small>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">RFC:</label>
-            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" required maxlength="13">
+            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" required maxlength="13"
+              (input)="validarRFC($event); eliminarEspaciosInicio($event, 'rfc')" placeholder="12 o 13 caracteres"
+              style="text-transform: uppercase;">
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label required-label">Clave Presupuestal:</label>
-            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required>
+            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required
+              (input)="eliminarEspaciosInicio($event, 'clavePresupuestal')" maxlength="50">
           </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label required-label">Especialidad:</label>
-          <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required>
-        </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label required-label">Especialidad:</label>
+            <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required
+              (input)="eliminarEspaciosInicio($event, 'especialidad')" maxlength="100">
+          </div>
         </div>
 
         <div class="text-end mt-3">
           <button type="button" class="btn btn-limpiar me-2" (click)="cerrarModal()">Cerrar</button>
-          <button type="submit" class="btn btn-guardar" [disabled]="guardando">{{ guardando ? 'Guardando...' : 'Guardar'
-            }}</button>
+          <button type="submit" class="btn btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando' : 'Guardar' }}
+          </button>
         </div>
       </form>
     </div>

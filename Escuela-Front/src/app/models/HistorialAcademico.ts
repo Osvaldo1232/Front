@@ -1,10 +1,10 @@
 export interface RegistroHistorial {
   id: string;
-  alumno: string;
+  nombreAlumno: string;
   cicloEscolar: string;
   grado: string;
   grupo: string;
-  calificacion: number;
+  calificacionTotal: number;
 }
 
 export interface FiltrosHistorial {

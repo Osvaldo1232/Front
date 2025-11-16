@@ -7,6 +7,7 @@ import { AlumnoCiclo } from '../../../../models/Materia';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from "../../../../shared/loading/loading";
+import { LoginService } from '../../../../services/login-service';
 
 
 @Component({
@@ -20,20 +21,31 @@ export class Alumnos implements OnInit {
   ciclos: any[] = [];
   cicloEscolar: string = '';
   inscripciones: AlumnoCiclo[] = [];
+  idUsuario: string = '';
 
   constructor(
     private servicioDirectorAsignacion: ServiciosProfesor,
+    private loginService: LoginService,
     private loadingService: LoadingService,
     private AlertService: AlertService
   ) {}
 
   ngOnInit(): void {
     this.loadingService.show();
+
+    this.idUsuario = this.loginService.Usuario();
+
+    if (!this.idUsuario) {
+      console.error('No se encontró usuario logueado');
+      this.loadingService.hide();
+      return;
+    }
+
     this.cargarCombos();
   }
 
   cargarCombos(): void {
-    this.servicioDirectorAsignacion.obtenerCiclos1().subscribe({
+    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).subscribe({
       next: (data) => {
         this.ciclos = data;
 
@@ -49,6 +61,11 @@ export class Alumnos implements OnInit {
       error: (err) => {
         console.error('Error al cargar ciclos', err);
         this.loadingService.hide();
+        this.AlertService.show(
+          'Ocurrió un error al cargar los ciclos escolares',
+          'danger',
+          'Error'
+        );
       }
     });
   }
@@ -69,7 +86,11 @@ export class Alumnos implements OnInit {
 
   buscar(mostrarLoading: boolean = true): void {
     if (!this.cicloEscolar) {
-      alert('Por favor, selecciona un ciclo escolar antes de buscar');
+      this.AlertService.show(
+        'Por favor, selecciona un ciclo escolar antes de buscar',
+        'warning',
+        'Advertencia'
+      );
       return;
     }
 
@@ -86,7 +107,7 @@ export class Alumnos implements OnInit {
           this.AlertService.show(
             'Actualmente no se encontraron alumnos para los criterios seleccionados.',
             'warning',
-            'Error'
+            'Información'
           );
         }
       },

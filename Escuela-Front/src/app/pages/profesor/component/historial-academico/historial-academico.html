@@ -25,20 +25,18 @@
             <table class="table table-striped table-hover grid-table align-middle">
                 <thead class="grid-header text-whit">
                     <tr>
-                        <th class="col-th">NOMBRE DOCENTE</th>
-                        <th class="col-th">RFC</th>
-                        <th class="col-th">CLAVE</th>
+                        <th class="col-th">NOMBRE ALUMNO</th>
                         <th class="col-th">GRADO</th>
                         <th class="col-th">GRUPO</th>
+                        <th class="col-th">CALIFICACION TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let alumno of inscripciones; let i = index" [class.row-alternate]="i % 2 === 1">
-                        <td>{{ alumno.alumno }}</td>
-                        <td>{{ alumno.cicloEscolar }}</td>
+                        <td>{{ alumno.nombreAlumno }}</td>
                         <td>{{ alumno.grado }}</td>
                         <td>{{ alumno.grupo }}</td>
-                        <td>{{ alumno.cicloEscolar}}</td>
+                        <td>{{ alumno.calificacionTotal}}</td>
                     
                     </tr>
                 </tbody>
