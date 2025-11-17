@@ -12,7 +12,7 @@ import { Loading } from '../../../../../shared/loading/loading';
 @Component({
   selector: 'app-calificaciones-asignacion',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Loading],
   templateUrl: './calificaciones-asignacion.html',
   styleUrls: ['./calificaciones-asignacion.scss']
 })
