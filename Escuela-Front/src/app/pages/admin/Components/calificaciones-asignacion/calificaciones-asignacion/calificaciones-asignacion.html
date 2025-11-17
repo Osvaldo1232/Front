@@ -1,0 +1,61 @@
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="titulo-principal">Calificaciones por Asignación</h2>
+    </div>
+  </div>
+
+  <!-- Filtro Simple -->
+  <div class="card p-3 shadow-sm mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <label class="form-label fw-bold mb-2">Seleccionar Grupo:</label>
+        <select 
+          class="form-select" 
+          [(ngModel)]="asignacionSeleccionada" 
+          (change)="onAsignacionChange()">
+          <option value="">-- Seleccionar --</option>
+          <option *ngFor="let asignacion of asignaciones" [value]="asignacion.id">
+            {{ asignacion.value }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay alumnos -->
+  <div *ngIf="alumnos.length === 0" class="no-data">
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="mb-3" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+    </svg>
+    <p>No hay calificaciones registradas para esta asignación.</p>
+  </div>
+
+  <!-- Grid de Alumnos -->
+  <div *ngIf="alumnos.length > 0" class="alumnos-grid">
+    <div class="alumno-card" *ngFor="let alumno of alumnos">
+      <!-- Header con nombre y promedio -->
+      <div class="alumno-header">
+        <h3 class="alumno-nombre">{{ alumno.nombreAlumno }}</h3>
+        <div class="promedio-badge">
+          <div class="promedio-valor">{{ calcularPromedio(alumno.materias) | number:'1.1-1' }}</div>
+          <div class="promedio-label">Promedio</div>
+        </div>
+      </div>
+
+      <!-- Lista de Materias -->
+      <div class="materias-list">
+        <div class="materia-item" *ngFor="let materia of alumno.materias">
+          <div class="materia-nombre">{{ materia.nombreMateria }}</div>
+          <div class="calificacion-container">
+            <span class="calificacion" [ngClass]="getColorCalificacion(materia.calificacion)">
+              {{ materia.calificacion | number:'1.1-1' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.titulo-principal {
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: #2c3e50;
+  background-color: #e8e8e8;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-label {
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: all 0.3s;
+
+  &:focus {
+    border-color: #5C1F38;
+    box-shadow: 0 0 0 0.2rem rgba(92, 31, 56, 0.15);
+    outline: none;
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #28a745;
+
+  svg {
+    color: #28a745;
+    opacity: 0.7;
+  }
+
+  p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.alumnos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.alumno-card {
+  background-color: #f5e6ec;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alumno-header {
+  margin-bottom: 1.2rem;
+}
+
+.alumno-nombre {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.3rem;
+}
+
+.alumno-info {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.materias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+// ✅ ESTILO ÚNICO PARA TODAS LAS MATERIAS EN ROJO VINO
+.materia-card {
+  background-color: #5C1F38; // ✅ Fondo rojo vino
+  border-radius: 8px;
+  padding: 1.2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.materia-nombre {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white; // ✅ Texto blanco
+  margin-bottom: 0.5rem;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.materia-promedio {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white; // ✅ Promedio en blanco
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .materias-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .materias-grid {
+    grid-template-columns: 1fr;
+  }
+}

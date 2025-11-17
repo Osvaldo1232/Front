@@ -10,6 +10,8 @@ import { ServiciosDirector } from '../../../../Services/servicios-director';
 import { ServiciosDirectorGrupos } from '../../../../Services/servicios-director-grupos/servicio-director-grupos';
 import { ServiciosDirectorCiclos } from '../../../../Services/servicios-director-ciclos/servicios-director-ciclos';
 import { AlertService } from '../../../../../../shared/alert-service';
+import { firstValueFrom } from 'rxjs'; 
+
 
 @Component({
   selector: 'app-asignar-grupo-docente',
@@ -104,58 +106,95 @@ export class AsignarGrupoDocente implements OnInit, OnChanges {
     return true;
   }
 
-  guardar() {
-    if (!this.validarFormulario()) {
-      return;
-    }
-
-    if (!this.docente?.id) {
-      this.errorMensaje = 'Error: No se encontró el ID del docente';
-      return;
-    }
-
-    this.guardando = true;
-    this.errorMensaje = '';
-
-    const asignacion: AsignacionDocente = {
-      idDocente: this.docente.id,
-      idGrado: this.idGrado,
-      idGrupo: this.idGrupo,
-      idCiclo: this.idCiclo,
-      estatus: 'ACTIVO'
-    };
-
-    console.log('📤 Enviando asignación:', asignacion);
-
-    this.serviciosAsignacion.CrearAsignacion(asignacion).subscribe({
-      next: (res) => {
-        console.log('✅ Asignación creada:', res);
-        
-        this.alertService.show(
-          'Asignación creada exitosamente',
-          'success',
-          'Éxito'
-        );
-
-        this.limpiarCampos();
-        this.cerrar.emit(true);
-      },
-      error: (err) => {
-        console.error('❌ Error al crear asignación:', err);
-        
-        this.errorMensaje = err.error?.message || 'Error al crear la asignación';
-        
-        this.alertService.show(
-          this.errorMensaje,
-          'danger',
-          'Error'
-        );
-      },
-      complete: () => {
-        this.guardando = false;
-      }
-    });
+ async guardar() {
+  if (!this.validarFormulario()) {
+    return;
   }
+
+  if (!this.docente?.id) {
+    this.errorMensaje = 'Error: No se encontró el ID del docente';
+    return;
+  }
+
+  this.guardando = true;
+  this.errorMensaje = '';
+
+  const asignacion: AsignacionDocente = {
+    idDocente: this.docente.id,
+    idGrado: this.idGrado,
+    idGrupo: this.idGrupo,
+    idCiclo: this.idCiclo,
+    estatus: 'ACTIVO'
+  };
+
+  console.log('📤 Enviando asignación:', asignacion);
+
+  try {
+    let respuesta: any = await firstValueFrom(
+      this.serviciosAsignacion.CrearAsignacion(asignacion)
+    );
+
+    console.log('✅ Respuesta del servidor (raw):', respuesta);
+    console.log('🔍 Tipo de respuesta:', typeof respuesta);
+
+    // ✅ CRÍTICO: Parsear si viene como string
+    if (typeof respuesta === 'string') {
+      try {
+        respuesta = JSON.parse(respuesta);
+        console.log('✅ Respuesta parseada:', respuesta);
+      } catch (e) {
+        console.error('❌ Error al parsear respuesta:', e);
+      }
+    }
+
+    // ✅ Validar si hay error (código 2001, 2000, etc.)
+    if (respuesta.codigo) {
+      // Si tiene código, es un error del backend
+      this.alertService.show(
+        respuesta.mensaje,
+        'danger',
+        'Error'
+      );
+      this.guardando = false;
+      return;
+    }
+
+    // ✅ Si no hay código de error, mostrar éxito
+    this.alertService.show(
+      'Asignación creada exitosamente',
+      'success',
+      'Éxito'
+    );
+
+    this.limpiarCampos();
+    this.cerrar.emit(true);
+
+  } catch (error: any) {
+    console.error('❌ Error completo:', error);
+    
+    let mensajeError = 'Error al crear la asignación';
+    
+    if (error.error && error.error.mensaje) {
+      mensajeError = error.error.mensaje;
+    } else if (error.error && error.error.message) {
+      mensajeError = error.error.message;
+    } else if (error.error && typeof error.error === 'string') {
+      try {
+        const errorObj = JSON.parse(error.error);
+        if (errorObj.mensaje) {
+          mensajeError = errorObj.mensaje;
+        }
+      } catch (e) {
+        // Si no se puede parsear, usar mensaje por defecto
+      }
+    }
+    
+    this.alertService.show(mensajeError, 'danger', 'Error');
+    
+  } finally {
+    this.guardando = false;
+  }
+}
 
   cerrarModal() {
     this.limpiarCampos();

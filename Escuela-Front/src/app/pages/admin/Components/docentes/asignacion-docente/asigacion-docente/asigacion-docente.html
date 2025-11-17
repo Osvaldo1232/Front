@@ -19,25 +19,7 @@
             readonly>
         </div>
 
-        <!-- Grupo -->
-        <div class="mb-3">
-          <label class="form-label">Grupo</label>
-          <select class="form-select" [(ngModel)]="idGrupo" name="grupo" required>
-            <option value="">Seleccionar...</option>
-            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
-          </select>
-        </div>
-
-        <!-- Grado -->
-        <div class="mb-3">
-          <label class="form-label">Grado:</label>
-          <select class="form-select" [(ngModel)]="idGrado" name="grado" required>
-            <option value="">Seleccionar...</option>
-            <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
-          </select>
-        </div>
-
-        <!-- Ciclo -->
+         <!-- Ciclo -->
         <div class="mb-3">
           <label class="form-label">Ciclo:</label>
           <select class="form-select" [(ngModel)]="idCiclo" name="ciclo" required>
@@ -48,6 +30,23 @@
           </select>
         </div>
 
+         <!-- Grado -->
+        <div class="mb-3">
+          <label class="form-label">Grado:</label>
+          <select class="form-select" [(ngModel)]="idGrado" name="grado" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let grado of grados" [value]="grado.id">{{ grado.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Grupo -->
+        <div class="mb-3">
+          <label class="form-label">Grupo</label>
+          <select class="form-select" [(ngModel)]="idGrupo" name="grupo" required>
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+          </select>
+        </div>
 
         <!-- Mensaje de error -->
         <div class="alert alert-danger" *ngIf="errorMensaje">

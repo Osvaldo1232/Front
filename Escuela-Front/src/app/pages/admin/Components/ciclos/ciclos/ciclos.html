@@ -16,12 +16,15 @@
   <!-- Grid de tarjetas -->
   <div class="cards-grid" *ngIf="registros.length > 0">
     <div class="card" *ngFor="let ciclo of ciclosPaginados">
-      <!-- ✅ EXTRAER SOLO EL AÑO -->
+      <!-- Título con años -->
       <h2 class="card__title">{{ extraerAnio(ciclo.anioInicio) }}-{{ extraerAnio(ciclo.anioFin) }}</h2>
       
-        <div class="card__footer">
+      <!-- Footer del card -->
+      <div class="card__footer">
+        <!-- ✅ Si quieres activar el toggle y botón editar, descomenta esto: -->
+        <!--
         <div class="card__status">
-         <!--  <span class="status-label">Estatus: Inactivo</span>
+          <span class="status-label">Inactivo</span>
           <label class="toggle">
             <input 
               type="checkbox" 
@@ -31,22 +34,33 @@
           </label>
           <span class="status-label">Activo</span>
         </div>
-      <button class="btn btn--edit" (click)="editar(ciclo)">EDITAR</button>      </div> -->
+        <button class="btn btn--edit" (click)="editar(ciclo)">EDITAR</button>
+        -->
+      </div>
     </div>
   </div>
 
   <!-- Paginación -->
   <div class="pagination" *ngIf="totalPaginas > 1">
-    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+    <button 
+      class="pagination__btn pagination__btn--prev" 
+      (click)="cambiarPagina(paginaActual - 1)" 
+      [disabled]="paginaActual === 1">
+      ‹
+    </button>
     <button
       *ngFor="let p of totalPaginasArray"
       class="pagination__btn"
       [class.pagination__btn--active]="p === paginaActual"
-      (click)="cambiarPagina(p)"
-    >
+      (click)="cambiarPagina(p)">
       {{ p }}
     </button>
-    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+    <button 
+      class="pagination__btn pagination__btn--next" 
+      (click)="cambiarPagina(paginaActual + 1)" 
+      [disabled]="paginaActual === totalPaginas">
+      ›
+    </button>
   </div>
 </div>
 

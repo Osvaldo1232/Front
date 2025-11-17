@@ -14,7 +14,7 @@ export class ServiciosDirectorAlumnos {
   private apiUrlAlumnosEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/alumno';
   private apiUrlAlumnosId= 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/alumnos/usuario/';
   private apiUrlDirectivoId= 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app';
-  private apiUrlCambiarEstatus = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios'; // ✅ CORREGIDO
+  private apiUrlCambiarEstatus = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios'; 
 
 
   constructor(private http: HttpClient) {}

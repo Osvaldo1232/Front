@@ -8,6 +8,8 @@ import { CampoFormativoNuevo } from './campo-formativo-nuevo/campo-formativo-nue
 import { CampoFormativoEditar } from './campo-formativo-editar/campo-formativo-editar/campo-formativo-editar';
 import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
 import { LoadingService } from '../../../../shared/loading-service';
+import { Loading } from '../../../../shared/loading/loading';
+
 
 @Component({
   selector: 'app-campo-formativo',
@@ -17,7 +19,8 @@ import { LoadingService } from '../../../../shared/loading-service';
     FormsModule,
     RouterModule,
     CampoFormativoNuevo,
-    CampoFormativoEditar
+    CampoFormativoEditar,
+    Loading
   ],
   templateUrl: './campo-formativo.html',
   styleUrls: ['./campo-formativo.scss']
@@ -36,7 +39,8 @@ export class CampoFormativo implements OnInit {
   registrosPorPagina = 6; // 6 cards por página (3x2)
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosCampoFormativo,  private loadingService: LoadingService,
+  constructor(private Servicios: ServiciosCampoFormativo, 
+    private loadingService: LoadingService,
     private alerta:AlertaConfirmacionService) { }
 
   ngOnInit() {
@@ -144,12 +148,19 @@ getNombreCampo(index: number): string {
   }
 
   cargarCampos() {
+    this.loadingService.show(); 
     this.Servicios.ObtenerCampoFormativo().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('Campos Formativos cargados:', this.registros);
+        this.loadingService.hide(); 
+
       },
-      error: (err) => console.error('Error al cargar Campos Formativos:', err)
+      error: (err) =>{
+         console.error('Error al cargar Campos Formativos:', err);
+                          this.loadingService.hide();
+
+      }
     });
   }
 }

@@ -97,21 +97,21 @@
     
     <!-- ✅ NUEVO: Switch de estatus -->
     <td class="text-center">
-      <div class="form-check form-switch d-flex justify-content-center">
-        <input 
-          class="form-check-input switch-estatus" 
-          type="checkbox" 
-          role="switch"
-          [checked]="alumno.estatus === 'ACTIVO'"
-          (change)="cambiarEstatus(alumno)"
-          [id]="'switch-' + alumno.alumnoId">
-        <label 
-          class="form-check-label ms-2 switch-label" 
-          [for]="'switch-' + alumno.alumnoId">
-          {{ alumno.estatus }}
-        </label>
-      </div>
-    </td>
+  <div class="form-check form-switch d-flex justify-content-center">
+    <input 
+      class="form-check-input switch-estatus" 
+      type="checkbox" 
+      role="switch"
+      [checked]="alumno.estatus === 'ACTIVO'"
+      (click)="cambiarEstatus(alumno, $event)"
+      [id]="'switch-' + alumno.alumnoId">
+    <label 
+      class="form-check-label ms-2 switch-label" 
+      [for]="'switch-' + alumno.alumnoId">
+      {{ alumno.estatus }}
+    </label>
+  </div>
+</td>
     
     <td class="text-center">
       <!-- Botón Editar -->
@@ -122,7 +122,7 @@
       </button>
       
       <!-- Botón Ver -->
-      <button class="btn btn-icon-view" title="Ver">
+      <button class="btn btn-icon-view" (click)="irPerfil(alumno.alumnoId)" title="Ver">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
           <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
@@ -136,6 +136,17 @@
         title="Asignar Tutor">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+        </svg>
+      </button>
+
+      <!-- Botón Actualizar Asignación -->
+      <button 
+        class="btn btn-icon-assignment" 
+        (click)="actualizarAsignacion(alumno.alumnoId, alumno.nombre + ' ' + alumno.apellidoPaterno + ' ' + alumno.apellidoMaterno)" 
+        title="Actualizar Asignación">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zM9.5 5.5 11 7l-6.5 6.5-.106.106-1.528 3.821 3.821-1.528.106-.106L13.5 9 12 7.5l-2.5 2.5z"/>
+          <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
         </svg>
       </button>
     </td>
@@ -186,3 +197,24 @@
   [nombreAlumno]="nombreAlumnoParaTutor"
   (cerrar)="cerrarModalAsignarTutor($event)">
 </app-asignar-tutor>
+
+<!-- ✅ Modal Perfil Estudiante -->
+<app-perfil-estudiante
+  *ngIf="verEstudiante"
+  [verEstudiante]="verEstudiante"
+  [idAlumno]="idAlumnoSeleccionado"
+  (cerrar)="cerrarModalPerfil($event)">
+</app-perfil-estudiante>
+
+<!-- ✅ Modal Actualizar Asignación -->
+<app-actualizar-asignacion
+  *ngIf="actualizarAsignacionm"
+  [mostrar]="actualizarAsignacionm"
+  [alumnoId]="alumnoIdParaAsignacion"
+  [nombreAlumno]="nombreAlumnoParaAsignacion"
+  [asignacionActualId]="asignacionActualId"
+  [inscripcionId]="inscripcionIdParaAsignacion"
+  (cerrar)="cerrarModalActualizarAsignacion($event)">
+</app-actualizar-asignacion>
+
+<app-loading></app-loading>

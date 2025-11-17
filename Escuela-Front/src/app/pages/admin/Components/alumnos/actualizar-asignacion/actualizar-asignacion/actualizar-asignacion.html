@@ -1,0 +1,64 @@
+<!-- Fondo modal -->
+<div class="modal-backdrop" *ngIf="mostrar" (click)="cancelar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <h5 class="modal-title">Actualizar Asignación</h5>
+      <button type="button" class="btn-close" (click)="cancelar()">×</button>
+    </div>
+
+    <!-- Cuerpo del modal -->
+    <div class="modal-body">
+      <form>
+        <!-- Nombre del Alumno (Solo lectura) -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Alumno:</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [value]="nombreAlumno" 
+            readonly>
+        </div>
+
+       <!-- Dropdown de Asignaciones -->
+        <div class="mb-3">
+        <label class="form-label fw-bold">Nueva Asignación: <span class="text-danger">*</span></label>
+        <select 
+            class="form-select" 
+            [(ngModel)]="asignacionSeleccionada"
+            name="asignacion"
+            required>
+<!--             <option value="">Seleccionar asignación...</option>
+ -->            <option *ngFor="let asignacion of asignacionesDisponibles" [value]="asignacion.id">
+            {{ asignacion.value }}
+            </option>
+        </select>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill me-2" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+          </svg>
+          Se creará una nueva inscripción para este alumno con la asignación seleccionada.
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer con botones -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-limpiar" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-guardar" 
+        (click)="guardar()"
+        [disabled]="!asignacionSeleccionada">
+        Guardar Cambios
+      </button>
+    </div>
+
+  </div>
+</div>

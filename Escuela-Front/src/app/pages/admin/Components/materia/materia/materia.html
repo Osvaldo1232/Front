@@ -3,14 +3,29 @@
     <h1 class="header__title">MATERIAS</h1>
   </header>
 
-  <!-- Botón Nuevo -->
-  <div class="button-section">
+  <!-- ✅ NUEVO: Sección de filtros -->
+  <div class="filter-section">
+    <div class="filter-group">
+      <label class="filter-label">Filtrar por Campo Formativo:</label>
+      <select 
+        class="filter-select" 
+        [(ngModel)]="campoFormativoSeleccionado"
+        (change)="aplicarFiltro()">
+        <option value="">Todos los campos</option>
+        <option *ngFor="let campo of camposFormativos" [value]="campo.id">
+          {{ campo.nombre }}
+        </option>
+      </select>
+      <button class="btn btn--clear" (click)="limpiarFiltro()" *ngIf="campoFormativoSeleccionado">
+        Limpiar
+      </button>
+    </div>
     <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
   </div>
 
   <!-- Mensaje cuando no hay materias -->
   <div *ngIf="registros.length === 0" class="no-data">
-    <p>No hay materias registradas.</p>
+    <p>No hay materias registradas{{ campoFormativoSeleccionado ? ' para este campo formativo' : '' }}.</p>
   </div>
 
   <!-- Grid de tarjetas -->
@@ -68,3 +83,5 @@
   [materia]="materiaSeleccionada"
   (cerrar)="cerrarModalEditar($event)">
 </app-editar-materia>
+
+<app-loading></app-loading>

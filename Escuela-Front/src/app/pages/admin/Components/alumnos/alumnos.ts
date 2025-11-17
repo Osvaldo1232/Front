@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { AlumnoGGC, Alumnos } from '../../../../models/alumnos.model';
 import { Inscripcion } from '../../../../models/inscripcion.model';
 import { AsignacionDocente } from '../../../../models/asignacion-docente.model';
@@ -21,6 +22,8 @@ import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlertService } from '../../../../shared/alert-service';
 import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
+import { PerfilEstudiante } from './perfil-estudiante/perfil-estudiante/perfil-estudiante';
+import { ActualizarAsignacion } from '../alumnos/actualizar-asignacion/actualizar-asignacion/actualizar-asignacion';
 
 @Component({
   selector: 'app-alumnos',
@@ -32,7 +35,9 @@ import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacio
     NuevoAlumno,
     EditarAlumno,
     AsignarTutor,
-    Loading
+    Loading,
+    PerfilEstudiante,
+    ActualizarAsignacion
   ],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.scss']
@@ -60,6 +65,13 @@ export class AlumnosComponent implements OnInit {
   asignarTutorm: boolean = false;
   alumnoIdParaTutor: string | null = null;
   nombreAlumnoParaTutor: string = '';
+
+  // Modal Actualizar Asignación
+actualizarAsignacionm: boolean = false;
+alumnoIdParaAsignacion: string | null = null;
+nombreAlumnoParaAsignacion: string = '';
+asignacionActualId: string = ''; // ✅ NUEVO
+
 
   verEstudiante: boolean = false;
   idAlumnoSeleccionado: string | null = null;
@@ -129,6 +141,8 @@ export class AlumnosComponent implements OnInit {
         console.log('📚 Grados cargados:', this.grados);
         
         // ✅ Seleccionar automáticamente el primer grado
+                this.loadingService.show(); 
+
         if (this.grados.length > 0) {
           this.filtroGrado = this.grados[0].id!;
           console.log('✅ Primer grado seleccionado:', this.grados[0].nombre);
@@ -309,34 +323,57 @@ export class AlumnosComponent implements OnInit {
   }
 
   aplicarFiltros() {
-    this.paginaActual = 1;
-    console.log('🔍 Filtros aplicados:', {
-      grado: this.filtroGrado,
-      grupo: this.filtroGrupo,
-      ciclo: this.filtroCiclo
-    });
-   
-    if (
-      (this.filtroGrado && this.filtroGrado.trim() !== '') &&
-      (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
-      (this.filtroCiclo && this.filtroCiclo.trim() !== '')
-    ) {
-      this.loadingService.show();
-      this.serviciosCiclos
-        .filtrarAlumnos(this.filtroGrado, this.filtroGrupo, this.filtroCiclo)
-        .subscribe({
-          next: (data) => {
+  this.paginaActual = 1;
+  console.log('🔍 Filtros aplicados:', {
+    grado: this.filtroGrado,
+    grupo: this.filtroGrupo,
+    ciclo: this.filtroCiclo
+  });
+ 
+  if (
+    (this.filtroGrado && this.filtroGrado.trim() !== '') &&
+    (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
+    (this.filtroCiclo && this.filtroCiclo.trim() !== '')
+  ) {
+    this.loadingService.show();
+    console.log('⏳ Loading iniciado...');
+    
+    this.serviciosCiclos
+      .filtrarAlumnos(this.filtroGrado, this.filtroGrupo, this.filtroCiclo)
+      .pipe(
+        finalize(() => {
+          this.loadingService.hide();
+          console.log('✅ Loading finalizado');
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          // ✅ CRÍTICO: Verificar que data no sea null
+          if (data && Array.isArray(data)) {
             this.registrosGGC = data;
-            console.log('🔍 Alumnos encontrados:', data);
-            this.loadingService.hide();
-          },
-          error: (err) => {
-            console.error('❌ Error al filtrar alumnos:', err);
-            this.loadingService.hide();
+            console.log('🔍 Alumnos encontrados:', data.length, 'registros');
+          } else {
+            this.registrosGGC = [];
+            console.log('⚠️ Respuesta vacía o null del servidor');
           }
-        });
-    }
+        },
+        error: (err) => {
+          console.error('❌ Error al filtrar alumnos:', err);
+          this.registrosGGC = []; // ✅ Asegurar array vacío en error
+          this.alertService.show(
+            'Error al cargar alumnos',
+            'danger',
+            'Error'
+          );
+        }
+      });
+  } else {
+    // ✅ Si no hay filtros completos, limpiar
+    this.registrosGGC = [];
+    this.loadingService.hide();
+    console.log('⚠️ Filtros incompletos');
   }
+}
 
   limpiarFiltros() {
     this.registrosGGC = [];
@@ -387,12 +424,11 @@ export class AlumnosComponent implements OnInit {
     this.editarm = true;
   }
 
-  irPerfil(alumno: Alumnos): void {
-    if (alumno.id) {
-      this.idAlumnoSeleccionado = alumno.id;
-      this.verEstudiante = true;
-    }
-  }
+  irPerfil(alumnoId: string): void {
+  console.log('👁️ Abriendo perfil del alumno:', alumnoId);
+  this.idAlumnoSeleccionado = alumnoId;
+  this.verEstudiante = true;
+}
 
   cerrarModalPerfil(event: boolean): void {
     this.verEstudiante = event;
@@ -434,16 +470,19 @@ export class AlumnosComponent implements OnInit {
   }
 
 // ✅ Cambiar estatus del alumno con confirmación
-async cambiarEstatus(alumno: AlumnoGGC) {
+async cambiarEstatus(alumno: AlumnoGGC, event: Event) {
+  // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+  event.preventDefault();
+  
   const nuevoEstatus = alumno.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
 
-  // 🟡 Mostrar alerta de confirmación antes de proceder
+  // Mostrar alerta de confirmación antes de proceder
   const confirmado = await this.alerta.mostrar(
     `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} al alumno ${alumno.nombre}?`
   );
 
   if (!confirmado) {
-    return; // 🚫 El usuario canceló
+    return; // El usuario canceló
   }
 
   console.log(`🔄 Cambiando estatus de ${alumno.nombre} de ${alumno.estatus} a ${nuevoEstatus}`);
@@ -453,7 +492,8 @@ async cambiarEstatus(alumno: AlumnoGGC) {
     next: (res) => {
       console.log('✅ Estatus cambiado exitosamente:', res);
 
-      alumno.estatus = nuevoEstatus; // Actualiza la tabla localmente
+      // ✅ SOLO aquí se cambia el estatus en el modelo
+      alumno.estatus = nuevoEstatus; 
 
       this.alertService.show(
         `Alumno ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
@@ -464,7 +504,6 @@ async cambiarEstatus(alumno: AlumnoGGC) {
       this.loadingService.hide();
     },
     error: (err) => {
-      console.error('❌ Error al cambiar estatus:', err);
 
       this.alertService.show(
         'Error al cambiar el estatus del alumno',
@@ -477,5 +516,39 @@ async cambiarEstatus(alumno: AlumnoGGC) {
   });
 }
 
+
+// Agrega esta propiedad a la clase
+inscripcionIdParaAsignacion: string = ''; // ✅ NUEVO
+
+actualizarAsignacion(alumnoId: string, nombreCompleto: string) {
+  console.log('🔄 Abriendo modal para actualizar asignación de:', nombreCompleto);
+  
+  // ✅ Solo pasar lo básico, sin buscar la inscripción
+  this.alumnoIdParaAsignacion = alumnoId;
+  this.nombreAlumnoParaAsignacion = nombreCompleto;
+  this.asignacionActualId = ''; // Lo dejaremos vacío por ahora
+  this.inscripcionIdParaAsignacion = ''; // Sin ID
+  this.actualizarAsignacionm = true;
+}
+
+cerrarModalActualizarAsignacion(guardado: boolean) {
+  this.actualizarAsignacionm = false;
+  this.alumnoIdParaAsignacion = null;
+  this.nombreAlumnoParaAsignacion = '';
+  this.asignacionActualId = '';
+  this.inscripcionIdParaAsignacion = ''; // ✅ NUEVO
+  
+  if (guardado) {
+    console.log('✅ Asignación actualizada exitosamente');
+    
+    // ✅ Recargar la tabla con los filtros actuales
+    if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
+      console.log('🔄 Reaplicando filtros para actualizar la tabla...');
+      this.aplicarFiltros();
+    } else {
+      this.cargarDatos();
+    }
+  }
+}
 
 }

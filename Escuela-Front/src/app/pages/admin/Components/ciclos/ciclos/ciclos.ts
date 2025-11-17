@@ -37,7 +37,8 @@ export class CiclosEscolaresComponent implements OnInit {
   paginaActual = 1;
 
   constructor(
-    private Servicios: ServiciosDirectorCiclos,private loadingService: LoadingService,
+    private Servicios: ServiciosDirectorCiclos,
+    private loadingService: LoadingService,
     private alertService: AlertService
   ) { }
 
@@ -155,7 +156,10 @@ export class CiclosEscolaresComponent implements OnInit {
         console.log('📥 Ciclos cargados:', this.registros);
             this.loadingService.hide(); 
       },
-      error: (err) => console.error('Error al cargar Ciclos:', err)
+      error: (err) =>{
+         console.error('Error al cargar Ciclos:', err);
+                 this.loadingService.hide();
+      }
     });
   }
 }

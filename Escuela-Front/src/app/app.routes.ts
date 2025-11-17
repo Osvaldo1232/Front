@@ -31,6 +31,8 @@ import { MateriasComponent } from './pages/admin/Components/materia/materia/mate
 import { ListaGradoMaterias } from './pages/admin/Components/lista-grado-materias/lista-grado-materias';
 import { HistorialAlumnoAcdemico } from './pages/profesor/component/historial-alumno-acdemico/historial-alumno-acdemico';
 import { GraficoAsignacion } from './pages/admin/Components/grafico-asignacion/grafico-asignacion';
+import {AlumnosRiesgoComponent} from './pages/admin/Components/alumnos-riesgo/alumnos-riesgo/alumnos-riesgo';
+import {CalificacionesAsignacionComponent} from './pages/admin/Components/calificaciones-asignacion/calificaciones-asignacion/calificaciones-asignacion';
 
 
 export const routes: Routes = [
@@ -53,7 +55,11 @@ export const routes: Routes = [
             { path: 'trimestres', component: TrimestresComponent },
             { path: 'materias', component: MateriasComponent },
             { path: 'lista-grado-materias', component: ListaGradoMaterias },
-             { path: 'grafico-asignacion', component: GraficoAsignacion },
+            { path: 'grafico-asignacion', component: GraficoAsignacion },
+            {path: 'alumnos-riesgo', component: AlumnosRiesgoComponent},
+            {path: 'calificaciones-asignacion', component: CalificacionesAsignacionComponent}
+
+
 
 
         ]

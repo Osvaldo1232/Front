@@ -10,6 +10,10 @@ import { NuevaMateria } from '../materia/nueva-materia/nueva-materia/nueva-mater
 import { EditarMateria } from '../editar-materia/editar-materia/editar-materia';
 import { AlertService } from '../../../../../shared/alert-service';
 import { AlertaConfirmacionService } from '../../../../../shared/alerta-confirmacion-service';
+import { Loading } from '../../../../../shared/loading/loading';
+import { LoadingService } from '../../../../../shared/loading-service';
+
+
 
 @Component({
   selector: 'app-materias',
@@ -19,7 +23,8 @@ import { AlertaConfirmacionService } from '../../../../../shared/alerta-confirma
     FormsModule,
     RouterModule,
     NuevaMateria,
-    EditarMateria
+    EditarMateria,
+    Loading
   ],
   templateUrl: './materia.html',
   styleUrls: ['./materia.scss']
@@ -28,6 +33,9 @@ export class MateriasComponent implements OnInit {
   
   registros: Materia[] = [];
   camposFormativos: CampoFormativoModel[] = [];
+  
+  // ✅ NUEVO: Variable para el filtro
+  campoFormativoSeleccionado: string = '';
   
   nuevom: boolean = false;
   editarm: boolean = false;
@@ -40,7 +48,10 @@ export class MateriasComponent implements OnInit {
   constructor(
     private serviciosMaterias: ServiciosDirectorMaterias,
     private serviciosCamposFormativos: ServiciosCampoFormativo,
-    private alertService: AlertService, private alerta:AlertaConfirmacionService
+    private alertService: AlertService, 
+    private alerta: AlertaConfirmacionService,
+    private loadingService: LoadingService,
+    
   ) { }
 
   ngOnInit() {
@@ -49,12 +60,18 @@ export class MateriasComponent implements OnInit {
 
   cargarDatos() {
     // Cargar materias
+    this.loadingService.show();
     this.serviciosMaterias.ObtenerMaterias().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('📚 Materias cargadas:', this.registros);
+                this.loadingService.hide(); 
+
       },
-      error: (err) => console.error('Error al cargar Materias:', err)
+      error: (err) =>{
+         console.error('Error al cargar Materias:', err)
+                 this.loadingService.hide();
+      }
     });
 
     // Cargar campos formativos
@@ -65,6 +82,37 @@ export class MateriasComponent implements OnInit {
       },
       error: (err) => console.error('Error al cargar Campos Formativos:', err)
     });
+  }
+
+  // ✅ NUEVO: Aplicar filtro
+  aplicarFiltro() {
+    if (!this.campoFormativoSeleccionado || this.campoFormativoSeleccionado === '') {
+      // Si no hay filtro, cargar todas las materias
+      this.cargarDatos();
+      return;
+    }
+
+    console.log('🔍 Filtrando por campo formativo:', this.campoFormativoSeleccionado);
+    
+    this.serviciosMaterias.ObtenerMateriasPorCampo(this.campoFormativoSeleccionado).subscribe({
+      next: (res) => {
+        this.registros = res;
+        this.paginaActual = 1; // Resetear a la primera página
+        console.log('✅ Materias filtradas:', res);
+      },
+      error: (err) => {
+        console.error('❌ Error al filtrar materias:', err);
+        this.alertService.show('Error al filtrar las materias', 'danger', 'Error');
+      }
+    });
+  }
+
+  // ✅ NUEVO: Limpiar filtro
+  limpiarFiltro() {
+    this.campoFormativoSeleccionado = '';
+    this.paginaActual = 1;
+    this.cargarDatos();
+    console.log('🧹 Filtro limpiado');
   }
 
   obtenerNombreCampoFormativo(campoFormativoId: string): string {
@@ -99,7 +147,12 @@ export class MateriasComponent implements OnInit {
   cerrarModal(event: Materia | null) {
     this.nuevom = false;
     if (event) {
-      this.cargarDatos();
+      // Si hay filtro activo, reaplicarlo
+      if (this.campoFormativoSeleccionado) {
+        this.aplicarFiltro();
+      } else {
+        this.cargarDatos();
+      }
     }
   }
 
@@ -112,16 +165,22 @@ export class MateriasComponent implements OnInit {
     this.editarm = false;
     this.materiaSeleccionada = null;
     if (guardado) {
-      this.cargarDatos();
+      // Si hay filtro activo, reaplicarlo
+      if (this.campoFormativoSeleccionado) {
+        this.aplicarFiltro();
+      } else {
+        this.cargarDatos();
+      }
     }
   }
 
   async cambiarEstatus(materia: Materia) {
-       const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+    const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
 
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
+    if (!confirmado) {
+      return;
+    }
+    
     const nuevoEstatus = materia.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const estatusAnterior = materia.estatus;
     materia.estatus = nuevoEstatus;
