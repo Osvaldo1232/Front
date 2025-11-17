@@ -83,7 +83,7 @@ export const routes: Routes = [
         canActivateChild: [AuthGuard],
         data: { roles: ['PROFESOR'] },
         children: [
-            { path: '', redirectTo: 'registro-calificaciones', pathMatch: 'full' },
+            { path: '', redirectTo: 'datos-personales', pathMatch: 'full' },
             { path: 'datos-personales', component: DatosPersonales },
             { path: 'materias', component: Materias },
             { path: 'Historial-academico', component: HistorialAcademico },

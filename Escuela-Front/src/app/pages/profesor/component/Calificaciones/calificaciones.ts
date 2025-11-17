@@ -209,11 +209,7 @@ export class CalificacionesComponent implements OnInit {
 
   validarYLimitarInput(event: any, alumno: AlumnoCalificacion, trimestre: number): void {
     let valor = event.target.value;
-
-    // Permitir números y un solo punto decimal
     valor = valor.replace(/[^0-9.]/g, '');
-
-    // Asegurar que solo haya un punto decimal
     const partes = valor.split('.');
     if (partes.length > 2) {
       valor = partes[0] + '.' + partes.slice(1).join('');
@@ -225,8 +221,6 @@ export class CalificacionesComponent implements OnInit {
     }
 
     let numero = parseFloat(valor);
-
-    // Validar rango 0-10
     if (numero > 10) {
       numero = 10;
       valor = '10';
@@ -250,8 +244,6 @@ export class CalificacionesComponent implements OnInit {
 
   convertirCalificacionALetras(calificacion: number | null): string {
     if (calificacion === null || calificacion === undefined) return '';
-
-    // Si es decimal, devolver la representación textual con decimales
     if (!Number.isInteger(calificacion)) {
       return calificacion.toFixed(2);
     }
@@ -284,8 +276,6 @@ export class CalificacionesComponent implements OnInit {
 
     const suma = calificaciones.reduce((acc, cal) => acc + cal, 0);
     const promedio = suma / calificaciones.length;
-    
-    // Retornar el promedio con 2 decimales sin redondear hacia arriba
     return Math.floor(promedio * 100) / 100;
   }
 
@@ -309,11 +299,6 @@ export class CalificacionesComponent implements OnInit {
 
   Editar(): void {
     this.modoEdicion = true;
-    this.alertService.show(
-      'Modo de edición activado. Puede modificar las calificaciones.',
-      'success',
-      'Edición'
-    );
   }
 
   guardar(): void {
@@ -491,7 +476,7 @@ export class CalificacionesComponent implements OnInit {
         this.modoEdicion = false;
 
         this.alertService.show(
-          `Se guardaron ${calificaciones.length} calificaciones exitosamente.`,
+          `Calificación registrada exitosamente.`,
           'success',
           'Éxito'
         );
