@@ -1,0 +1,14 @@
+<div class="mb-3 row">
+  <div class="col-md-6">
+    <label class="form-label">Año Inicio:</label>
+    <select class="form-select" [(ngModel)]="selected" (change)="onChange($event)">
+  <option value="" disabled selected></option>
+  <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+</select>
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Año Fin:</label>
+    <input class="form-control" [value]="anioFin" readonly />
+  </div>
+</div>

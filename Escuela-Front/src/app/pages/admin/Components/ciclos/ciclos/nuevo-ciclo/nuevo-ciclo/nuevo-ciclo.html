@@ -1,4 +1,3 @@
-<!-- Fondo modal -->
 <div class="modal-backdrop" *ngIf="nuevo" (click)="cerrarModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
 
@@ -13,34 +12,14 @@
       <form (ngSubmit)="guardar()">
         
         <div class="row">
-          <!-- Año Inicio -->
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Año Inicio: <span class="text-danger">*</span></label>
-            <select 
-              class="form-select" 
-              [(ngModel)]="fechaInicio" 
-              name="fechaInicio" 
-              required
-              (change)="validarAnios()">
-              <option value="">Seleccionar año</option>
-              <option *ngFor="let anio of aniosDisponibles" [value]="anio">{{ anio }}</option>
-            </select>
-            <small class="text-muted">Año de inicio del ciclo escolar</small>
-          </div>
-
-          <!-- Año Fin -->
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Año Fin: <span class="text-danger">*</span></label>
-            <select 
-              class="form-select" 
-              [(ngModel)]="fechaFin" 
-              name="fechaFin" 
-              required
-              [disabled]="!fechaInicio">
-              <option value="">Seleccionar año</option>
-              <option *ngFor="let anio of aniosFin" [value]="anio">{{ anio }}</option>
-            </select>
-            <small class="text-muted">Año de fin del ciclo escolar</small>
+          <!-- Selección de años -->
+          <div class="col-md-12 mb-3">
+          <app-select-anios
+  [(selected)]="fechaInicio"
+  [cantidad]="50"
+  (selectedChange)="calcularAnoFin()"
+></app-select-anios>
+            <small class="text-muted">Seleccione el año de inicio; el año fin se calcula automáticamente</small>
           </div>
         </div>
 
