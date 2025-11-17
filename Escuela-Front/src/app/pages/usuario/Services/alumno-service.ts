@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Alumnos, CalifTri, CalificacionesAlumno, DetalleMateria, InscripcionReciente, MateriasCalifica} from '../../../models/alumnos.model';
+import { Alumnos, CalifTri, CalificacionesAlumno, DetalleMateria, InscripcionReciente, MateriasCalifica, AlumnoTutor} from '../../../models/alumnos.model';
 
 
 // ✅ Nueva interfaz para la respuesta del servicio de inscripciones recientes
@@ -46,5 +46,7 @@ obtenerDetalleMat(idAlumno: string, idMateria: string,idCiclo: string): Observab
   const url = `${this.apiUrl}/calificaciones/calificaciones-por-alumno?idAlumno=${idAlumno}&idMateria=${idMateria}&idCiclo=${idCiclo}`;
   return this.http.get<DetalleMateria[]>(url);
 }
-  
+obtenerTutor(idAlumno: string): Observable<AlumnoTutor> {
+  return this.http.get<AlumnoTutor>(`${this.apiUrl}/inscripcion/${idAlumno}`);
+}
 }

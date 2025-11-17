@@ -100,4 +100,13 @@ export interface AlumnoResumen {
   nombreCompleto: string;
   promedioGeneral: number;
 }
+export interface AlumnoTutor{
+  curp: string;
+  nombreAlumno: string;
+  nombreTutor: string;
+  matricula: string;
+  grado: string;
+  grupo: string;
+  ciclo: string;
+}
 

@@ -20,9 +20,8 @@
         <p><strong>Ciclo Escolar:</strong> {{ inscripcion.ciclo }}</p>
         <p><strong>Grado:</strong> {{ inscripcion.nombreGrado }}</p>
         <p><strong>Grupo:</strong> {{ inscripcion.nombreGrupo }}</p>
-        <p><strong>Nombre del Tutor:</strong> {{ inscripcion.nombreProfesorCompleto }}</p>
-        
       </div>
+      <div *ngIf="tutor"> <p><strong>Nombre del Tutor:</strong> {{ tutor.nombreTutor }}</p></div>
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlumnoService } from '../../Services/alumno-service';
-import { Alumnos, InscripcionReciente } from '../../../../models/alumnos.model';
+import { Alumnos, AlumnoTutor, InscripcionReciente } from '../../../../models/alumnos.model';
 import { LoginService } from '../../../../services/login-service';
 import { CommonModule } from '@angular/common';
 import { timeout } from 'rxjs';
@@ -19,6 +19,7 @@ export class InfoPersonalComponent implements OnInit {
   inscripcion?: InscripcionReciente; // ✅ Guardamos la inscripción reciente
   errorMessage = '';
   usuario:any;
+  tutor!:AlumnoTutor;
   constructor(
     private alumnoService: AlumnoService,
     private loginService: LoginService,
@@ -30,6 +31,7 @@ export class InfoPersonalComponent implements OnInit {
     if (this.usuario) {
       this.cargarUsuario(this.usuario);
       this.cargarTutor(this.usuario);
+      this.obtenerDatosTutor(this.usuario);
     } else {
       this.errorMessage = 'No se encontró el ID del alumno.';
     }
@@ -63,4 +65,13 @@ cargarUsuario(usu:any){
     }
   });
 }
+  obtenerDatosTutor(idAlumno: string) {
+    this.alumnoService.obtenerTutor(idAlumno).subscribe({
+      next: (data) => {
+        this.tutor = data;
+
+      },
+      error: (err) => console.error('Error al obtener alumno:', err)
+    });
+  }
 }
