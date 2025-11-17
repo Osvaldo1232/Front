@@ -10,53 +10,53 @@ import { Loading } from '../../../../shared/loading/loading';
   selector: 'app-historial',
   imports: [CommonModule, Loading],
   templateUrl: './historial.html',
-  styleUrl: './historial.scss',
- 
+  styleUrls: ['./historial.scss'],
 })
 export class Historial implements OnInit {
-calificaciones!: CalificacionesAlumno;
+  calificaciones!: CalificacionesAlumno;
+  cargando: boolean = false;  // variable para el HTML
+  usuario: any;
+  errorMessage = '';
 
-usuario:any;
-errorMessage = '';
-
-   constructor( private alumnoService: AlumnoService,
-      private loginService: LoginService,
-      private loadingService: LoadingService
-    ) {}
+  constructor(
+    private alumnoService: AlumnoService,
+    private loginService: LoginService,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit(): void {
-     this.loadingService.show();
-   this.usuario= this.loginService.Usuario();
-   if (this.usuario) {
+    this.usuario = this.loginService.Usuario();
+    if (this.usuario) {
       this.cargarCalificac(this.usuario);
     } else {
       this.errorMessage = 'No se encontró el ID del alumno.';
     }
   }
 
-cargarCalificac(usu:any){
-  this.loadingService.show();
-  this.alumnoService.obtenerCalificaciones(usu).subscribe({
-  next: (data: CalificacionesAlumno) => {
-      this.calificaciones = data;
-      this.loadingService.hide();
-    },
-    error: () => {
-      this.errorMessage = 'No se pudieron cargar las calificaciones.';
-      this.loadingService.hide();
-    }
-  });
-}
+  cargarCalificac(usu: any) {
+    this.cargando = true;
+    this.loadingService.show();
 
+    this.alumnoService.obtenerCalificaciones(usu).subscribe({
+      next: (data: CalificacionesAlumno) => {
+        this.calificaciones = data;
+      },
+      error: () => {},
+      complete: () => {
+        this.cargando = false;
+        this.loadingService.hide();
+      }
+    });
+  }
 
-descargarPDF() {
-    
+  descargarPDF() {
+    if (!this.usuario) return;
+
+    this.cargando = true;
+    this.loadingService.show();
 
     this.alumnoService.descargarPDF(this.usuario).subscribe({
-      
       next: (pdfBlob) => {
-         this.loadingService.show();
-        // Crear un link temporal para descargar el PDF
         const blob = new Blob([pdfBlob], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -64,18 +64,14 @@ descargarPDF() {
         a.download = 'HistorialAcademico.pdf';
         a.click();
         window.URL.revokeObjectURL(url);
-        this.loadingService.hide();
       },
       error: (err) => {
         console.error('Error al descargar PDF', err);
+      },
+      complete: () => {
+        this.cargando = false;
+        this.loadingService.hide();
       }
     });
   }
- 
 }
-
-
-
-
-
-

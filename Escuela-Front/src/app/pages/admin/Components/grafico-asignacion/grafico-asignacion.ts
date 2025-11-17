@@ -20,7 +20,8 @@ import { Loading } from '../../../../shared/loading/loading';
   styleUrl: './grafico-asignacion.scss',
 })
 export class GraficoAsignacion implements OnInit{
-opcionesInscripcion: any[] = [];
+  cargando: boolean = false;
+  opcionesInscripcion: any[] = [];
   idAsignacionSeleccionada: string = '';
 
   resumen!: ResumenAlumnos;
@@ -34,46 +35,53 @@ opcionesInscripcion: any[] = [];
   ) {}
 
   ngOnInit(): void {
-  this.cargarOpcionesInscripcion();
-}
+    this.cargarOpcionesInscripcion();
+  }
 
-cargarOpcionesInscripcion() {
-  this.loadingService.show(); // ✔ Mostrar solo una vez aquí
+  cargarOpcionesInscripcion() {
+    this.loadingService.show();
+    this.cargando = true;
 
-  this.serviciosInscripcion.ObtenerOpcionesInscripcion().subscribe({
-    next: (res) => {
-      this.opcionesInscripcion = res;
-
-      if (this.opcionesInscripcion.length > 0) {
-        this.idAsignacionSeleccionada = this.opcionesInscripcion[0].id;
-        this.cargarGrafico(); // ✔ Cargar gráfica
-      } else {
-        this.loadingService.hide(); // ✔ Ocultar si no hay opciones
-      }
-    },
-    error: () => {
-      this.loadingService.hide(); // ✔ Ocultar si falla
-    }
-  });
-}
-
-cargarGrafico() {
-  // ✔ NO llames show() de nuevo si ya estaba cargando
-  // this.loadingService.show(); ← ❌ QUITADO
-
-  this.ServiciosDirectorAlumnos.obtenerGraficoAlumnos(this.idAsignacionSeleccionada)
-    .subscribe({
-      next: (data) => {
-        this.resumen = data;
-        this.porcentajeAprobados = (data.alumnosAprobados / data.totalAlumnos) * 100;
-        this.porcentajeReprobados = 100 - this.porcentajeAprobados;
+    this.serviciosInscripcion.ObtenerOpcionesInscripcion().subscribe({
+      next: (res) => {
+        this.opcionesInscripcion = res;
+        if (this.opcionesInscripcion.length > 0) {
+          this.idAsignacionSeleccionada = this.opcionesInscripcion[0].id;
+          this.cargarGrafico(); // carga inicial
+        } else {
+          this.cargando = false;
+          this.loadingService.hide();
+        }
       },
       error: () => {
-        this.loadingService.hide(); // ✔ Siempre ocultar si falla
-      },
-      complete: () => {
-        this.loadingService.hide(); // ✔ Ocultar cuando ya cargó TODO
+        this.cargando = false;
+        this.loadingService.hide();
       }
     });
-}
+  }
+
+  // Llamado cuando el usuario selecciona otra asignación
+  cargarGrafico() {
+    if (!this.idAsignacionSeleccionada) return;
+
+    this.cargando = true;
+    this.loadingService.show();
+
+    this.ServiciosDirectorAlumnos.obtenerGraficoAlumnos(this.idAsignacionSeleccionada)
+      .subscribe({
+        next: (data) => {
+          this.resumen = data;
+          this.porcentajeAprobados = (data.alumnosAprobados / data.totalAlumnos) * 100;
+          this.porcentajeReprobados = 100 - this.porcentajeAprobados;
+        },
+        error: () => {
+          this.cargando = false;
+          this.loadingService.hide();
+        },
+        complete: () => {
+          this.cargando = false;
+          this.loadingService.hide();
+        }
+      });
+  }
 }
