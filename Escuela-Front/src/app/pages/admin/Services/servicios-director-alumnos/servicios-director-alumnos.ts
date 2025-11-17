@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Alumnos } from '../../../../models/alumnos.model';
+import { Alumnos, ResumenAlumnos } from '../../../../models/alumnos.model';
 import { Directivo } from '../../../../models/DirectivoPersonal';
 
 @Injectable({
@@ -55,5 +55,8 @@ export class ServiciosDirectorAlumnos {
 
    obtenerPerfilUsuario(idUsuario: string): Observable<Directivo> {
        return this.http.get<Directivo>(`${this.apiUrlDirectivoId}/usuarios/BuscarUsuario/${idUsuario}`);
+     }
+     obtenerGraficoAlumnos(idAsignacion : string): Observable<ResumenAlumnos> {
+       return this.http.get<ResumenAlumnos>(`${this.apiUrlDirectivoId}/calificaciones-finales/asignacion/${idAsignacion}`);
      }
 }

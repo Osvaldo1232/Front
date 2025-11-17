@@ -1,0 +1,49 @@
+<div class="container mt-4">
+
+  <!-- Título -->
+  <h3 class="mb-4 text-center">Gráfico de Aprobación por Asignación</h3>
+
+  <!-- SELECT DE ASIGNACIONES -->
+  <div class="mb-4">
+    <label class="form-label fw-bold">Selecciona una asignación:</label>
+
+    <select class="form-select"
+            [(ngModel)]="idAsignacionSeleccionada"
+            (change)="cargarGrafico()">
+
+      <option *ngFor="let op of opcionesInscripcion" 
+              [value]="op.id">
+        {{ op.value }}
+      </option>
+    </select>
+  </div>
+
+  <!-- MENSAJE MIENTRAS CARGA (en lugar de <loading>) -->
+
+
+     <!-- GRÁFICA 3D -->
+<div *ngIf="resumen ; else cargando" class="chart-wrapper">
+
+  <div class="pie-3d"
+       [style.background]="
+         'conic-gradient(#046c30 ' + porcentajeAprobados + '%, ' +
+                          '#7d1d12 ' + porcentajeAprobados + '%)'
+       ">
+    <div class="pie-label">
+      {{ porcentajeAprobados | number:'1.0-0' }}%
+      <span>Aprobados</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- DATOS -->
+<div *ngIf="resumen else cargando" class="numbers">
+  <p><strong>Total:</strong> {{ resumen.totalAlumnos }}</p>
+  <p class="ok"><strong>Aprobados:</strong> {{ resumen.alumnosAprobados }}</p>
+  <p class="fail"><strong>Reprobados:</strong> {{ resumen.alumnosReprobados }}</p>
+</div>
+
+<ng-template #cargando>
+  <app-loading></app-loading>
+</ng-template>

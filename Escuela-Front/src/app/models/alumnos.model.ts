@@ -88,4 +88,16 @@ export interface DetalleMateria {
   trimestre3: number | null;
   promedioFinal: number | null;
 }
+export interface ResumenAlumnos {
+  totalAlumnos: number;
+  alumnosAprobados: number;
+  alumnosReprobados: number;
+  alumnos: AlumnoResumen[];
+}
+
+export interface AlumnoResumen {
+  idAlumno: string;
+  nombreCompleto: string;
+  promedioGeneral: number;
+}
 

@@ -30,6 +30,7 @@ import { TrimestresComponent } from './pages/admin/Components/trimestres/trimest
 import { MateriasComponent } from './pages/admin/Components/materia/materia/materia';
 import { ListaGradoMaterias } from './pages/admin/Components/lista-grado-materias/lista-grado-materias';
 import { HistorialAlumnoAcdemico } from './pages/profesor/component/historial-alumno-acdemico/historial-alumno-acdemico';
+import { GraficoAsignacion } from './pages/admin/Components/grafico-asignacion/grafico-asignacion';
 
 
 export const routes: Routes = [
@@ -52,6 +53,7 @@ export const routes: Routes = [
             { path: 'trimestres', component: TrimestresComponent },
             { path: 'materias', component: MateriasComponent },
             { path: 'lista-grado-materias', component: ListaGradoMaterias },
+             { path: 'grafico-asignacion', component: GraficoAsignacion },
 
 
         ]
