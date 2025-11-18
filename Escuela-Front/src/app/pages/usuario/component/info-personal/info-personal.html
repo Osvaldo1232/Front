@@ -1,39 +1,42 @@
-<!-- Tarjeta Información Personal -->
-<div *ngIf="alumno; else cargando" class="info-personal-card">
-  <div class="card-content">
-    <div class="profile-icon"></div>
-    <div class="info-text">
-      <h2>Información Personal</h2>
+<div class="cards-container">
+  <!-- Tarjeta Información Personal -->
+  <div *ngIf="alumno; else cargando" class="info-personal-card card">
+    <div class="card-content">
+      <div class="profile-icon" role="img" aria-label="Foto del alumno"></div>
+      <div class="info-text">
+        <h2>Información Personal</h2>
 
-      <!-- Datos del alumno (siempre se muestran) -->
-      <p><strong>Nombre:</strong> {{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</p>
-      <p><strong>CURP:</strong> {{ alumno.curp }}</p>
-      <p><strong>Fecha de Nacimiento:</strong> {{ alumno.fechaNacimiento }}</p>
-      <p><strong>Matrícula:</strong> {{ alumno.matricula }}</p>
-      <p><strong>Email:</strong> {{ alumno.email }}</p>
-      <p><strong>Sexo:</strong> {{ alumno.sexo }}</p>
+        <p><strong>Nombre:</strong> {{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</p>
+        <p><strong>CURP:</strong> {{ alumno.curp }}</p>
+        <p><strong>Fecha de Nacimiento:</strong> {{ alumno.fechaNacimiento }}</p>
+        <p><strong>Matrícula:</strong> {{ alumno.matricula }}</p>
+        <p><strong>Email:</strong> {{ alumno.email }}</p>
+        <p><strong>Sexo:</strong> {{ alumno.sexo }}</p>
 
-      <!-- Datos de inscripción (solo si existe inscripcion) -->
-      <div *ngIf="inscripcion">
-        <hr>
-        <h3>Datos de Inscripción</h3>
-        <p><strong>Ciclo Escolar:</strong> {{ inscripcion.ciclo }}</p>
-        <p><strong>Grado:</strong> {{ inscripcion.nombreGrado }}</p>
-        <p><strong>Grupo:</strong> {{ inscripcion.nombreGrupo }}</p>
+        <div *ngIf="inscripcion">
+          <hr>
+          <h3>Datos de Inscripción</h3>
+          <p><strong>Ciclo Escolar:</strong> {{ inscripcion.ciclo }}</p>
+          <p><strong>Grado:</strong> {{ inscripcion.nombreGrado }}</p>
+          <p><strong>Grupo:</strong> {{ inscripcion.nombreGrupo }}</p>
+        </div>
+
+        <div *ngIf="tutor">
+          <p><strong>Nombre del Tutor:</strong> {{ tutor.nombreTutor }}</p>
+        </div>
       </div>
-      <div *ngIf="tutor"> <p><strong>Nombre del Tutor:</strong> {{ tutor.nombreTutor }}</p></div>
     </div>
   </div>
-</div>
-<!-- Tarjeta Inscripción Reciente -->
-<div *ngIf="inscripcion; else cargandoInscripcion" class="inscripcion-card">
-  <div class="card-content">
-    <div class="profile-icon"></div>
-    <div class="info-text">
-      <h2>Docente a Cargo</h2>
-      <p><strong>Nombre:</strong> {{ inscripcion.nombreProfesorCompleto }}</p>
-      <p><strong>Teléfono :</strong> {{ inscripcion.telefonoProfesor }}</p>
-      
+
+  <!-- Tarjeta Inscripción Reciente -->
+  <div *ngIf="inscripcion; else cargandoInscripcion" class="inscripcion-card card">
+    <div class="card-content">
+      <div class="profile-icon small-icon" role="img" aria-label="Foto docente"></div>
+      <div class="info-text">
+        <h2>Docente a Cargo</h2>
+        <p><strong>Nombre:</strong> {{ inscripcion.nombreProfesorCompleto }}</p>
+        <p><strong>Teléfono :</strong> {{ inscripcion.telefonoProfesor }}</p>
+      </div>
     </div>
   </div>
 </div>

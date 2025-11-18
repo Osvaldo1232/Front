@@ -1,29 +1,64 @@
-.info-personal-card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  max-width: 1000px;
-  margin: 30px auto;
-  font-family: 'Segoe UI', sans-serif;
-}
-.inscripcion-card{
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  max-width: 1000px;
-  margin: 30px auto;
-  font-family: 'Segoe UI', sans-serif;
+// Variables (puedes ajustarlas)
+$bg: #ffffff;
+$card-radius: 12px;
+$shadow: 0 6px 18px rgba(0,0,0,0.08);
+$muted: #6b6b6b;
+$accent-border: #e6eef9;
+
+// Breakpoints
+$bp-sm: 0;        // mobile
+$bp-md: 600px;    // tablet
+$bp-lg: 1024px;   // desktop
+
+.cards-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 16px;
+
+  // En mobile: stack vertical
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+
+  @media (min-width: $bp-lg) {
+    // En desktop: dos columnas (info personal + inscripción)
+    grid-template-columns: 1fr 380px;
+    align-items: start;
+    gap: 22px;
+  }
+
+  .card {
+    background: $bg;
+    border-radius: $card-radius;
+    box-shadow: $shadow;
+    padding: 16px;
+    font-family: 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: transform .18s ease, box-shadow .18s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+  }
 }
 
+/* Contenido de la tarjeta */
 .card-content {
   display: flex;
+  gap: 18px;
   align-items: flex-start;
-  gap: 30px;
+  flex-wrap: nowrap;
+
+  // En pantallas pequeñas permite que la foto y texto se alineen verticalmente si el ancho es muy pequeño
+  @media (max-width: 420px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
-/* Ícono circular tipo perfil */
+/* Icono circular tipo perfil */
 .profile-icon {
   width: 120px;
   height: 120px;
@@ -32,36 +67,89 @@
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
-  border: 2px solid #ccc;
+  border: 2px solid $accent-border;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+/* tamaño alterno para tarjetas secundarias */
+.small-icon {
+  width: 88px;
+  height: 88px;
+}
+
+/* Ajustes responsivos del icono */
+@media (max-width: 420px) {
+  .profile-icon { width: 96px; height: 96px; }
+  .small-icon { width: 80px; height: 80px; }
+}
+
+@media (min-width: $bp-md) and (max-width: $bp-lg  ) {
+  .profile-icon { width: 110px; height: 110px; }
 }
 
 /* Contenedor de texto */
 .info-text {
   flex: 1;
+  min-width: 0; // para que el texto haga wrap correctamente
 }
 
 .info-text h2 {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
+  font-size: 1.4rem;
+  margin: 0 0 8px 0;
+  color: #1f2937;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.info-text h3 {
+  font-size: 1.05rem;
+  margin: 10px 0 6px 0;
   color: #333;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 5px;
 }
 
 .info-text p {
-  margin: 8px 0;
-  font-size: 1rem;
-  color: #444;
+  margin: 6px 0;
+  font-size: 0.98rem;
+  color: $muted;
+  line-height: 1.4;
+  word-wrap: break-word;
 }
 
+/* Resaltar label */
 .info-text strong {
-  color: #222;
+  color: #111827;
 }
 
-/* Estilo para el mensaje de carga */
+/* Línea divisoria */
+.card hr {
+  border: none;
+  border-top: 1px solid #f0f2f5;
+  margin: 10px 0;
+}
+
+/* Pequeñas optimizaciones para tablet/desktop */
+@media (min-width: $bp-md) {
+  .info-text h2 { font-size: 1.5rem; }
+  .info-text p { font-size: 1rem; }
+}
+
+/* Desktop: más espacio y tipografía mayor */
+@media (min-width: $bp-lg) {
+  .card { padding: 22px; }
+  .info-text h2 { font-size: 1.6rem; }
+  .info-text p { font-size: 1.02rem; }
+}
+
+/* Accessibility / print */
+@media print {
+  .profile-icon { display: none; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+}
+
+/* Estado de carga (si usas clase cargando) */
 .cargando {
   text-align: center;
-  font-size: 1.2rem;
-  color: #666;
-  padding: 20px;
+  font-size: 1.05rem;
+  color: $muted;
+  padding: 18px;
 }
