@@ -11,7 +11,7 @@
         <p><strong>Fecha de Nacimiento:</strong> {{ alumno.fechaNacimiento }}</p>
         <p><strong>Matrícula:</strong> {{ alumno.matricula }}</p>
         <p><strong>Email:</strong> {{ alumno.email }}</p>
-        <p><strong>Sexo:</strong> {{ alumno.sexo }}</p>
+        <p><strong>Sexo:</strong> {{ alumno.sexo ==="FEMENINO"?"Femenino": "Masculino"}}</p>
 
         <div *ngIf="inscripcion">
           <hr>
