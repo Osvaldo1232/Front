@@ -37,9 +37,17 @@ header {
 .toggle-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 26px;
   cursor: pointer;
   color: #2d0404;
+  display: none;   // Oculto en escritorio
+}
+
+/* Mostrar botón en móvil y tablet */
+@media (max-width: 1024px) {
+  .toggle-button {
+    display: block;
+  }
 }
 
 .header-right {
@@ -60,23 +68,33 @@ header {
   background-color: #2d0404;
   color: white;
   transition: transform 0.3s ease-in-out;
+  position: relative;
 }
 
-/* Por defecto oculta en móvil */
-@media (max-width: 768px) {
+/* Escritorio: menú siempre visible */
+@media (min-width: 1025px) {
+  .sidebar {
+    transform: translateX(0) !important;
+    position: relative;
+  }
+}
+
+/* MÓVIL & TABLET: menú oculto inicialmente */
+@media (max-width: 1024px) {
   .sidebar {
     position: fixed;
     top: 60px;
     left: 0;
     height: calc(100% - 60px);
-    transform: translateX(-100%);
+    transform: translateX(-100%);  // escondido
     z-index: 1001;
   }
 
   .sidebar.active {
-    transform: translateX(0);
+    transform: translateX(0);      // mostrar
   }
 
+  /* Overlay */
   .overlay {
     position: fixed;
     top: 60px;
@@ -88,7 +106,7 @@ header {
   }
 }
 
-/* Enlaces del menú */
+/* LINKS */
 .sidebar ul {
   list-style: none;
   padding: 0;

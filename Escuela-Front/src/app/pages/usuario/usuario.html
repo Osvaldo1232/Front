@@ -3,34 +3,59 @@
     <span>Panel de Control</span>
     <button class="toggle-button" (click)="toggleSidebar()">☰</button>
   </div>
+
   <div class="header-right">
-     {{ usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno }}
+    {{ usuario.nombre }} {{ usuario.apellidoPaterno }} {{ usuario?.apellidoMaterno }}
   </div>
 </header>
 
 <div class="layout">
-  <!-- Sidebar -->
+
+  <!-- SIDEBAR -->
   <nav class="sidebar" [class.active]="sidebarVisible">
     <div class="profile-section">
       <img src="assets/img/perfil.png" alt="Perfil" class="profile-image">
-      <p class="profile-name">{{this.usuario.nombre}}</p>
-      <p class="profile-role">{{rolUsuario}}</p>
+      <p class="profile-name">{{ usuario.nombre }}</p>
+      <p class="profile-role">{{ rolUsuario }}</p>
     </div>
 
     <ul>
-      <li><a routerLink="calificaciones" routerLinkActive="active">Calificaciones</a></li>
-      <li><a routerLink="info-personal" routerLinkActive="active">Información Personal</a></li>
-      <li><a routerLink="historial" routerLinkActive="active">Historial</a></li>
-      
-      <li><a (click)="logout()">Salir</a></li>
+      <li>
+        <a routerLink="calificaciones"
+           routerLinkActive="active"
+           (click)="toggleSidebar()">
+          Calificaciones
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="info-personal"
+           routerLinkActive="active"
+           (click)="toggleSidebar()">
+          Información Personal
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="historial"
+           routerLinkActive="active"
+           (click)="toggleSidebar()">
+          Historial
+        </a>
+      </li>
+
+      <li>
+        <a (click)="logout()">Salir</a>
+      </li>
     </ul>
   </nav>
 
-  <!-- Overlay (solo móvil) -->
+  <!-- OVERLAY (solo cuando sidebar está abierto en móvil) -->
   <div class="overlay" *ngIf="sidebarVisible" (click)="toggleSidebar()"></div>
 
-  <!-- Contenido principal -->
+  <!-- CONTENIDO PRINCIPAL -->
   <div class="main-content">
     <router-outlet></router-outlet>
   </div>
+
 </div>

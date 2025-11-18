@@ -10,22 +10,19 @@ $bp-sm: 0;        // mobile
 $bp-md: 600px;    // tablet
 $bp-lg: 1024px;   // desktop
 
+/* CONTENEDOR PRINCIPAL */
 .cards-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 900px;       // Ajustado para una columna limpia
   margin: 24px auto;
   padding: 16px;
 
-  // En mobile: stack vertical
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr; // <-- SIEMPRE una sola columna
   gap: 18px;
 
   @media (min-width: $bp-lg) {
-    // En desktop: dos columnas (info personal + inscripción)
-    grid-template-columns: 1fr 380px;
-    align-items: start;
-    gap: 22px;
+    grid-template-columns: 1fr; // <-- también una sola columna en desktop
   }
 
   .card {
@@ -50,11 +47,11 @@ $bp-lg: 1024px;   // desktop
   align-items: flex-start;
   flex-wrap: nowrap;
 
-  // En pantallas pequeñas permite que la foto y texto se alineen verticalmente si el ancho es muy pequeño
+  /* Responsivo para teléfonos */
   @media (max-width: 420px) {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: center;   // <-- Solo el icono se centra
+    text-align: left;      // <-- El texto sigue a la izquierda
   }
 }
 
@@ -71,7 +68,7 @@ $bp-lg: 1024px;   // desktop
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-/* tamaño alterno para tarjetas secundarias */
+/* Tamaño alterno para tarjetas secundarias */
 .small-icon {
   width: 88px;
   height: 88px;
@@ -79,12 +76,22 @@ $bp-lg: 1024px;   // desktop
 
 /* Ajustes responsivos del icono */
 @media (max-width: 420px) {
-  .profile-icon { width: 96px; height: 96px; }
-  .small-icon { width: 80px; height: 80px; }
+  .profile-icon {
+    width: 96px;
+    height: 96px;
+  }
+
+  .small-icon {
+    width: 80px;
+    height: 80px;
+  }
 }
 
-@media (min-width: $bp-md) and (max-width: $bp-lg  ) {
-  .profile-icon { width: 110px; height: 110px; }
+@media (min-width: $bp-md) and (max-width: $bp-lg) {
+  .profile-icon {
+    width: 110px;
+    height: 110px;
+  }
 }
 
 /* Contenedor de texto */
@@ -129,24 +136,39 @@ $bp-lg: 1024px;   // desktop
 
 /* Pequeñas optimizaciones para tablet/desktop */
 @media (min-width: $bp-md) {
-  .info-text h2 { font-size: 1.5rem; }
-  .info-text p { font-size: 1rem; }
+  .info-text h2 {
+    font-size: 1.5rem;
+  }
+  .info-text p {
+    font-size: 1rem;
+  }
 }
 
 /* Desktop: más espacio y tipografía mayor */
 @media (min-width: $bp-lg) {
-  .card { padding: 22px; }
-  .info-text h2 { font-size: 1.6rem; }
-  .info-text p { font-size: 1.02rem; }
+  .card {
+    padding: 22px;
+  }
+  .info-text h2 {
+    font-size: 1.6rem;
+  }
+  .info-text p {
+    font-size: 1.02rem;
+  }
 }
 
-/* Accessibility / print */
+/* Impresión */
 @media print {
-  .profile-icon { display: none; }
-  .card { box-shadow: none; border: 1px solid #ddd; }
+  .profile-icon {
+    display: none;
+  }
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
 }
 
-/* Estado de carga (si usas clase cargando) */
+/* Estado de carga */
 .cargando {
   text-align: center;
   font-size: 1.05rem;
