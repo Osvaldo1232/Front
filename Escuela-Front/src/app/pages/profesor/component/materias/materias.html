@@ -8,19 +8,11 @@
   <div class="card p-4 mb-5 shadow-lg form-card-padding">
     <div class="info-docente-container" *ngIf="asignacionDocente && !cargando">
 
-      <div class="info-item">
-        <label>Grado</label>
-        <p>{{ asignacionDocente.nombreGrado }}</p>
-      </div>
 
-      <div class="info-item">
-        <label>Grupo</label>
-        <p>{{ asignacionDocente.nombreGrupo }}</p>
-      </div>
-
-      <div class="info-item">
-        <label>Ciclo</label>
-        <p>{{ asignacionDocente.ciclo }}</p>
+        <div class="right-section text-center text-md-start">
+        <strong>Grado:</strong>  {{ asignacionDocente.nombreGrado }} |  
+        <strong>Grupo:</strong>  {{ asignacionDocente.nombreGrupo }} |   
+        <strong>Ciclo:</strong>  {{ asignacionDocente.ciclo }}
       </div>
 
     </div>

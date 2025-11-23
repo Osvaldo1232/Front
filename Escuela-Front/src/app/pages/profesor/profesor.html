@@ -1,34 +1,33 @@
 <header>
   <div class="header-left">
-    <span>Panel de Control</span>
     <button class="toggle-button" (click)="toggleSidebar()">☰</button>
+    <span>Panel de Control</span>
   </div>
   <div class="header-right">
-   {{ usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno }}
+    {{ usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno }}
 
   </div>
 </header>
 
 <div class="layout">
-  <nav class="sidebar" *ngIf="sidebarVisible">
-    <div class="profile-section">
-    <img src="assets/img/perfil.png" alt="Perfil" class="profile-image">
-    <p class="profile-name">{{this.usuario.nombre}}</p>
-    <p class="profile-role">{{rolUsuario}}</p>
-  </div>
+  <nav class="sidebar" [class.hidden]="!sidebarVisible">
+    <div class="sidebar-content">
+      <div class="profile-section">
 
- 
-
-    <ul>
-      <li><a routerLink="inicio" routerLinkActive="active">Inicio</a></li>
-      <li><a routerLink="datos-personales" routerLinkActive="active">Datos Personales</a></li>
-      <li><a routerLink="materias" routerLinkActive="active">Materias</a></li> 
-      <li><a routerLink="alumnoss" routerLinkActive="active">Alumnos</a></li>
-      <li><a routerLink="Historial-academico" routerLinkActive="active">Historial Academico</a></li>
-      <li><a routerLink="Historial-alumno" routerLinkActive="active">Historial Academico Alumno</a></li>
-
-      <li><a (click)="logout()">Salir</a></li>
-    </ul>
+        <img src="assets/img/perfil.png" alt="Perfil" class="profile-image">
+        <p class="profile-name">{{ usuario.nombre }} {{ usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}}</p>
+        <p class="profile-role">{{rolUsuario}}</p>
+      </div>
+      <ul>
+        <li><a routerLink="inicio" routerLinkActive="active">Inicio</a></li>
+        <li><a routerLink="datos-personales" routerLinkActive="active" (click)="closeSidebar()">Datos Personales</a></li>
+        <li><a routerLink="materias" routerLinkActive="active" (click)="closeSidebar()">Materias</a></li>
+        <li><a routerLink="alumnoss" routerLinkActive="active" (click)="closeSidebar()">Alumnos</a></li>
+        <li><a routerLink="Historial-academico" routerLinkActive="active" (click)="closeSidebar()">Historial Academico</a></li>
+        <li><a routerLink="Historial-alumno" routerLinkActive="active" (click)="closeSidebar()">Historial Academico Alumno</a></li>
+        <li><a (click)="logout()">Salir</a></li>
+      </ul>
+    </div>
   </nav>
 
   <div class="main-content">

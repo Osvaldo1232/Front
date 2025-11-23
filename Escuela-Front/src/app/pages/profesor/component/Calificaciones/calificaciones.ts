@@ -210,14 +210,15 @@ export class CalificacionesComponent implements OnInit {
   validarYLimitarInput(event: any, alumno: AlumnoCalificacion, trimestre: number): void {
     let valor = event.target.value;
     valor = valor.replace(/[^0-9.]/g, '');
+    
     const partes = valor.split('.');
     if (partes.length > 2) {
       valor = partes[0] + '.' + partes.slice(1).join('');
     }
 
-    // Limitar a 2 decimales
-    if (partes.length === 2 && partes[1].length > 2) {
-      valor = partes[0] + '.' + partes[1].substring(0, 2);
+    // Limitar a 1 decimal
+    if (partes.length === 2 && partes[1].length > 1) {
+      valor = partes[0] + '.' + partes[1].substring(0, 1);
     }
 
     let numero = parseFloat(valor);
@@ -244,9 +245,9 @@ export class CalificacionesComponent implements OnInit {
 
   convertirCalificacionALetras(calificacion: number | null): string {
     if (calificacion === null || calificacion === undefined) return '';
-    if (!Number.isInteger(calificacion)) {
-      return calificacion.toFixed(2);
-    }
+    
+    const parteEntera = Math.floor(calificacion);
+    const parteDecimal = Math.round((calificacion - parteEntera) * 10);
 
     const numerosALetras: { [key: number]: string } = {
       0: 'Cero',
@@ -262,7 +263,44 @@ export class CalificacionesComponent implements OnInit {
       10: 'Diez'
     };
 
-    return numerosALetras[calificacion] || calificacion.toString();
+    let resultado = numerosALetras[parteEntera] || calificacion.toString();
+    
+    if (parteDecimal > 0) {
+      resultado += ` punto ${numerosALetras[parteDecimal] || ''}`;
+    }
+    
+    return resultado;
+  }
+
+  convertirPromedioALetras(promedio: number | null): string {
+    if (promedio === null || promedio === undefined) return '';
+    
+    const promedioRedondeado = Math.round(promedio * 10) / 10;
+    
+    const parteEntera = Math.floor(promedioRedondeado);
+    const parteDecimal = Math.round((promedioRedondeado - parteEntera) * 10);
+    
+    const numerosALetras: { [key: number]: string } = {
+      0: 'cero',
+      1: 'uno',
+      2: 'dos',
+      3: 'tres',
+      4: 'cuatro',
+      5: 'cinco',
+      6: 'seis',
+      7: 'siete',
+      8: 'ocho',
+      9: 'nueve',
+      10: 'diez'
+    };
+    
+    let resultado = numerosALetras[parteEntera] || '';
+    
+    if (parteDecimal > 0) {
+      resultado += ` punto ${numerosALetras[parteDecimal] || ''}`;
+    }
+    
+    return resultado.charAt(0).toUpperCase() + resultado.slice(1);
   }
 
   calcularPromedioFinal(alumno: AlumnoCalificacion): number | null {
@@ -276,7 +314,9 @@ export class CalificacionesComponent implements OnInit {
 
     const suma = calificaciones.reduce((acc, cal) => acc + cal, 0);
     const promedio = suma / calificaciones.length;
-    return Math.floor(promedio * 100) / 100;
+    
+    // Redondear a 1 decimal
+    return Math.round(promedio * 10) / 10;
   }
 
   puedeEditarTrimestre1(alumno: AlumnoCalificacion): boolean {
@@ -349,7 +389,6 @@ export class CalificacionesComponent implements OnInit {
     }
 
     const alumnosOrdenIncorrecto = this.alumnosCalificaciones.filter(alumno => {
-
       if ((alumno.calificacionT2 !== null && alumno.calificacionT2 !== undefined) &&
         (alumno.calificacionT1 === null || alumno.calificacionT1 === undefined)) {
         return true;
@@ -400,8 +439,6 @@ export class CalificacionesComponent implements OnInit {
           }
 
           calificacionesAGuardar.push(payload);
-        } else {
-          console.warn('Calificación duplicada detectada y omitida:', key);
         }
       }
 
@@ -425,8 +462,6 @@ export class CalificacionesComponent implements OnInit {
           }
 
           calificacionesAGuardar.push(payload);
-        } else {
-          console.warn('Calificación duplicada detectada y omitida:', key);
         }
       }
 
@@ -450,8 +485,6 @@ export class CalificacionesComponent implements OnInit {
           }
 
           calificacionesAGuardar.push(payload);
-        } else {
-          console.warn('Calificación duplicada detectada y omitida:', key);
         }
       }
     });
@@ -487,12 +520,9 @@ export class CalificacionesComponent implements OnInit {
       },
       error: (err) => {
         this.loadingService.hide();
-
         console.error('Error al guardar calificaciones:', err);
-        console.error('Respuesta del servidor:', err.error);
-
         this.alertService.show(
-          'Error al guardar las calificaciones. Revise la consola para más detalles.',
+          'Error al guardar las calificaciones.',
           'danger',
           'Error'
         );

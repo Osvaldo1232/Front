@@ -7,6 +7,7 @@ import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from "../../../../shared/loading/loading";
 import { LoginService } from '../../../../services/login-service';
 import { HistorialAlumno } from '../../../../models/HistorialAcademicoAlumno';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-historial-alumno-acdemico',
@@ -22,20 +23,15 @@ export class HistorialAlumnoAcdemico implements OnInit {
   historialAlumno: HistorialAlumno | null = null;
   idUsuario: string = '';
 
-  constructor(
-    private servicioDirectorAsignacion: ServiciosProfesor,
-    private loginService: LoginService,
-    private loadingService: LoadingService,
+  constructor(private servicioDirectorAsignacion: ServiciosProfesor, private loginService: LoginService,private loadingService: LoadingService,
     private AlertService: AlertService
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.show();
     this.idUsuario = this.loginService.Usuario(); 
 
     if (!this.idUsuario) {
       console.error('No se encontró usuario logueado');
-      this.loadingService.hide();
       this.AlertService.show('No se encontró usuario logueado', 'danger', 'Error');
       return;
     }
@@ -44,7 +40,11 @@ export class HistorialAlumnoAcdemico implements OnInit {
   }
 
   cargarCombos(): void {
-    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).subscribe({
+    this.loadingService.show();
+
+    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
       next: (data) => {
         console.log('Ciclos obtenidos:', data);
         this.ciclos = data;
@@ -54,12 +54,11 @@ export class HistorialAlumnoAcdemico implements OnInit {
           this.cicloEscolar = cicloActual.id;
           this.cargarAlumnos();
         } else {
-          this.loadingService.hide();
+          this.AlertService.show('No se encontraron ciclos escolares', 'warning', 'Información');
         }
       },
       error: (err) => {
         console.error('Error al cargar ciclos', err);
-        this.loadingService.hide();
         this.AlertService.show('Error al cargar los ciclos escolares', 'danger', 'Error');
       }
     });
@@ -98,7 +97,9 @@ export class HistorialAlumnoAcdemico implements OnInit {
     }
 
     this.loadingService.show();
-    this.servicioDirectorAsignacion.filtrarInscripciones2(this.cicloEscolar).subscribe({
+    this.servicioDirectorAsignacion.obtenerAlumnosConIdPorCiclo(this.cicloEscolar, this.idUsuario).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
       next: (alumnos) => {
         console.log('Alumnos obtenidos completos:', alumnos);
         
@@ -108,7 +109,6 @@ export class HistorialAlumnoAcdemico implements OnInit {
         }
         
         this.alumnos = alumnos || [];
-        this.loadingService.hide();
 
         if (this.alumnos.length === 0) {
           this.AlertService.show('No se encontraron alumnos para el ciclo seleccionado', 'warning', 'Información');
@@ -116,7 +116,6 @@ export class HistorialAlumnoAcdemico implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar alumnos', err);
-        this.loadingService.hide();
         this.AlertService.show('Error al cargar los alumnos', 'danger', 'Error');
       }
     });
@@ -129,11 +128,13 @@ export class HistorialAlumnoAcdemico implements OnInit {
     });
 
     this.loadingService.show();
-    this.servicioDirectorAsignacion.obtenerHistorialAlumnoPorCiclo(this.alumnoSeleccionado, this.cicloEscolar).subscribe({
+    
+    this.servicioDirectorAsignacion.obtenerHistorialAlumnoPorCiclo(this.alumnoSeleccionado, this.cicloEscolar).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
       next: (historial) => {
         console.log('Historial recibido:', historial);
         this.historialAlumno = historial;
-        this.loadingService.hide();
 
         if (!historial.camposFormativos || historial.camposFormativos.length === 0) {
           this.AlertService.show('El alumno no tiene campos formativos registrados en este ciclo', 'warning', 'Sin calificaciones');
@@ -141,8 +142,6 @@ export class HistorialAlumnoAcdemico implements OnInit {
       },
       error: (err) => {
         console.error('Error al obtener historial:', err);
-        console.error('Status:', err.status);
-        this.loadingService.hide();
         
         if (err.status === 403) {
           this.AlertService.show('No tiene permisos para acceder a esta información', 'danger', 'Error de permisos');
@@ -165,7 +164,7 @@ export class HistorialAlumnoAcdemico implements OnInit {
     const nombre = alumno.nombre || '';
     const apellidoP = alumno.apellidoPaterno || '';
     const apellidoM = alumno.apellidoMaterno || '';
-    return `${nombre} ${apellidoP} ${apellidoM}`.trim();
+    return `${nombre} ${apellidoP} ${apellidoM}`.trim() || 'Sin nombre';
   }
 
   obtenerIdAlumno(alumno: any): string {

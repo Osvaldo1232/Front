@@ -50,7 +50,7 @@ export class Materias implements OnInit {
       error: (err) => {
         this.loadingService.hide();
         this.AlertService.show(
-          'Actualmente, el profesor no tiene asignación registrada.',
+          'Actualmente, el profesor no tiene Materias registrada.',
           'danger',
           'Error'
         );

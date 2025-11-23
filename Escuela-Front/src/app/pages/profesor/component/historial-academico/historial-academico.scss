@@ -1,3 +1,8 @@
+@use "sass:color";
+$color-vino: #530909; 
+$color-gris-secundario: #6c757d; 
+$color-gris-texto: #495057; 
+
 .historial-container {
   padding: 2rem;
   max-width: 1400px;
@@ -87,6 +92,69 @@
       }
     }
   }
+  .pagination-vino {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0;
+    
+    @media (max-width: 575.98px) {
+        font-size: 0.875rem;
+    }
+    
+    .page-item {
+        &.active .page-link {
+            background-color: $color-vino; 
+            border-color: $color-vino;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .page-link {
+            color: $color-gris-secundario; 
+            border-color: #dee2e6;
+            transition: all 0.2s;
+            
+            @media (max-width: 575.98px) {
+                padding: 0.375rem 0.625rem;
+            }
+
+            &:hover {
+                background-color: color.adjust($color-vino, $lightness: 50%);
+                border-color: $color-vino;
+                color: $color-vino;
+            }
+        }
+        
+        &.disabled .page-link {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #6c757d;
+            cursor: not-allowed;
+            
+            &:hover {
+                background-color: #f8f9fa;
+                border-color: #dee2e6;
+                color: #6c757d;
+            }
+        }
+    }
+}
+
+// Texto del contador de registros
+.text-center.text-muted {
+    white-space: nowrap;
+    font-size: 0.875rem;
+    
+    @media (max-width: 575.98px) {
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+    }
+}
+
+// Row alternate
+.row-alternate {
+    background-color: #f8f9fa;
+}
 
   .spinner-container {
     display: flex;

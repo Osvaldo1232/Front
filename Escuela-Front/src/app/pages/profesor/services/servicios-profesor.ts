@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CalificacionRegistro, CalificacionResponse } from '../../../models/calificacion';
 import { Profesor } from '../../../models/Profesor';
 import { MateriasCamposFormativos } from '../../../models/AsignaciónMateria';
 import { AlumnoCiclo, InscripcionDTO } from '../../../models/Materia';
@@ -48,8 +47,11 @@ export class ServiciosProfesor {
     return this.http.get<AlumnoCiclo[]>(`${this.apiUrlBase}/inscripcion/alumnos/${cicloId}`);
   }
 
-  filtrarInscripciones2(cicloId: string): Observable<RegistroHistorial[]> {
-    return this.http.get<[RegistroHistorial]>(`${this.apiUrlBase}/calificaciones-finales/promedio/ciclo/${cicloId}`);
+  filtrarInscripciones2(cicloId: string, docenteId: string): Observable<RegistroHistorial[]> {
+    const params = new HttpParams()
+      .set('cicloId', cicloId)
+      .set('docenteId', docenteId);
+    return this.http.get<RegistroHistorial[]>(`${this.apiUrlBase}/calificaciones-finales/promedio/ciclo/${cicloId}`,{ params });
   }
 
   obtenerGradosUno(): Observable<any[]> {
@@ -100,8 +102,11 @@ export class ServiciosProfesor {
       { params }
     );
   }
-  obtenerAlumnosConIdPorCiclo(cicloId: string): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrlBase}/alumnos/por-ciclo/${cicloId}`);
+  obtenerAlumnosConIdPorCiclo(cicloId: string, docenteId: string): Observable<any[]> {
+  const params = new HttpParams()
+    .set('cicloId', cicloId)
+    .set('docenteId', docenteId);
+  return this.http.get<any[]>(`${this.apiUrlBase}/alumnos/por-ciclo-docente`, { params });
 }
 
   obtenerHistorialAlumnoPorCiclo(idAlumno: string, idCiclo: string): Observable<HistorialAlumno> {

@@ -11,7 +11,6 @@
             <div class="col-md-4 col-sm-6">
                 <label for="ciclo" class="form-label required-label">Ciclo:*</label>
                 <select id="ciclo" class="form-select" [(ngModel)]="cicloEscolar" (change)="onCicloChange()">
-                    <option value="">Seleccione un ciclo</option>
                     <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
                         {{ ciclo.nombre }}
                     </option>

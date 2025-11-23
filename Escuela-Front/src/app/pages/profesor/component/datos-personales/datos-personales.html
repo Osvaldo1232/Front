@@ -1,7 +1,7 @@
-<div class="perfil-card" *ngIf="usuario">
+<div class="perfil-card">
     <h2 class="titulo-pagina">DATOS PERSONALES</h2>
     
-    <div class="contenido-perfil">
+    <div class="contenido-perfil" *ngIf="usuario && usuario.id">
         <div class="seccion-avatar">
             <div class="avatar-circulo">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
@@ -10,8 +10,8 @@
                 </svg>
             </div>
             <h4 class="nombre-usuario">
-                {{ usuario.nombre | uppercase}}<br>
-                {{ usuario.apellidoPaterno | uppercase }}  {{ usuario.apellidoMaterno | uppercase }}
+                {{ usuario?.nombre | uppercase }}<br>
+                {{ usuario?.apellidoPaterno | uppercase }} {{ usuario?.apellidoMaterno | uppercase }}
             </h4>
         </div>
         <div class="seccion-info">
@@ -22,7 +22,7 @@
                     </svg>
                     <div>
                         <label>RFC</label>
-                        <p>{{ usuario.rfc }}</p>
+                        <p>{{ usuario?.rfc || 'No disponible' }}</p>
                     </div>
                 </div>
 
@@ -32,7 +32,7 @@
                     </svg>
                     <div>
                         <label>CLAVE PRESUPUESTAL</label>
-                        <p>{{ usuario.clavePresupuestal }}</p>
+                        <p>{{ usuario?.clavePresupuestal || 'No disponible' }}</p>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     </svg>
                     <div>
                         <label>NÚMERO DE TELÉFONO</label>
-                        <p>{{ usuario.telefono }}</p>
+                        <p>{{ usuario?.telefono || 'No disponible' }}</p>
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                     </svg>
                     <div>
                         <label>FECHA NACIMIENTO</label>
-                        <p>{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
+                        <p>{{ usuario?.fechaNacimiento ? (usuario.fechaNacimiento | date:'dd/MM/yyyy') : 'No disponible' }}</p>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     </svg>
                     <div>
                         <label>ESPECIALIDAD</label>
-                        <p>{{ usuario.especialidad }}</p>
+                        <p>{{ usuario?.especialidad || 'No disponible' }}</p>
                     </div>
                 </div>
 
@@ -80,17 +80,19 @@
                     </svg>
                     <div>
                         <label>GRADO / GRUPO ASIGNADO</label>
-                        <p>{{ usuario1.nombreGrado }} / {{ usuario1.nombreGrupo}}</p>
-                    </div>
+                        <p>{{ usuario1?.nombreGrado || 'Sin asignar' }} / {{ usuario1?.nombreGrupo || 'Sin asignar' }}</p>
+                     </div>
                 </div>
+            </div>
 
+             <div class="fila-info">
                 <div class="campo-info">
                     <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12.65 10C11.7 7.31 8.9 5.5 5.77 6.12c-2.29.46-4.15 2.29-4.63 4.58C.32 14.57 3.26 18 7 18c2.61 0 4.83-1.67 5.65-4H17v2c0 1.1.9 2 2 2s2-.9 2-2v-2c1.1 0 2-.9 2-2s-.9-2-2-2h-8.35zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
                     </svg>
                     <div>
                         <label>CORREO</label>
-                        <p>{{ usuario.email }}</p>
+                        <p>{{ usuario?.email || 'No disponible' }}</p>
                     </div>
                 </div>
                 <div class="campo-info">
@@ -100,14 +102,24 @@
                     </svg>
                     <div>
                         <label>CICLO</label>
-                        <p>{{ usuario1.ciclo }}</p>
+                        <p>{{ usuario1?.ciclo || 'No disponible' }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn-editar" (click)="editar(usuario)" title="Editar">Editar</button>
-    <app-modal-edicion-personales [registro]="registroParaEditar"(cerrar)="cerrarModal($event)"></app-modal-edicion-personales>
 
+    <div *ngIf="!usuario || !usuario.id" class="text-center py-5">
+        <p class="text-muted">No se encontraron datos del usuario</p>
+    </div>
+
+    <button class="btn-editar" (click)="editar(usuario)" title="Editar" *ngIf="usuario && usuario.id">Editar</button>
+    
+    <app-modal-edicion-personales 
+        *ngIf="registroParaEditar" 
+        [registro]="registroParaEditar"
+        (cerrar)="cerrarModal($event)">
+    </app-modal-edicion-personales>
 </div>
+
 <app-loading></app-loading>

@@ -7,17 +7,19 @@
   </div>
 
   <div class="card p-4 mb-4 shadow-lg form-card-padding">
-    <div class="row g-4">
-      <div class="col-12 d-flex justify-content-end align-items-end gap-3">
-        <button type="button" class="btn btn-action btn-limpiar" (click)="volver()">
-          Volver
-        </button>
-        <button type="button" class="btn btn-action btn-limpiar" [disabled]="modoEdicion" (click)="Editar()">
-          {{ modoEdicion ? '✓ Modo Edición Activo' : 'Editar' }}
-        </button>
-        <button type="button" class="btn btn-action btn-guardar" [disabled]="!modoEdicion" (click)="guardar()">
-          Guardar
-        </button>
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="d-flex justify-content-end gap-3">
+          <button type="button" class="btn btn-action btn-limpiar" (click)="volver()">
+            Volver
+          </button>
+          <button type="button" class="btn btn-action btn-limpiar" [disabled]="modoEdicion" (click)="Editar()">
+            {{ modoEdicion ? '✓ Modo Edición Activo' : 'Editar' }}
+          </button>
+          <button type="button" class="btn btn-action btn-guardar" [disabled]="!modoEdicion" (click)="guardar()">
+            Guardar
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -61,14 +63,14 @@
           </tr>
 
           <tr *ngFor="let alumno of alumnosPaginados">
-            <td class="fw-bold">{{ alumno.nombreAlumno }}</td>
+            <td class="fw-bold">{{ alumno?.nombreAlumno || 'Sin nombre' }}</td>
 
             <td>
               <div class="d-flex align-items-center gap-2">
                 <input type="text" class="form-control form-control-sm text-center"
                   [value]="alumno.calificacionT1 !== null ? alumno.calificacionT1 : ''"
                   (input)="validarYLimitarInput($event, alumno, 1)" [disabled]="!puedeEditarTrimestre1(alumno)"
-                  maxlength="2" placeholder="0" style="width: 60px;" />
+                  maxlength="4" placeholder="0" />
                 <small class="text-muted" *ngIf="alumno.calificacionT1 !== null">
                   /{{ convertirCalificacionALetras(alumno.calificacionT1) }}
                 </small>
@@ -80,9 +82,8 @@
                 <input type="text" class="form-control form-control-sm text-center"
                   [value]="alumno.calificacionT2 !== null ? alumno.calificacionT2 : ''"
                   (input)="validarYLimitarInput($event, alumno, 2)" [disabled]="!puedeEditarTrimestre2(alumno)"
-                  [class.bg-light]="!puedeEditarTrimestre2(alumno)" maxlength="2" placeholder="0"
-                  [title]="!puedeEditarTrimestre2(alumno) ? 'Debe calificar el Trimestre 1 primero' : ''"
-                  style="width: 60px;" />
+                  [class.bg-light]="!puedeEditarTrimestre2(alumno)" maxlength="4" placeholder="0"
+                  [title]="!puedeEditarTrimestre2(alumno) ? 'Debe calificar el Trimestre 1 primero' : ''" />
                 <small class="text-muted" *ngIf="alumno.calificacionT2 !== null">
                   /{{ convertirCalificacionALetras(alumno.calificacionT2) }}
                 </small>
@@ -97,9 +98,8 @@
                 <input type="text" class="form-control form-control-sm text-center"
                   [value]="alumno.calificacionT3 !== null ? alumno.calificacionT3 : ''"
                   (input)="validarYLimitarInput($event, alumno, 3)" [disabled]="!puedeEditarTrimestre3(alumno)"
-                  [class.bg-light]="!puedeEditarTrimestre3(alumno)" maxlength="2" placeholder="0"
-                  [title]="!puedeEditarTrimestre3(alumno) ? 'Debe calificar el Trimestre 1 y 2 primero' : ''"
-                  style="width: 60px;" />
+                  [class.bg-light]="!puedeEditarTrimestre3(alumno)" maxlength="4" placeholder="0"
+                  [title]="!puedeEditarTrimestre3(alumno) ? 'Debe calificar el Trimestre 1 y 2 primero' : ''" />
                 <small class="text-muted" *ngIf="alumno.calificacionT3 !== null">
                   /{{ convertirCalificacionALetras(alumno.calificacionT3) }}
                 </small>
@@ -112,8 +112,9 @@
             <td class="fw-bold text-center" [class.text-success]="alumno.promedioFinal && alumno.promedioFinal >= 6"
               [class.text-danger]="alumno.promedioFinal && alumno.promedioFinal < 6">
               <div *ngIf="alumno.promedioFinal !== null">
-                <div>{{ alumno.promedioFinal }}</div>
+                <div>{{ alumno.promedioFinal | number:'1.1-1' }}</div>
                 <small class="text-muted d-block" style="font-size: 0.75rem;">
+                  {{ convertirPromedioALetras(alumno.promedioFinal) }}
                 </small>
               </div>
               <span *ngIf="alumno.promedioFinal === null">-</span>
@@ -123,7 +124,7 @@
       </table>
     </div>
 
-    <div class="d-flex justify-content-center mt-4" *ngIf="!cargando && alumnosFiltrados.length > 0">
+    <div class="d-flex justify-content-center mt-4 gap-3" *ngIf="!cargando && alumnosFiltrados.length > 0">
       <nav aria-label="Paginación de registros">
         <ul class="pagination pagination-standard shadow-sm">
           <li class="page-item" [class.disabled]="paginaActual === 1">
@@ -146,12 +147,12 @@
           </li>
         </ul>
       </nav>
-    </div>
 
-    <div class="text-center text-muted mt-3" *ngIf="!cargando && alumnosFiltrados.length > 0">
-      Mostrando {{ (paginaActual - 1) * registrosPorPagina + 1 }} -
-      {{ Math.min(paginaActual * registrosPorPagina, alumnosFiltrados.length) }}
-      de {{ alumnosFiltrados.length }} alumnos
+      <div class="text-center text-muted">
+        Mostrando {{ (paginaActual - 1) * registrosPorPagina + 1 }} -
+        {{ Math.min(paginaActual * registrosPorPagina, alumnosFiltrados.length) }}
+        de {{ alumnosFiltrados.length }} alumnos
+      </div>
     </div>
   </div>
 </div>

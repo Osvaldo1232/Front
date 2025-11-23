@@ -7,6 +7,7 @@ import { ServiciosProfesor } from '../../services/servicios-profesor';
 import { AlertService } from '../../../../shared/alert-service';
 import { Loading } from "../../../../shared/loading/loading";
 import { LoginService } from '../../../../services/login-service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-historial-academico',
@@ -18,7 +19,13 @@ export class HistorialAcademico implements OnInit {
   ciclos: any[] = [];
   cicloEscolar: string = '';
   inscripciones: RegistroHistorial[] = [];
+  inscripcionesFiltradas: RegistroHistorial[] = [];
+  inscripcionesPaginadas: RegistroHistorial[] = [];
   idUsuario: string = '';
+  paginaActual = 1;
+  totalPaginas = 1;
+  registrosPorPagina = 10;
+  Math = Math;
 
   constructor(
     private servicioDirectorAsignacion: ServiciosProfesor,
@@ -28,13 +35,11 @@ export class HistorialAcademico implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.show();
-
     this.idUsuario = this.loginService.Usuario(); 
 
     if (!this.idUsuario) {
       console.error('No se encontró usuario logueado');
-      this.loadingService.hide();
+      this.AlertService.show('No se encontró usuario logueado', 'danger', 'Error');
       return;
     }
 
@@ -42,7 +47,11 @@ export class HistorialAcademico implements OnInit {
   }
 
   cargarCombos(): void {
-    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).subscribe({
+    this.loadingService.show();
+
+    this.servicioDirectorAsignacion.obtenerCiclos(this.idUsuario).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
       next: (data) => {
         this.ciclos = data;
 
@@ -51,13 +60,13 @@ export class HistorialAcademico implements OnInit {
         if (cicloActual) {
           this.cicloEscolar = cicloActual.id;
           this.buscar(false);
+        } else {
+          this.AlertService.show('No se encontraron ciclos escolares', 'warning', 'Información');
         }
-
-        this.loadingService.hide();
       },
       error: (err) => {
         console.error('Error al cargar ciclos', err);
-        this.loadingService.hide();
+        this.AlertService.show('Error al cargar los ciclos escolares', 'danger', 'Error');
       }
     });
   }
@@ -78,7 +87,7 @@ export class HistorialAcademico implements OnInit {
 
   buscar(mostrarLoading: boolean = true): void {
     if (!this.cicloEscolar) {
-      alert('Por favor, selecciona un ciclo escolar antes de buscar');
+      this.AlertService.show('Por favor, selecciona un ciclo escolar antes de buscar', 'warning', 'Advertencia');
       return;
     }
 
@@ -86,33 +95,47 @@ export class HistorialAcademico implements OnInit {
       this.loadingService.show();
     }
 
-    this.servicioDirectorAsignacion.filtrarInscripciones2(this.cicloEscolar).subscribe({
+    this.servicioDirectorAsignacion.filtrarInscripciones2(this.cicloEscolar, this.idUsuario).pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe({
       next: (inscripciones) => {
         this.inscripciones = inscripciones || [];
-        this.loadingService.hide();
+        this.inscripcionesFiltradas = [...this.inscripciones];
+        this.paginaActual = 1;
+        this.calcularPaginacion();
 
         if (!this.inscripciones.length) {
-          this.AlertService.show(
-            'Actualmente no se encontraron alumnos para los criterios seleccionados.',
-            'warning',
-            'Error'
-          );
+          this.AlertService.show('Actualmente no se encontraron alumnos para los criterios seleccionados.', 'warning', 'Sin resultados');
         }
       },
       error: (err) => {
         console.error('Error al obtener inscripciones', err);
-        this.loadingService.hide();
-        this.AlertService.show(
-          'Ocurrió un error al buscar los alumnos',
-          'danger',
-          'Error'
-        );
+        this.AlertService.show('Ocurrió un error al buscar los alumnos', 'danger', 'Error');
       }
     });
+  }
+
+  calcularPaginacion(): void {
+    this.totalPaginas = Math.ceil(this.inscripcionesFiltradas.length / this.registrosPorPagina);
+
+    const inicio = (this.paginaActual - 1) * this.registrosPorPagina;
+    const fin = inicio + this.registrosPorPagina;
+
+    this.inscripcionesPaginadas = this.inscripcionesFiltradas.slice(inicio, fin);
+  }
+
+  irAPagina(num: number): void {
+    if (num < 1 || num > this.totalPaginas) return;
+    this.paginaActual = num;
+    this.calcularPaginacion();
   }
 
   limpiar(): void {
     this.cicloEscolar = '';
     this.inscripciones = [];
+    this.inscripcionesFiltradas = [];
+    this.inscripcionesPaginadas = [];
+    this.paginaActual = 1;
+    this.totalPaginas = 1;
   }
 }

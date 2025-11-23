@@ -127,8 +127,6 @@ $color-estandar-azul: #007bff;
     }
 }
 
-// --- ESTILOS DE PAGINACIÓN ---
-
 .pagination-standard {
     .page-item {
         &.active .page-link {
@@ -147,10 +145,5 @@ $color-estandar-azul: #007bff;
             }
 
         }
-       // :ng.table > :not(caption) > * > * {
-    //padding: .5rem .5rem;
-    //border-bottom-width: var(--bs-border-width);
-    //box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
-//}
     }
 }
