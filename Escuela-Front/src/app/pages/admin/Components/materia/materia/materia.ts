@@ -13,8 +13,6 @@ import { AlertaConfirmacionService } from '../../../../../shared/alerta-confirma
 import { Loading } from '../../../../../shared/loading/loading';
 import { LoadingService } from '../../../../../shared/loading-service';
 
-
-
 @Component({
   selector: 'app-materias',
   standalone: true,
@@ -34,7 +32,6 @@ export class MateriasComponent implements OnInit {
   registros: Materia[] = [];
   camposFormativos: CampoFormativoModel[] = [];
   
-  // ✅ NUEVO: Variable para el filtro
   campoFormativoSeleccionado: string = '';
   
   nuevom: boolean = false;
@@ -50,64 +47,68 @@ export class MateriasComponent implements OnInit {
     private serviciosCamposFormativos: ServiciosCampoFormativo,
     private alertService: AlertService, 
     private alerta: AlertaConfirmacionService,
-    private loadingService: LoadingService,
-    
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit() {
-    this.cargarDatos();
+    this.cargarCamposFormativos();
   }
 
+ cargarCamposFormativos() {
+  this.serviciosCamposFormativos.ObtenerCampoFormativo().subscribe({
+    next: (res) => {
+      this.camposFormativos = res;
+      console.log('📋 Campos Formativos cargados:', this.camposFormativos);
+      
+      // ✅ Seleccionar automáticamente el primer campo formativo
+      if (this.camposFormativos.length > 0) {
+        this.campoFormativoSeleccionado = String(this.camposFormativos[0].id || '');
+        console.log('✅ Primer campo formativo seleccionado:', this.camposFormativos[0].nombre);
+        this.aplicarFiltro();
+      }
+    },
+    error: (err) => console.error('Error al cargar Campos Formativos:', err)
+  });
+}
   cargarDatos() {
-    // Cargar materias
     this.loadingService.show();
     this.serviciosMaterias.ObtenerMaterias().subscribe({
       next: (res) => {
         this.registros = res;
         console.log('📚 Materias cargadas:', this.registros);
-                this.loadingService.hide(); 
-
+        this.loadingService.hide(); 
       },
-      error: (err) =>{
-         console.error('Error al cargar Materias:', err)
-                 this.loadingService.hide();
+      error: (err) => {
+        console.error('Error al cargar Materias:', err);
+        this.loadingService.hide();
       }
-    });
-
-    // Cargar campos formativos
-    this.serviciosCamposFormativos.ObtenerCampoFormativo().subscribe({
-      next: (res) => {
-        this.camposFormativos = res;
-        console.log('📋 Campos Formativos cargados:', this.camposFormativos);
-      },
-      error: (err) => console.error('Error al cargar Campos Formativos:', err)
     });
   }
 
-  // ✅ NUEVO: Aplicar filtro
   aplicarFiltro() {
     if (!this.campoFormativoSeleccionado || this.campoFormativoSeleccionado === '') {
-      // Si no hay filtro, cargar todas las materias
       this.cargarDatos();
       return;
     }
 
     console.log('🔍 Filtrando por campo formativo:', this.campoFormativoSeleccionado);
+    this.loadingService.show();
     
     this.serviciosMaterias.ObtenerMateriasPorCampo(this.campoFormativoSeleccionado).subscribe({
       next: (res) => {
         this.registros = res;
-        this.paginaActual = 1; // Resetear a la primera página
+        this.paginaActual = 1;
         console.log('✅ Materias filtradas:', res);
+        this.loadingService.hide();
       },
       error: (err) => {
         console.error('❌ Error al filtrar materias:', err);
         this.alertService.show('Error al filtrar las materias', 'danger', 'Error');
+        this.loadingService.hide();
       }
     });
   }
 
-  // ✅ NUEVO: Limpiar filtro
   limpiarFiltro() {
     this.campoFormativoSeleccionado = '';
     this.paginaActual = 1;
@@ -147,7 +148,6 @@ export class MateriasComponent implements OnInit {
   cerrarModal(event: Materia | null) {
     this.nuevom = false;
     if (event) {
-      // Si hay filtro activo, reaplicarlo
       if (this.campoFormativoSeleccionado) {
         this.aplicarFiltro();
       } else {
@@ -165,7 +165,6 @@ export class MateriasComponent implements OnInit {
     this.editarm = false;
     this.materiaSeleccionada = null;
     if (guardado) {
-      // Si hay filtro activo, reaplicarlo
       if (this.campoFormativoSeleccionado) {
         this.aplicarFiltro();
       } else {
@@ -174,48 +173,65 @@ export class MateriasComponent implements OnInit {
     }
   }
 
-  async cambiarEstatus(materia: Materia) {
-    const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
-
-    if (!confirmado) {
-      return;
-    }
+  // ✅ MÉTODO CORREGIDO: Cambiar estatus con confirmación
+  async cambiarEstatus(materia: Materia, event: Event) {
+    // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+    event.preventDefault();
     
     const nuevoEstatus = materia.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-    const estatusAnterior = materia.estatus;
-    materia.estatus = nuevoEstatus;
+
+    // Mostrar alerta de confirmación antes de proceder
+    const confirmado = await this.alerta.mostrar(
+      `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} la materia ${materia.nombre}?`
+    );
+
+    if (!confirmado) {
+      return; // El usuario canceló
+    }
+
+    console.log(`🔄 Cambiando estatus de ${materia.nombre} de ${materia.estatus} a ${nuevoEstatus}`);
+    this.loadingService.show();
+
+    // Crear objeto actualizado
+    const materiaActualizada: Materia = {
+      ...materia,
+      estatus: nuevoEstatus
+    };
 
     if (materia.id) {
-      const materiaActualizada: Materia = {
-        ...materia,
-        estatus: nuevoEstatus
-      };
-
       this.serviciosMaterias.ActualizarMateria(materia.id, materiaActualizada).subscribe({
         next: (mensaje) => {
-          console.log(mensaje);
-          
+          console.log('✅ Estatus cambiado exitosamente:', mensaje);
+
+          // ✅ SOLO aquí se cambia el estatus en el modelo
+          materia.estatus = nuevoEstatus;
+
+          // Actualizar en el array
           const index = this.registros.findIndex(m => m.id === materia.id);
           if (index !== -1) {
             this.registros[index].estatus = nuevoEstatus;
           }
-          
+
           this.alertService.show(
-            `Estatus cambiado a ${nuevoEstatus}`,
+            `Materia ${nuevoEstatus === 'ACTIVO' ? 'activada' : 'desactivada'} exitosamente`,
             'success',
             'Éxito'
           );
+
+          this.loadingService.hide();
         },
         error: (err) => {
-          console.error('Error al cambiar estatus:', err);
-          materia.estatus = estatusAnterior;
+          console.error('❌ Error al cambiar estatus:', err);
           this.alertService.show(
-            'Error al cambiar el estatus',
+            'Error al cambiar el estatus de la materia',
             'danger',
             'Error'
           );
+          this.loadingService.hide();
         }
       });
+    } else {
+      this.loadingService.hide();
     }
   }
 }

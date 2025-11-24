@@ -7,9 +7,9 @@ import { CampoFormativoModel } from '../../../../models/campo-formativo.model';
 import { CampoFormativoNuevo } from './campo-formativo-nuevo/campo-formativo-nuevo/campo-formativo-nuevo';
 import { CampoFormativoEditar } from './campo-formativo-editar/campo-formativo-editar/campo-formativo-editar';
 import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
+import { AlertService } from '../../../../shared/alert-service';
 import { LoadingService } from '../../../../shared/loading-service';
 import { Loading } from '../../../../shared/loading/loading';
-
 
 @Component({
   selector: 'app-campo-formativo',
@@ -36,12 +36,15 @@ export class CampoFormativo implements OnInit {
   CamposSeleccionado: CampoFormativoModel | null = null;
 
   // Paginación
-  registrosPorPagina = 6; // 6 cards por página (3x2)
+  registrosPorPagina = 6;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosCampoFormativo, 
+  constructor(
+    private Servicios: ServiciosCampoFormativo, 
     private loadingService: LoadingService,
-    private alerta:AlertaConfirmacionService) { }
+    private alerta: AlertaConfirmacionService,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit() {
     this.cargarCampos();
@@ -69,28 +72,23 @@ export class CampoFormativo implements OnInit {
     return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
-  // ✅ AGREGAR este método
-getNombreCampo(index: number): string {
-  const nombres = [
-    'Primer Campo Formativo',
-    'Segundo Campo Formativo',
-    'Tercer Campo Formativo',
-    'Cuarto Campo Formativo',
-    'Quinto Campo Formativo',
-    'Sexto Campo Formativo',
-    'Séptimo Campo Formativo',
-    'Octavo Campo Formativo',
-    'Noveno Campo Formativo',
-    'Décimo Campo Formativo'
-  ];
-  
-  // Calcular el índice global considerando la paginación
-  const indiceGlobal = (this.paginaActual - 1) * this.registrosPorPagina + index;
-  
-  return nombres[indiceGlobal] || `Campo Formativo ${indiceGlobal + 1}`;
-}
-
-  
+  getNombreCampo(index: number): string {
+    const nombres = [
+      'Primer Campo Formativo',
+      'Segundo Campo Formativo',
+      'Tercer Campo Formativo',
+      'Cuarto Campo Formativo',
+      'Quinto Campo Formativo',
+      'Sexto Campo Formativo',
+      'Séptimo Campo Formativo',
+      'Octavo Campo Formativo',
+      'Noveno Campo Formativo',
+      'Décimo Campo Formativo'
+    ];
+    
+    const indiceGlobal = (this.paginaActual - 1) * this.registrosPorPagina + index;
+    return nombres[indiceGlobal] || `Campo Formativo ${indiceGlobal + 1}`;
+  }
 
   cambiarPagina(pagina: number) {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
@@ -135,16 +133,66 @@ getNombreCampo(index: number): string {
     }
   }
 
-  async cambiarEstatus(campo: CampoFormativoModel) {
-        const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+  // ✅ MÉTODO CORREGIDO: Cambiar estatus con confirmación
+  async cambiarEstatus(campo: CampoFormativoModel, event: Event) {
+    // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+    event.preventDefault();
+    
+    const nuevoEstatus = campo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
 
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
-    // Implementar cambio de estatus
-    campo.estatus = campo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-    console.log('Cambiar estatus:', campo);
-    // Aquí llamarías al servicio para actualizar en el backend
+    // Mostrar alerta de confirmación antes de proceder
+    const confirmado = await this.alerta.mostrar(
+      `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} el campo formativo "${campo.nombre}"?`
+    );
+
+    if (!confirmado) {
+      return; // El usuario canceló
+    }
+
+    console.log(`🔄 Cambiando estatus de ${campo.nombre} de ${campo.estatus} a ${nuevoEstatus}`);
+    this.loadingService.show();
+
+    // Crear objeto actualizado
+    const campoActualizado: CampoFormativoModel = {
+      ...campo,
+      estatus: nuevoEstatus
+    };
+
+    if (campo.id) {
+        this.Servicios.ActualizarCampoFormativo(String(campo.id), campoActualizado).subscribe({
+        next: (mensaje) => {
+          console.log('✅ Estatus cambiado exitosamente:', mensaje);
+
+          // ✅ SOLO aquí se cambia el estatus en el modelo
+          campo.estatus = nuevoEstatus;
+
+          // Actualizar en el array
+          const index = this.registros.findIndex(c => c.id === campo.id);
+          if (index !== -1) {
+            this.registros[index].estatus = nuevoEstatus;
+          }
+
+          this.alertService.show(
+            `Campo formativo ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
+            'success',
+            'Éxito'
+          );
+
+          this.loadingService.hide();
+        },
+        error: (err) => {
+          console.error('❌ Error al cambiar estatus:', err);
+          this.alertService.show(
+            'Error al cambiar el estatus del campo formativo',
+            'danger',
+            'Error'
+          );
+          this.loadingService.hide();
+        }
+      });
+    } else {
+      this.loadingService.hide();
+    }
   }
 
   cargarCampos() {
@@ -152,14 +200,12 @@ getNombreCampo(index: number): string {
     this.Servicios.ObtenerCampoFormativo().subscribe({
       next: (res) => {
         this.registros = res;
-        console.log('Campos Formativos cargados:', this.registros);
+        console.log('📚 Campos Formativos cargados:', this.registros);
         this.loadingService.hide(); 
-
       },
-      error: (err) =>{
-         console.error('Error al cargar Campos Formativos:', err);
-                          this.loadingService.hide();
-
+      error: (err) => {
+        console.error('Error al cargar Campos Formativos:', err);
+        this.loadingService.hide();
       }
     });
   }

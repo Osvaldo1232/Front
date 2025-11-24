@@ -67,10 +67,27 @@
 
         <div class="row">
           <!-- Teléfono -->
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Teléfono:</label>
-            <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono">
-          </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Teléfono: <span class="text-danger">*</span></label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                [(ngModel)]="telefono" 
+                name="telefono"
+                (keypress)="soloNumeros($event)"
+                maxlength="10"
+                minlength="10"
+                placeholder=""
+                #telefonoInput="ngModel"
+                required>
+              
+              <!-- Mensaje de validación -->
+              <small *ngIf="telefonoInput.invalid && (telefonoInput.dirty || telefonoInput.touched)" 
+                    class="text-danger">
+                <span *ngIf="telefonoInput.errors?.['required']">El teléfono es obligatorio. </span>
+                <span *ngIf="telefonoInput.errors?.['minlength']">El teléfono debe tener 10 dígitos.</span>
+              </small>
+            </div>
 
           <!-- Fecha de Nacimiento -->
           <div class="col-md-6 mb-3">

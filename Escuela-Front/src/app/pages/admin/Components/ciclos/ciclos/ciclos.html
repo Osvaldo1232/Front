@@ -1,66 +1,81 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">CICLOS ESCOLARES</h1>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-uppercase mb-1 titulo-h2">CICLOS ESCOLARES</h2>
+      <h5 class="text-muted mb-4 titulo-h5">Periodos Académicos Registrados</h5>
+    </div>
+  </div>
 
   <!-- Botón Nuevo -->
-  <div class="button-section">
-    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+  <div class="row mb-4">
+    <div class="col-12 text-end">
+      <button class="btn btn-new" (click)="nuevo()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>
+        Nuevo Ciclo
+      </button>
+    </div>
   </div>
 
   <!-- Mensaje cuando no hay ciclos -->
   <div *ngIf="registros.length === 0" class="no-data">
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+    </svg>
     <p>No hay ciclos escolares registrados.</p>
+    <button class="btn btn-primary mt-3" (click)="nuevo()">Crear Primer Ciclo</button>
   </div>
 
   <!-- Grid de tarjetas -->
-  <div class="cards-grid" *ngIf="registros.length > 0">
-    <div class="card" *ngFor="let ciclo of ciclosPaginados">
-      <!-- Título con años -->
-      <h2 class="card__title">{{ extraerAnio(ciclo.anioInicio) }}-{{ extraerAnio(ciclo.anioFin) }}</h2>
-      
-      <!-- Footer del card -->
-      <div class="card__footer">
-        <!-- ✅ Si quieres activar el toggle y botón editar, descomenta esto: -->
-        <!--
-        <div class="card__status">
-          <span class="status-label">Inactivo</span>
-          <label class="toggle">
-            <input 
-              type="checkbox" 
-              [checked]="ciclo.estatus === 'ACTIVO'"
-              (change)="cambiarEstatus(ciclo)">
-            <span class="toggle__slider"></span>
-          </label>
-          <span class="status-label">Activo</span>
+  <div class="row g-4" *ngIf="registros.length > 0">
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let ciclo of ciclosPaginados">
+      <div class="ciclo-card" [ngClass]="{'ciclo-activo': ciclo.estatus === 'ACTIVO', 'ciclo-inactivo': ciclo.estatus === 'INACTIVO'}">
+        
+        <!-- Icono de calendario -->
+        <div class="ciclo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+          </svg>
         </div>
-        <button class="btn btn--edit" (click)="editar(ciclo)">EDITAR</button>
-        -->
+
+        <!-- Años del ciclo -->
+        <h3 class="ciclo-titulo">{{ extraerAnio(ciclo.anioInicio) }} - {{ extraerAnio(ciclo.anioFin) }}</h3>
+        
+        <!-- Etiqueta "Ciclo Escolar" -->
+        <p class="ciclo-subtitulo">Ciclo Escolar</p>
+
+        <!-- Estatus con color -->
+        <div class="ciclo-estatus" [ngClass]="{'estatus-activo': ciclo.estatus === 'ACTIVO', 'estatus-inactivo': ciclo.estatus === 'INACTIVO'}">
+          <svg *ngIf="ciclo.estatus === 'ACTIVO'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg>
+          <svg *ngIf="ciclo.estatus === 'INACTIVO'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+          </svg>
+          <span>{{ ciclo.estatus }}</span>
+        </div>
+
       </div>
     </div>
   </div>
 
   <!-- Paginación -->
-  <div class="pagination" *ngIf="totalPaginas > 1">
-    <button 
-      class="pagination__btn pagination__btn--prev" 
-      (click)="cambiarPagina(paginaActual - 1)" 
-      [disabled]="paginaActual === 1">
-      ‹
-    </button>
-    <button
-      *ngFor="let p of totalPaginasArray"
-      class="pagination__btn"
-      [class.pagination__btn--active]="p === paginaActual"
-      (click)="cambiarPagina(p)">
-      {{ p }}
-    </button>
-    <button 
-      class="pagination__btn pagination__btn--next" 
-      (click)="cambiarPagina(paginaActual + 1)" 
-      [disabled]="paginaActual === totalPaginas">
-      ›
-    </button>
+  <div class="pagination-container" *ngIf="totalPaginas > 1">
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="paginaActual === 1">
+          <button class="page-link" (click)="cambiarPagina(paginaActual - 1)">‹</button>
+        </li>
+        <li class="page-item" *ngFor="let p of totalPaginasArray" [class.active]="p === paginaActual">
+          <button class="page-link" (click)="cambiarPagina(p)">{{ p }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+          <button class="page-link" (click)="cambiarPagina(paginaActual + 1)">›</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
 
@@ -71,12 +86,14 @@
   (cerrar)="cerrarModal($event)">
 </app-nuevo-ciclo>
 
-<!-- Modal Editar Ciclo -->
+<!-- ✅ OPCIONAL: Si en el futuro quieres habilitar edición -->
+<!--
 <app-editar-ciclo 
   *ngIf="editarm"
   [editar]="editarm"
   [ciclo]="cicloSeleccionado"
   (cerrar)="cerrarModalEditar($event)">
 </app-editar-ciclo>
+-->
 
 <app-loading></app-loading>

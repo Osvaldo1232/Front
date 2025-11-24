@@ -1,26 +1,29 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">MATERIAS</h1>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">MATERIAS</h2>
+        <h5 class="titulo-h5">Gestión de Materias por Campo Formativo</h5>
+      </div>
+    </div>
+  </div>
 
-  <!-- ✅ NUEVO: Sección de filtros -->
+<div class="container">
+
+  <!-- ✅ Sección de filtros -->
   <div class="filter-section">
     <div class="filter-group">
-      <label class="filter-label">Filtrar por Campo Formativo:</label>
+      <label class="filter-label">Campo Formativo:</label>
       <select 
         class="filter-select" 
         [(ngModel)]="campoFormativoSeleccionado"
         (change)="aplicarFiltro()">
-        <option value="">Todos los campos</option>
         <option *ngFor="let campo of camposFormativos" [value]="campo.id">
           {{ campo.nombre }}
         </option>
       </select>
-      <button class="btn btn--clear" (click)="limpiarFiltro()" *ngIf="campoFormativoSeleccionado">
-        Limpiar
-      </button>
     </div>
-    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+    <button class="btn btn--new" (click)="nuevo()">+ Nueva Materia</button>
   </div>
 
   <!-- Mensaje cuando no hay materias -->
@@ -34,21 +37,25 @@
       <h2 class="card__title">{{ materia.nombre }}</h2>
       
       <div class="card__info">
-        <p class="card__detail">Campo Formativo: {{ obtenerNombreCampoFormativo(materia.campoFormativoId) }}</p>
+        <p class="card__detail">
+          <strong>Campo Formativo:</strong><br>
+          {{ obtenerNombreCampoFormativo(materia.campoFormativoId) }}
+        </p>
       </div>
       
       <div class="card__footer">
-        <div class="card__status">
-          <span class="status-label">Inactivo</span>
-          <label class="toggle">
-            <input 
-              type="checkbox" 
-              [checked]="materia.estatus === 'ACTIVO'"
-              (change)="cambiarEstatus(materia)">
-            <span class="toggle__slider"></span>
-          </label>
-          <span class="status-label">Activo</span>
-        </div>
+       <div class="card__status">
+        <span class="status-label">Inactivo</span>
+        <label class="toggle">
+          <input 
+            type="checkbox" 
+            [checked]="materia.estatus === 'ACTIVO'"
+            (click)="cambiarEstatus(materia, $event)"
+            [id]="'switch-' + materia.id">
+          <span class="toggle__slider"></span>
+        </label>
+        <span class="status-label">Activo</span>
+      </div>
         <button class="btn btn--edit" (click)="editar(materia)">EDITAR</button>
       </div>
     </div>

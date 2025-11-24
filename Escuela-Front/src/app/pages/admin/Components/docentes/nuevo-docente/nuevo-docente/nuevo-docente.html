@@ -10,26 +10,58 @@
 
     <!-- Cuerpo del modal con scroll -->
     <div class="modal-body">
-      <form (ngSubmit)="guardar()">
+      <form (ngSubmit)="guardar()" #formulario="ngForm">
         
         <div class="row">
           <!-- Nombre -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Nombre: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="nombre" 
+              name="nombre"
+              (keypress)="soloLetras($event)"
+              (input)="eliminarEspaciosInicio($event, 'nombre')"
+              #nombreInput="ngModel"
+              required>
+            <small *ngIf="nombreInput.invalid && nombreInput.touched" class="text-danger">
+              El nombre es obligatorio
+            </small>
           </div>
 
-
-          <!-- Apellidos -->
+          <!-- Apellido Paterno -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoPaterno" name="apellidos" required>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="apellidoPaterno" 
+              name="apellidoPaterno"
+              (keypress)="soloLetras($event)"
+              (input)="eliminarEspaciosInicio($event, 'apellidoPaterno')"
+              #apellidoPaternoInput="ngModel"
+              required>
+            <small *ngIf="apellidoPaternoInput.invalid && apellidoPaternoInput.touched" class="text-danger">
+              El apellido paterno es obligatorio
+            </small>
           </div>
 
-          <!-- Apellidos -->
+          <!-- Apellido Materno -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Apellido Paterno: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="apellidoMaterno" name="apellidos" required>
+            <label class="form-label">Apellido Materno: <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="apellidoMaterno" 
+              name="apellidoMaterno"
+              (keypress)="soloLetras($event)"
+              (input)="eliminarEspaciosInicio($event, 'apellidoMaterno')"
+              #apellidoMaternoInput="ngModel"
+              required>
+            <small *ngIf="apellidoMaternoInput.invalid && apellidoMaternoInput.touched" class="text-danger">
+              El apellido materno es obligatorio
+            </small>
           </div>
         </div>
 
@@ -37,45 +69,116 @@
           <!-- Especialidad -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Especialidad: <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="especialidad" name="especialidad" required>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="especialidad" 
+              name="especialidad"
+              (keypress)="soloLetras($event)"
+              (input)="eliminarEspaciosInicio($event, 'especialidad')"
+              #especialidadInput="ngModel"
+              required>
+            <small *ngIf="especialidadInput.invalid && especialidadInput.touched" class="text-danger">
+              La especialidad es obligatoria
+            </small>
           </div>
 
           <!-- Sexo -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Sexo: <span class="text-danger">*</span></label>
-            <select class="form-select" [(ngModel)]="sexo" name="sexo" required>
+            <select 
+              class="form-select" 
+              [(ngModel)]="sexo" 
+              name="sexo"
+              #sexoInput="ngModel"
+              required>
               <option value="">Seleccionar...</option>
               <option value="MASCULINO">MASCULINO</option>
               <option value="FEMENINO">FEMENINO</option>
             </select>
+            <small *ngIf="sexoInput.invalid && sexoInput.touched" class="text-danger">
+              Selecciona un sexo
+            </small>
           </div>
         </div>
 
         <div class="row">
           <!-- Clave Presupuestal -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Clave Presupuestal:<span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="clavePresupuestal" name="clavePresupuestal" required>
+            <label class="form-label">Clave Presupuestal: <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="clavePresupuestal" 
+              name="clavePresupuestal"
+              #clavePresupuestalInput="ngModel"
+              required>
+            <small *ngIf="clavePresupuestalInput.invalid && clavePresupuestalInput.touched" class="text-danger">
+              La clave presupuestal es obligatoria
+            </small>
           </div>
 
           <!-- RFC -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">RFC:<span class="text-danger">*</span></label>
-            <input type="text" class="form-control" [(ngModel)]="rfc" name="rfc" required >
+            <label class="form-label">RFC: <span class="text-danger">*</span></label>
+            <input 
+              type="text" 
+              class="form-control text-uppercase" 
+              [(ngModel)]="rfc" 
+              name="rfc"
+              (input)="onRfcInput($event)"
+              maxlength="13"
+              minlength="13"
+              #rfcInput="ngModel"
+              required>
+            <small *ngIf="rfcInput.invalid && rfcInput.touched" class="text-danger">
+              <span *ngIf="rfcInput.errors?.['required']">El RFC es obligatorio. </span>
+              <span *ngIf="rfcInput.errors?.['minlength']">El RFC debe tener 13 caracteres.</span>
+            </small>
+            <small *ngIf="rfc.length > 0 && rfc.length < 13" class="text-muted">
+              {{ rfc.length }}/13 caracteres
+            </small>
           </div>
         </div>
 
         <div class="row">
           <!-- Fecha de Nacimiento -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Fecha de Nacimiento:<span class="text-danger">*</span></label>
-            <input type="date" class="form-control" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+            <label class="form-label">Fecha de Nacimiento: <span class="text-danger">*</span></label>
+            <input 
+              type="date" 
+              class="form-control" 
+              [(ngModel)]="fechaNacimiento" 
+              name="fechaNacimiento"
+              [max]="fechaMaxima"
+              #fechaNacimientoInput="ngModel"
+              required>
+            <small *ngIf="fechaNacimientoInput.invalid && fechaNacimientoInput.touched" class="text-danger">
+              La fecha de nacimiento es obligatoria
+            </small>
           </div>
 
           <!-- Teléfono -->
           <div class="col-md-6 mb-3">
-            <label class="form-label">Teléfono:</label>
-            <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono">
+            <label class="form-label">Teléfono: <span class="text-danger">*</span></label>
+            <input 
+              type="tel" 
+              class="form-control" 
+              [(ngModel)]="telefono" 
+              name="telefono"
+              (keypress)="soloNumeros($event)"
+              maxlength="10"
+              minlength="10"
+              placeholder="10 dígitos"
+              #telefonoInput="ngModel"
+              required>
+            <small *ngIf="telefonoInput.invalid && telefonoInput.touched" class="text-danger">
+              <span *ngIf="telefonoInput.errors?.['required']">El teléfono es obligatorio. </span>
+              <span *ngIf="telefonoInput.errors?.['minlength']">El teléfono debe tener 10 dígitos.</span>
+            </small>
+            <small *ngIf="telefono.length > 0 && telefono.length < 10" class="text-muted">
+              {{ telefono.length }}/10 dígitos
+            </small>
           </div>
         </div>
 
@@ -83,37 +186,75 @@
           <!-- Correo -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Correo: <span class="text-danger">*</span></label>
-            <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
+            <input 
+              type="email" 
+              class="form-control" 
+              [(ngModel)]="email" 
+              name="email"
+              placeholder="ejemplo@correo.com"
+              #emailInput="ngModel"
+              email
+              required>
+            <small *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
+              <span *ngIf="emailInput.errors?.['required']">El correo es obligatorio. </span>
+              <span *ngIf="emailInput.errors?.['email']">Ingresa un correo válido.</span>
+            </small>
           </div>
 
           <!-- Contraseña -->
           <div class="col-md-6 mb-3">
             <label class="form-label">Contraseña: <span class="text-danger">*</span></label>
-            <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
+            <input 
+              type="password" 
+              class="form-control" 
+              [(ngModel)]="password" 
+              name="password"
+              minlength="6"
+              #passwordInput="ngModel"
+              required>
+            <small *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
+              <span *ngIf="passwordInput.errors?.['required']">La contraseña es obligatoria. </span>
+              <span *ngIf="passwordInput.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres.</span>
+            </small>
           </div>
         </div>
+
         <!-- Confirmar Contraseña -->
+        <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Confirmar Contraseña: <span class="text-danger">*</span></label>
-            <input type="password" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+            <input 
+              type="password" 
+              class="form-control" 
+              [(ngModel)]="confirmPassword" 
+              name="confirmPassword"
+              #confirmPasswordInput="ngModel"
+              required>
+            <small *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched" class="text-danger">
+              Confirma tu contraseña
+            </small>
             <small class="text-danger" *ngIf="password && confirmPassword && password !== confirmPassword">
-              ⚠️ Las contraseñas no coinciden.
+              ⚠️ Las contraseñas no coinciden
+            </small>
+            <small class="text-success" *ngIf="password && confirmPassword && password === confirmPassword">
+              ✓ Las contraseñas coinciden
             </small>
           </div>
 
-        <!-- Estatus -->
-        <div class="mb-3">
-          <label class="form-label">Estatus:</label>
-          <select class="form-select" [(ngModel)]="estatus" name="estatus">
-            <option value="ACTIVO">Activo</option>
-            <option value="INACTIVO">Inactivo</option>
-          </select>
+          <!-- Estatus -->
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Estatus:</label>
+            <select class="form-select" [(ngModel)]="estatus" name="estatus">
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
+          </div>
         </div>
 
         <!-- Botones de acción -->
         <div class="modal-footer">
           <button type="button" class="btn btn-limpiar" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-guardar">Guardar</button>
+          <button type="submit" class="btn btn-guardar" [disabled]="!formulario.valid">Guardar</button>
         </div>
 
       </form>

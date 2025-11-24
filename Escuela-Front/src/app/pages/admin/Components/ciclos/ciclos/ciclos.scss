@@ -1,200 +1,264 @@
-.container {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+// ===================================
+// VARIABLES DE COLOR
+// ===================================
+$color-primary: #4A90E2;
+$color-activo: #10B981;
+$color-inactivo: #F59E0B;
+$color-text: #1F2937;
+$color-text-light: #6B7280;
+$color-border: #E5E7EB;
+$color-bg: #F9FAFB;
+
+// ===================================
+// TÍTULOS
+// ===================================
+.titulo-h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $color-text;
+  letter-spacing: 0.5px;
 }
 
-.header {
-  margin-bottom: 2rem;
-
-  &__title {
-    font-size: 2rem;
-    font-weight: 300;
-    letter-spacing: 2px;
-    margin: 0;
-    color: #2c3e50;
-  }
+.titulo-h5 {
+  font-size: 1rem;
+  color: $color-text-light;
+  font-weight: 400;
 }
 
-.button-section {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
+// ===================================
+// BOTÓN NUEVO
+// ===================================
+.btn-new {
+  background: linear-gradient(135deg, #5C1F38 100%);
+  color: white;
   border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: all 0.3s ease;
-  font-size: 0.95rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 
-  &--new {
-    background: #D4AF37;
-    color: white;
-
-    &:hover {
-      background: #C19B2E;
-      transform: translateY(-2px);
-    }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #5C1F38 0%);
   }
 
-  &--edit {
-    background: #5D1F3C;
-    color: white;
-    padding: 0.5rem 1.5rem;
-    font-size: 0.85rem;
+  &:active {
+    transform: translateY(0);
+  }
 
-    &:hover {
-      background: #4A1830;
-    }
+  svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
+// ===================================
+// SIN DATOS
+// ===================================
 .no-data {
   text-align: center;
-  padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin: 2rem 0;
-}
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(2, 1fr);
+  svg {
+    color: $color-text-light;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
   }
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  p {
+    color: $color-text-light;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
   }
 }
 
-.card {
-  background: #F5F5F5;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+// ===================================
+// TARJETAS DE CICLOS
+// ===================================
+.ciclo-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 3px solid transparent;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 150px;
+  justify-content: center;
+  align-items: center;
 
-  &__title {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0 0 1rem 0;
-    color: #2c3e50;
-    text-align: center;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
   }
 
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    padding-top: 1rem;
-    border-top: 1px solid #ddd;
+  // ✅ Verde para activos
+  &.ciclo-activo {
+    border-color: $color-activo;
+    background: linear-gradient(135deg, rgba($color-activo, 0.03) 0%, white 100%);
   }
 
-  &__status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  // ✅ Amarillo para inactivos
+  &.ciclo-inactivo {
+    border-color: $color-inactivo;
+    background: linear-gradient(135deg, rgba($color-inactivo, 0.03) 0%, white 100%);
   }
 }
 
-.status-label {
-  font-size: 0.85rem;
-  color: #2c3e50;
+// ===================================
+// ICONO DEL CICLO
+// ===================================
+.ciclo-icon {
+  margin-bottom: 1.5rem;
+
+  svg {
+    color: $color-primary;
+    opacity: 0.7;
+  }
 }
 
-.toggle {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
+// ===================================
+// TÍTULO DEL CICLO
+// ===================================
+.ciclo-titulo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $color-text;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
 
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+// ===================================
+// SUBTÍTULO
+// ===================================
+.ciclo-subtitulo {
+  font-size: 0.875rem;
+  color: $color-text-light;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
 
-    &:checked + .toggle__slider {
-      background-color: #5D1F3C;
-    }
+// ===================================
+// BADGE DE ESTATUS
+// ===================================
+.ciclo-estatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: auto;
 
-    &:checked + .toggle__slider:before {
-      transform: translateX(26px);
-    }
-
-    &:not(:checked) + .toggle__slider {
-      background-color: #ccc;
-    }
+  svg {
+    width: 16px;
+    height: 16px;
   }
 
-  &__slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 24px;
-
-    &:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
+  // ✅ Verde para activos
+  &.estatus-activo {
+    background: $color-activo;
+    color: white;
   }
+
+  // ✅ Amarillo para inactivos
+  &.estatus-inactivo {
+    background: $color-inactivo;
+    color: white;
+  }
+}
+
+// ===================================
+// PAGINACIÓN
+// ===================================
+.pagination-container {
+  margin-top: 3rem;
+  padding: 1.5rem 0;
 }
 
 .pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
+  .page-item {
+    margin: 0 0.25rem;
 
-  &__btn {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    .page-link {
+      border: none;
+      color: $color-text;
+      background: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-    &:hover:not(:disabled) {
-      background: #f8f9fa;
-      border-color: #D4AF37;
+      &:hover {
+        background: $color-bg;
+        color: $color-primary;
+        transform: translateY(-2px);
+      }
     }
 
-    &--active {
-      background: #5D1F3C;
+    &.active .page-link {
+      background: $color-primary;
       color: white;
-      border-color: #5D1F3C;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    &:disabled {
+    &.disabled .page-link {
       opacity: 0.5;
       cursor: not-allowed;
+      background: white;
+
+      &:hover {
+        transform: none;
+      }
     }
+  }
+}
+
+// ===================================
+// RESPONSIVE
+// ===================================
+@media (max-width: 768px) {
+  .titulo-h2 {
+    font-size: 1.5rem;
+  }
+
+  .ciclo-titulo {
+    font-size: 1.75rem;
+  }
+
+  .ciclo-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn-new {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ciclo-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ciclo-titulo {
+    font-size: 1.5rem;
   }
 }

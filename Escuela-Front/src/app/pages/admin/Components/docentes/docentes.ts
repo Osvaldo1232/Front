@@ -40,9 +40,9 @@ export class DocentesComponent implements OnInit {
   terminoBusqueda: string = '';
   nuevom: boolean = false;
   editarm: boolean = false;
-  asignarGrupom: boolean = false; // ✅ NUEVO
+  asignarGrupom: boolean = false;
   docenteSeleccionado: Maestros | null = null;
-  docenteParaAsignar: Maestros | null = null; // ✅ NUEVO
+  docenteParaAsignar: Maestros | null = null;
   registros: Maestros[] = [];
 
   registrosPorPagina = 9;
@@ -51,7 +51,8 @@ export class DocentesComponent implements OnInit {
   constructor(
     private Servicios: ServiciosDirector,
     private loadingService: LoadingService,
-    private alertService: AlertService, private alerta:AlertaConfirmacionService
+    private alertService: AlertService,
+    private alerta: AlertaConfirmacionService
   ) { }
 
   get usuariosFiltrados() {
@@ -131,65 +132,74 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  // ✅ NUEVO: Abrir modal de asignación
   abrirModalAsignacion(docente: Maestros) {
     this.docenteParaAsignar = docente;
     this.asignarGrupom = true;
   }
 
-  // ✅ NUEVO: Cerrar modal de asignación
   cerrarModalAsignacion(guardado: boolean) {
     this.asignarGrupom = false;
     this.docenteParaAsignar = null;
     
     if (guardado) {
-      // Opcional: recargar si necesitas actualizar algo
       console.log('✅ Asignación guardada exitosamente');
     }
   }
 
-  async cambiarEstatus(docente: Maestros) {
-     const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
-
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
+  // ✅ MÉTODO CORREGIDO: Cambiar estatus con confirmación
+  async cambiarEstatus(docente: Maestros, event: Event) {
+    // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+    event.preventDefault();
+    
     const nuevoEstatus = docente.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-    const estatusAnterior = docente.estatus;
-    docente.estatus = nuevoEstatus;
+
+    // Mostrar alerta de confirmación antes de proceder
+    const confirmado = await this.alerta.mostrar(
+      `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} al docente ${docente.nombre}?`
+    );
+
+    if (!confirmado) {
+      return; // El usuario canceló
+    }
+
+    console.log(`🔄 Cambiando estatus de ${docente.nombre} de ${docente.estatus} a ${nuevoEstatus}`);
+    this.loadingService.show();
 
     if (docente.id) {
-      console.log(`📤 Cambiando estatus de ${docente.nombre} a ${nuevoEstatus}`);
-
       this.Servicios.ActualizarEstatusDocente(docente.id, nuevoEstatus).subscribe({
         next: (mensaje) => {
-          console.log('✅ Respuesta del servidor:', mensaje);
-          
+          console.log('✅ Estatus cambiado exitosamente:', mensaje);
+
+          // ✅ SOLO aquí se cambia el estatus en el modelo
+          docente.estatus = nuevoEstatus;
+
+          // Actualizar en el array
           const index = this.registros.findIndex(d => d.id === docente.id);
           if (index !== -1) {
             this.registros[index].estatus = nuevoEstatus;
           }
-          
+
           this.alertService.show(
-            `Estatus cambiado a ${nuevoEstatus}`,
+            `Docente ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
             'success',
             'Éxito'
           );
+
+          this.loadingService.hide();
         },
         error: (err) => {
-          console.error('❌ Error completo:', err);
-          docente.estatus = estatusAnterior;
-          
+          console.error('❌ Error al cambiar estatus:', err);
           this.alertService.show(
-            'Error al cambiar el estatus',
+            'Error al cambiar el estatus del docente',
             'danger',
             'Error'
           );
+          this.loadingService.hide();
         }
       });
     } else {
       console.error('❌ El docente no tiene ID');
-      docente.estatus = estatusAnterior;
+      this.loadingService.hide();
     }
   }
 
@@ -198,7 +208,7 @@ export class DocentesComponent implements OnInit {
     this.Servicios.ObtenerDocentes().subscribe({
       next: (res) => {
         this.registros = res;
-        console.log('Docentes cargados:', this.registros);
+        console.log('👨‍🏫 Docentes cargados:', this.registros);
         this.loadingService.hide(); 
       },
       error: (err) => {

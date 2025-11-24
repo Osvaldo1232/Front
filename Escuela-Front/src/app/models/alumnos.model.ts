@@ -43,7 +43,15 @@ export interface AlumnoGGC {
   grupoId: string;
   grupoNombre: string;
   estatus: string;
-} 
+  
+  // ✅ NUEVOS CAMPOS del servicio
+  esUltimaInscripcion?: boolean;
+  tieneTutor?: boolean;
+  tutorNombreCompleto?: string;
+  tutorTelefono?: string;
+  tutorCorreo?: string;
+  parentesco?: string;
+}
 
 export interface Calificacionesgra {
   idGrado: string;

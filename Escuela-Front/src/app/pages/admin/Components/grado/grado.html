@@ -3,67 +3,80 @@
     <div class="col-12">
       <div class="header-section">
         <h2 class="text-uppercase titulo-h2">GRADOS</h2>
-        <h5 class="titulo-h5">Grados</h5>
+        <h5 class="titulo-h5">Niveles Educativos</h5>
       </div>
     </div>
   </div>
 
-<div class="container">
+  <div class="container">
+    <!--  <div class="button-section">
+      <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+    </div> -->
 
- <!--  <div class="button-section">
-    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
-  </div> -->
+    <!-- Mensaje cuando no hay grados -->
+    <div *ngIf="registros.length === 0" class="no-data">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+      </svg>
+      <p>No hay grados registrados.</p>
+    </div>
 
-  <div *ngIf="registros.length === 0" class="no-data">
-    <p>No hay grados registrados.</p>
-  </div>
-
-  <div class="cards-grid" *ngIf="registros.length > 0">
-    <div class="card" *ngFor="let grado of registrosPaginados">
-      <h2 class="card__title">{{ grado.nombre }}</h2>
-      
-      <div class="card__footer">
-        <div class="card__status">
-          <span class="status-label">Estatus: {{ grado.estatus === 'ACTIVO' ? 'Inactivo' : 'Activo' }}</span>
-          <label class="toggle">
-            <input 
-              type="checkbox" 
-              [checked]="grado.estatus === 'ACTIVO'"
-              (change)="cambiarEstatus(grado)">
-            <span class="toggle__slider"></span>
-          </label>
-          <span class="status-label">{{ grado.estatus === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</span>
+    <!-- Grid de Grados -->
+    <div class="grados-grid" *ngIf="registros.length > 0">
+      <div class="grado-card" *ngFor="let grado of registrosPaginados">
+        <div class="grado-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/>
+            <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/>
+          </svg>
         </div>
-        <button class="btn btn--edit" (click)="editar(grado)">EDITAR</button>
+        <h2 class="grado-titulo">{{ grado.nombre }}</h2>
+        
+        <!-- <div class="card__footer">
+          <div class="card__status">
+            <span class="status-label">Estatus: {{ grado.estatus === 'ACTIVO' ? 'Inactivo' : 'Activo' }}</span>
+            <label class="toggle">
+              <input 
+                type="checkbox" 
+                [checked]="grado.estatus === 'ACTIVO'"
+                (change)="cambiarEstatus(grado)">
+              <span class="toggle__slider"></span>
+            </label>
+            <span class="status-label">{{ grado.estatus === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</span>
+          </div>
+          <button class="btn btn--edit" (click)="editar(grado)">EDITAR</button>
+        </div> -->
       </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="totalPaginas > 1">
+      <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+      <button
+        *ngFor="let p of totalPaginasArray"
+        class="pagination__btn"
+        [class.pagination__btn--active]="p === paginaActual"
+        (click)="cambiarPagina(p)">
+        {{ p }}
+      </button>
+      <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
     </div>
   </div>
 
-  <!-- Paginación -->
-  <div class="pagination" *ngIf="totalPaginas > 1">
-    <button class="pagination__btn pagination__btn--prev" (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
-    <button
-      *ngFor="let p of totalPaginasArray"
-      class="pagination__btn"
-      [class.pagination__btn--active]="p === paginaActual"
-      (click)="cambiarPagina(p)"
-    >
-      {{ p }}
-    </button>
-    <button class="pagination__btn pagination__btn--next" (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
-  </div>
+  <!-- Modales -->
+  <app-nuevo-grado 
+    *ngIf="nuevom" 
+    [nuevo]="nuevom" 
+    (cerrar)="cerrarmodal($event)">
+  </app-nuevo-grado>
+
+  <app-editar-grado 
+    *ngIf="editarm"
+    [editar]="editarm"
+    [grado]="gradoSeleccionado"
+    (cerrar)="cerrarModalEditar($event)">
+  </app-editar-grado>
+
+  <app-loading></app-loading>
 </div>
-
-<app-nuevo-grado 
-  *ngIf="nuevom" 
-  [nuevo]="nuevom" 
-  (cerrar)="cerrarmodal($event)">
-</app-nuevo-grado>
-
- <app-editar-grado 
-  *ngIf="editarm"
-  [editar]="editarm"
-  [grado]="gradoSeleccionado"
-  (cerrar)="cerrarModalEditar($event)">
-</app-editar-grado>
-<app-loading></app-loading>

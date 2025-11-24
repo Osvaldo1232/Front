@@ -10,12 +10,28 @@
 
     <!-- Cuerpo del modal -->
     <div class="modal-body">
-      <form (ngSubmit)="guardar()">
+      <form (ngSubmit)="guardar()" #formulario="ngForm">
         
         <!-- Nombre -->
         <div class="mb-3">
           <label class="form-label">Nombre: <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" [(ngModel)]="nombre" name="nombre" required>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="nombre" 
+            name="nombre"
+            (keypress)="soloLetras($event)"
+            (input)="eliminarEspaciosInicio($event)"
+            #nombreInput="ngModel"
+            required>
+          
+          <!-- Mensaje de validación -->
+          <small *ngIf="nombreInput.invalid && nombreInput.touched" class="text-danger">
+            El nombre es obligatorio
+          </small>
+          <small *ngIf="nombre && nombre.trim() === ''" class="text-danger">
+            El nombre no puede estar vacío
+          </small>
         </div>
 
         <!-- Estatus -->
@@ -30,7 +46,12 @@
         <!-- Botones de acción -->
         <div class="modal-footer">
           <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-guardar">Guardar</button>
+          <button 
+            type="submit" 
+            class="btn btn-guardar"
+            [disabled]="!formulario.valid || !nombre.trim()">
+            Guardar
+          </button>
         </div>
 
       </form>

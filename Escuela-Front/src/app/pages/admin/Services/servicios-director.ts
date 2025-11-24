@@ -6,6 +6,7 @@ import { Grados } from '../../../models/grado.models';
 import { Maestros } from '../../../models/maestros.model';
 import { Director } from '../../../models/director.model';
 import { AsignacionDocente } from '../../../models/asignacion-docente.model';
+import { InscripcionSelect } from '../../../models/inscripcion-select.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class ServiciosDirector {
   private apiUrlUsuarios = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/usuarios';
   private apiUrlCrearAsignacion = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion-docente/guardar';
   private apiUrlAsignaciones = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion-docente';
+  private baseUrl = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app';
 
   constructor(private http: HttpClient) {}
   
@@ -66,9 +68,9 @@ export class ServiciosDirector {
     });
   }
 
-  // ✅ NUEVO: Obtener todas las asignaciones
-  ObtenerAsignaciones(): Observable<AsignacionDocente[]> {
-    return this.http.get<AsignacionDocente[]>(this.apiUrlAsignaciones);
+  // ✅ NUEVO: Obtener asignaciones para el combo (devuelve {id, value})
+  ObtenerAsignaciones(): Observable<InscripcionSelect[]> {
+    return this.http.get<InscripcionSelect[]>(`${this.baseUrl}/inscripcion/select`);
   }
 
   // Obtener asignaciones por ciclo

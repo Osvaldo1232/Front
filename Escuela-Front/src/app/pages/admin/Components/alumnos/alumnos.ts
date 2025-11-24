@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AlumnoGGC, Alumnos } from '../../../../models/alumnos.model';
+import { InscripcionSelect } from '../../../../models/inscripcion-select.model';
 import { Inscripcion } from '../../../../models/inscripcion.model';
 import { AsignacionDocente } from '../../../../models/asignacion-docente.model';
 import { Grados } from '../../../../models/grado.models';
@@ -47,17 +48,15 @@ export class AlumnosComponent implements OnInit {
   registros: Alumnos[] = [];
   registrosGGC: AlumnoGGC[] = [];
   inscripciones: Inscripcion[] = [];
-  asignaciones: AsignacionDocente[] = [];
+  asignaciones: InscripcionSelect[] = [];
   
   // Listas para filtros
   grados: Grados[] = [];
   grupos: Grupos[] = [];
   ciclos: Ciclos[] = [];
 
-  // Filtros
-  filtroGrado: string = '';
-  filtroGrupo: string = '';
-  filtroCiclo: string = '';
+  // ✅ NUEVO FILTRO (reemplaza los 3 anteriores)
+  asignacionSeleccionada: string = '';
 
   // Modales
   nuevom: boolean = false;
@@ -67,11 +66,11 @@ export class AlumnosComponent implements OnInit {
   nombreAlumnoParaTutor: string = '';
 
   // Modal Actualizar Asignación
-actualizarAsignacionm: boolean = false;
-alumnoIdParaAsignacion: string | null = null;
-nombreAlumnoParaAsignacion: string = '';
-asignacionActualId: string = ''; // ✅ NUEVO
-
+  actualizarAsignacionm: boolean = false;
+  alumnoIdParaAsignacion: string | null = null;
+  nombreAlumnoParaAsignacion: string = '';
+  asignacionActualId: string = '';
+  inscripcionIdParaAsignacion: string = '';
 
   verEstudiante: boolean = false;
   idAlumnoSeleccionado: string | null = null;
@@ -90,13 +89,11 @@ asignacionActualId: string = ''; // ✅ NUEVO
     private router: Router,
     private loadingService: LoadingService,
     private alertService: AlertService,
-    private alerta:AlertaConfirmacionService
+    private alerta: AlertaConfirmacionService
   ) { }
 
   ngOnInit() {
-    this.GGC();
     this.cargarAsignaciones();
-    this.cargarCicloMasReciente();
   }
 
   cargarDatos() {
@@ -124,114 +121,108 @@ asignacionActualId: string = ''; // ✅ NUEVO
   }
 
   cargarAsignaciones() {
+    console.log('🔄 Iniciando carga de asignaciones...');
+    console.log('📍 URL:', 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/inscripcion/select');
+    
     this.serviciosGrados.ObtenerAsignaciones().subscribe({
       next: (res) => {
+        console.log('✅ Respuesta del backend:', res);
         this.asignaciones = res;
-        console.log('📌 Asignaciones cargadas:', this.asignaciones);
-      },
-      error: (err) => console.error('Error al cargar asignaciones:', err)
-    });
-  }
-
-  GGC() {
-    // Cargar grados
-    this.serviciosGrados.obtenerGrados().subscribe({
-      next: (res) => {
-        this.grados = res;
-        console.log('📚 Grados cargados:', this.grados);
+        console.log('📌 Total de asignaciones:', this.asignaciones.length);
         
-        // ✅ Seleccionar automáticamente el primer grado
-                this.loadingService.show(); 
-
-        if (this.grados.length > 0) {
-          this.filtroGrado = this.grados[0].id!;
-          console.log('✅ Primer grado seleccionado:', this.grados[0].nombre);
-        }
-      },
-      error: (err) => console.error('Error al cargar grados:', err)
-    });
-
-    // Cargar grupos
-    this.serviciosGrupos.ObtenerGrupos().subscribe({
-      next: (res) => {
-        this.grupos = res;
-        console.log('👥 Grupos cargados:', this.grupos);
-        
-        // ✅ Seleccionar automáticamente el primer grupo
-        if (this.grupos.length > 0) {
-          this.filtroGrupo = this.grupos[0].id!;
-          console.log('✅ Primer grupo seleccionado:', this.grupos[0].nombre);
-        }
-        
-        // ✅ Después de cargar grado, grupo y ciclo, aplicar filtros automáticamente
-        this.verificarYAplicarFiltros();
-      },
-      error: (err) => console.error('Error al cargar grupos:', err)
-    });
-
-    // Cargar ciclos
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
-      next: (res) => {
-        this.ciclos = res;
-        console.log('📅 Ciclos cargados:', this.ciclos);
-      },
-      error: (err) => console.error('Error al cargar ciclos:', err)
-    });
-  }
-
-  // ✅ Cargar automáticamente el ciclo más reciente
-  cargarCicloMasReciente() {
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
-      next: (res) => {
-        if (res && res.length > 0) {
-          // Ordenar ciclos por año de inicio (descendente) para obtener el más reciente
-          const ciclosOrdenados = res.sort((a, b) => {
-            return b.anioInicio - a.anioInicio;
+        if (this.asignaciones.length > 0) {
+          this.asignacionSeleccionada = this.asignaciones[0].id || '';
+          console.log('✅ Primera asignación seleccionada:', {
+            id: this.asignaciones[0].id,
+            value: this.asignaciones[0].value
           });
           
-          // Seleccionar el más reciente
-          const cicloMasReciente = ciclosOrdenados[0];
-          this.filtroCiclo = cicloMasReciente.id!;
-          
-          console.log('📅 Ciclo más reciente seleccionado:', cicloMasReciente);
-          console.log(`✅ ${cicloMasReciente.anioInicio}-${cicloMasReciente.anioFin} cargado automáticamente`);
-          
-          // ✅ Después de cargar el ciclo, verificar si ya podemos aplicar filtros
-          this.verificarYAplicarFiltros();
+          this.onAsignacionChange();
+        } else {
+          console.log('⚠️ No hay asignaciones disponibles');
+          this.loadingService.hide();
         }
       },
-      error: (err) => console.error('Error al cargar ciclo más reciente:', err)
-    });
-  }
-
-  // ✅ NUEVO: Verificar si los 3 filtros están cargados y aplicarlos automáticamente
-  verificarYAplicarFiltros() {
-    // Esperar un momento para asegurar que todos los valores estén asignados
-    setTimeout(() => {
-      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
-        console.log('🎯 Filtros iniciales cargados, aplicando automáticamente...');
-        this.aplicarFiltros();
+      error: (err) => {
+        console.error('❌ ERROR completo:', err);
+        console.error('Status:', err.status);
+        console.error('URL:', err.url);
+        this.loadingService.hide();
       }
-    }, 500);
-  }
-
-  // ✅ Detectar cuando los 3 filtros están seleccionados
-  onFiltroChange() {
-    console.log('🔄 Cambio en filtros:', {
-      grado: this.filtroGrado,
-      grupo: this.filtroGrupo,
-      ciclo: this.filtroCiclo
     });
-
-    // Si los 3 filtros tienen valor, aplicar automáticamente
-    if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
-      console.log('✅ Todos los filtros seleccionados, aplicando...');
-      this.aplicarFiltros();
-    } else {
-      // Si falta algún filtro, limpiar la tabla
-      this.registrosGGC = [];
-    }
   }
+
+  onAsignacionChange() {
+  console.log('🔄 Asignación seleccionada:', this.asignacionSeleccionada);
+  
+  if (!this.asignacionSeleccionada || this.asignacionSeleccionada.trim() === '') {
+    this.registrosGGC = [];
+    this.loadingService.hide();
+    console.log('⚠️ No hay asignación seleccionada');
+    return;
+  }
+
+  this.paginaActual = 1;
+  this.loadingService.show();
+  console.log('⏳ Cargando alumnos...');
+
+  // ✅ PASO 1: Obtener alumnos de la asignación (sin estatus)
+  this.Servicios.obtenerAlumnosPorAsignacion(this.asignacionSeleccionada)
+    .pipe(
+      finalize(() => {
+        this.loadingService.hide();
+        console.log('✅ Loading finalizado');
+      })
+    )
+    .subscribe({
+      next: (alumnosAsignacion) => {
+        if (!alumnosAsignacion || !Array.isArray(alumnosAsignacion) || alumnosAsignacion.length === 0) {
+          this.registrosGGC = [];
+          console.log('ℹ️ No hay alumnos en esta asignación');
+          return;
+        }
+
+        console.log('📦 Alumnos de asignación obtenidos:', alumnosAsignacion.length);
+
+        // ✅ PASO 2: Obtener TODOS los alumnos completos (con estatus)
+        this.Servicios.ObtenerAlumnos().subscribe({
+          next: (todosLosAlumnos) => {
+            console.log('📦 Todos los alumnos obtenidos:', todosLosAlumnos.length);
+
+            // ✅ PASO 3: Cruzar información - agregar estatus a cada alumno
+            this.registrosGGC = alumnosAsignacion.map(alumnoAsig => {
+              // Buscar el alumno completo por ID
+              const alumnoCompleto = todosLosAlumnos.find(a => a.id === alumnoAsig.alumnoId);
+              
+              return {
+                ...alumnoAsig,
+                estatus: alumnoCompleto?.estatus || 'ACTIVO' // ✅ Agregar estatus
+              };
+            });
+
+            console.log('✅ Alumnos con estatus:', this.registrosGGC.length, 'registros');
+          },
+          error: (err) => {
+            console.error('❌ Error al obtener todos los alumnos:', err);
+            // ✅ Si falla, usar ACTIVO por defecto
+            this.registrosGGC = alumnosAsignacion.map(a => ({
+              ...a,
+              estatus: 'ACTIVO'
+            }));
+          }
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar alumnos de asignación:', err);
+        this.registrosGGC = [];
+        this.alertService.show(
+          'Error al cargar alumnos',
+          'danger',
+          'Error'
+        );
+      }
+    });
+}
 
   obtenerInscripcionAlumno(alumnoId?: string): Inscripcion | undefined {
     if (!alumnoId) return undefined;
@@ -239,7 +230,7 @@ asignacionActualId: string = ''; // ✅ NUEVO
   }
 
   obtenerAsignacionDeInscripcion(inscripcion: Inscripcion): AsignacionDocente | undefined {
-    return this.asignaciones.find(a => a.id === inscripcion.asignacionId);
+    return this.asignaciones.find(a => a.id === inscripcion.asignacionId) as any;
   }
 
   obtenerNombreGrado(alumnoId?: string): string {
@@ -251,7 +242,7 @@ asignacionActualId: string = ''; // ✅ NUEVO
     const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
     if (!asignacion) return '-';
     
-    const grado = this.grados.find(g => g.id === asignacion.idGrado);
+    const grado = this.grados.find(g => g.id === (asignacion as any).idGrado);
     return grado ? grado.nombre : '-';
   }
 
@@ -264,7 +255,7 @@ asignacionActualId: string = ''; // ✅ NUEVO
     const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
     if (!asignacion) return '-';
     
-    const grupo = this.grupos.find(g => g.id === asignacion.idGrupo);
+    const grupo = this.grupos.find(g => g.id === (asignacion as any).idGrupo);
     return grupo ? grupo.nombre : '-';
   }
 
@@ -274,32 +265,7 @@ asignacionActualId: string = ''; // ✅ NUEVO
   }
 
   get alumnosFiltrados() {
-    return this.registros.filter(alumno => {
-      const inscripcion = this.obtenerInscripcionAlumno(alumno.id!);
-      
-      if (!inscripcion && (this.filtroGrado || this.filtroGrupo || this.filtroCiclo)) {
-        return false;
-      }
-
-      if (!inscripcion) return true;
-
-      const asignacion = this.obtenerAsignacionDeInscripcion(inscripcion);
-      if (!asignacion) return false;
-
-      if (this.filtroGrado && asignacion.idGrado !== this.filtroGrado) {
-        return false;
-      }
-
-      if (this.filtroGrupo && asignacion.idGrupo !== this.filtroGrupo) {
-        return false;
-      }
-
-      if (this.filtroCiclo && asignacion.idCiclo !== this.filtroCiclo) {
-        return false;
-      }
-
-      return true;
-    });
+    return this.registrosGGC;
   }
 
   get alumnosPaginados() {
@@ -322,83 +288,20 @@ asignacionActualId: string = ''; // ✅ NUEVO
     }
   }
 
-  aplicarFiltros() {
-  this.paginaActual = 1;
-  console.log('🔍 Filtros aplicados:', {
-    grado: this.filtroGrado,
-    grupo: this.filtroGrupo,
-    ciclo: this.filtroCiclo
-  });
- 
-  if (
-    (this.filtroGrado && this.filtroGrado.trim() !== '') &&
-    (this.filtroGrupo && this.filtroGrupo.trim() !== '') &&
-    (this.filtroCiclo && this.filtroCiclo.trim() !== '')
-  ) {
-    this.loadingService.show();
-    console.log('⏳ Loading iniciado...');
-    
-    this.serviciosCiclos
-      .filtrarAlumnos(this.filtroGrado, this.filtroGrupo, this.filtroCiclo)
-      .pipe(
-        finalize(() => {
-          this.loadingService.hide();
-          console.log('✅ Loading finalizado');
-        })
-      )
-      .subscribe({
-        next: (data) => {
-          // ✅ CRÍTICO: Verificar que data no sea null
-          if (data && Array.isArray(data)) {
-            this.registrosGGC = data;
-            console.log('🔍 Alumnos encontrados:', data.length, 'registros');
-          } else {
-            this.registrosGGC = [];
-            console.log('⚠️ Respuesta vacía o null del servidor');
-          }
-        },
-        error: (err) => {
-          console.error('❌ Error al filtrar alumnos:', err);
-          this.registrosGGC = []; // ✅ Asegurar array vacío en error
-          this.alertService.show(
-            'Error al cargar alumnos',
-            'danger',
-            'Error'
-          );
-        }
-      });
-  } else {
-    // ✅ Si no hay filtros completos, limpiar
-    this.registrosGGC = [];
-    this.loadingService.hide();
-    console.log('⚠️ Filtros incompletos');
-  }
-}
-
   limpiarFiltros() {
     this.registrosGGC = [];
     this.paginaActual = 1;
     
-    // ✅ Restaurar primer grado
-    if (this.grados.length > 0) {
-      this.filtroGrado = this.grados[0].id!;
-      console.log('✅ Primer grado restaurado:', this.grados[0].nombre);
+    // ✅ Restaurar primera asignación
+    if (this.asignaciones.length > 0) {
+      this.asignacionSeleccionada = this.asignaciones[0].id || '';
+      console.log('✅ Primera asignación restaurada');
+      this.onAsignacionChange();
     } else {
-      this.filtroGrado = '';
+      this.asignacionSeleccionada = '';
     }
     
-    // ✅ Restaurar primer grupo
-    if (this.grupos.length > 0) {
-      this.filtroGrupo = this.grupos[0].id!;
-      console.log('✅ Primer grupo restaurado:', this.grupos[0].nombre);
-    } else {
-      this.filtroGrupo = '';
-    }
-    
-    // ✅ Restaurar el ciclo más reciente
-    this.cargarCicloMasReciente();
-    
-    console.log('🧹 Filtros restaurados a valores iniciales');
+    console.log('🧹 Filtros limpiados');
   }
 
   nuevo() {
@@ -411,9 +314,9 @@ asignacionActualId: string = ''; // ✅ NUEVO
     if (event) {
       console.log('✅ Nuevo alumno creado');
       
-      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
-        console.log('🔄 Reaplicando filtros...');
-        this.aplicarFiltros();
+      if (this.asignacionSeleccionada) {
+        console.log('🔄 Recargando alumnos...');
+        this.onAsignacionChange();
       }
     }
   }
@@ -425,10 +328,10 @@ asignacionActualId: string = ''; // ✅ NUEVO
   }
 
   irPerfil(alumnoId: string): void {
-  console.log('👁️ Abriendo perfil del alumno:', alumnoId);
-  this.idAlumnoSeleccionado = alumnoId;
-  this.verEstudiante = true;
-}
+    console.log('👁️ Abriendo perfil del alumno:', alumnoId);
+    this.idAlumnoSeleccionado = alumnoId;
+    this.verEstudiante = true;
+  }
 
   cerrarModalPerfil(event: boolean): void {
     this.verEstudiante = event;
@@ -441,9 +344,9 @@ asignacionActualId: string = ''; // ✅ NUEVO
     if (event) {
       console.log('✅ Alumno editado exitosamente');
       
-      if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
-        console.log('🔄 Reaplicando filtros para actualizar la tabla...');
-        this.aplicarFiltros();
+      if (this.asignacionSeleccionada) {
+        console.log('🔄 Recargando alumnos...');
+        this.onAsignacionChange();
       }
     }
   }
@@ -469,86 +372,77 @@ asignacionActualId: string = ''; // ✅ NUEVO
     }
   }
 
-// ✅ Cambiar estatus del alumno con confirmación
-async cambiarEstatus(alumno: AlumnoGGC, event: Event) {
-  // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
-  event.preventDefault();
-  
-  const nuevoEstatus = alumno.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-
-  // Mostrar alerta de confirmación antes de proceder
-  const confirmado = await this.alerta.mostrar(
-    `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} al alumno ${alumno.nombre}?`
-  );
-
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
-
-  console.log(`🔄 Cambiando estatus de ${alumno.nombre} de ${alumno.estatus} a ${nuevoEstatus}`);
-  this.loadingService.show();
-
-  this.Servicios.CambiarEstatusAlumno(alumno.alumnoId, nuevoEstatus).subscribe({
-    next: (res) => {
-      console.log('✅ Estatus cambiado exitosamente:', res);
-
-      // ✅ SOLO aquí se cambia el estatus en el modelo
-      alumno.estatus = nuevoEstatus; 
-
-      this.alertService.show(
-        `Alumno ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
-        'success',
-        'Éxito'
-      );
-
-      this.loadingService.hide();
-    },
-    error: (err) => {
-
-      this.alertService.show(
-        'Error al cambiar el estatus del alumno',
-        'danger',
-        'Error'
-      );
-
-      this.loadingService.hide();
-    }
-  });
-}
-
-
-// Agrega esta propiedad a la clase
-inscripcionIdParaAsignacion: string = ''; // ✅ NUEVO
-
-actualizarAsignacion(alumnoId: string, nombreCompleto: string) {
-  console.log('🔄 Abriendo modal para actualizar asignación de:', nombreCompleto);
-  
-  // ✅ Solo pasar lo básico, sin buscar la inscripción
-  this.alumnoIdParaAsignacion = alumnoId;
-  this.nombreAlumnoParaAsignacion = nombreCompleto;
-  this.asignacionActualId = ''; // Lo dejaremos vacío por ahora
-  this.inscripcionIdParaAsignacion = ''; // Sin ID
-  this.actualizarAsignacionm = true;
-}
-
-cerrarModalActualizarAsignacion(guardado: boolean) {
-  this.actualizarAsignacionm = false;
-  this.alumnoIdParaAsignacion = null;
-  this.nombreAlumnoParaAsignacion = '';
-  this.asignacionActualId = '';
-  this.inscripcionIdParaAsignacion = ''; // ✅ NUEVO
-  
-  if (guardado) {
-    console.log('✅ Asignación actualizada exitosamente');
+  // ✅ Cambiar estatus del alumno con confirmación
+  async cambiarEstatus(alumno: AlumnoGGC, event: Event) {
+    // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+    event.preventDefault();
     
-    // ✅ Recargar la tabla con los filtros actuales
-    if (this.filtroGrado && this.filtroGrupo && this.filtroCiclo) {
-      console.log('🔄 Reaplicando filtros para actualizar la tabla...');
-      this.aplicarFiltros();
-    } else {
-      this.cargarDatos();
+    const nuevoEstatus = alumno.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+
+    // Mostrar alerta de confirmación antes de proceder
+    const confirmado = await this.alerta.mostrar(
+      `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} al alumno ${alumno.nombre}?`
+    );
+
+    if (!confirmado) {
+      return; // El usuario canceló
+    }
+
+    console.log(`🔄 Cambiando estatus de ${alumno.nombre} de ${alumno.estatus} a ${nuevoEstatus}`);
+    this.loadingService.show();
+
+    this.Servicios.CambiarEstatusAlumno(alumno.alumnoId, nuevoEstatus).subscribe({
+      next: (res) => {
+        console.log('✅ Estatus cambiado exitosamente:', res);
+
+        // ✅ SOLO aquí se cambia el estatus en el modelo
+        alumno.estatus = nuevoEstatus!; 
+
+        this.alertService.show(
+          `Alumno ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
+          'success',
+          'Éxito'
+        );
+
+        this.loadingService.hide();
+      },
+      error: (err) => {
+        this.alertService.show(
+          'Error al cambiar el estatus del alumno',
+          'danger',
+          'Error'
+        );
+
+        this.loadingService.hide();
+      }
+    });
+  }
+
+  actualizarAsignacion(alumnoId: string, nombreCompleto: string) {
+    console.log('🔄 Abriendo modal para actualizar asignación de:', nombreCompleto);
+    
+    // ✅ Solo pasar lo básico, sin buscar la inscripción
+    this.alumnoIdParaAsignacion = alumnoId;
+    this.nombreAlumnoParaAsignacion = nombreCompleto;
+    this.asignacionActualId = '';
+    this.inscripcionIdParaAsignacion = '';
+    this.actualizarAsignacionm = true;
+  }
+
+  cerrarModalActualizarAsignacion(guardado: boolean) {
+    this.actualizarAsignacionm = false;
+    this.alumnoIdParaAsignacion = null;
+    this.nombreAlumnoParaAsignacion = '';
+    this.asignacionActualId = '';
+    this.inscripcionIdParaAsignacion = '';
+    
+    if (guardado) {
+      console.log('✅ Asignación actualizada exitosamente');
+      
+      if (this.asignacionSeleccionada) {
+        console.log('🔄 Recargando alumnos...');
+        this.onAsignacionChange();
+      }
     }
   }
-}
-
 }

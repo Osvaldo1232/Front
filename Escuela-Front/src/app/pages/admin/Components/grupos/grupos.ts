@@ -9,6 +9,7 @@ import { NuevoGrupo } from '../grupos/nuevo-grupo/nuevo-grupo/nuevo-grupo';
 import { Loading } from '../../../../shared/loading/loading';
 import { LoadingService } from '../../../../shared/loading-service';
 import { AlertaConfirmacionService } from '../../../../shared/alerta-confirmacion-service';
+import { AlertService } from '../../../../shared/alert-service';
 
 @Component({
   selector: 'app-grupos',
@@ -35,8 +36,12 @@ export class GruposComponent implements OnInit {
   registrosPorPagina = 6;
   paginaActual = 1;
 
-  constructor(private Servicios: ServiciosDirectorGrupos, private loadingService: LoadingService,
-    private alerta:AlertaConfirmacionService) { }
+  constructor(
+    private Servicios: ServiciosDirectorGrupos,
+    private loadingService: LoadingService,
+    private alerta: AlertaConfirmacionService,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit() {
     this.cargarGrupos();
@@ -55,7 +60,8 @@ export class GruposComponent implements OnInit {
       this.paginaActual = pagina;
     }
   }
-  existeNombreGrupo(nombre: string, idExcluir?: number): boolean {
+
+  existeNombreGrupo(nombre: string, idExcluir?: string): boolean {
     return this.registros.some(grupo =>
       grupo.nombre.toLowerCase().trim() === nombre.toLowerCase().trim() &&
       grupo.id !== idExcluir
@@ -89,14 +95,66 @@ export class GruposComponent implements OnInit {
     }
   }
 
-  async cambiarEstatus(grupo: Grupos) {
-        const confirmado = await this.alerta.mostrar('¿Estás seguro de cambiar el estatus?');
+  // ✅ MÉTODO CORREGIDO: Cambiar estatus con confirmación
+  async cambiarEstatus(grupo: Grupos, event: Event) {
+    // ⚠️ CRÍTICO: Prevenir el cambio del checkbox hasta confirmar
+    event.preventDefault();
+    
+    const nuevoEstatus = grupo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
 
-  if (!confirmado) {
-    return; // El usuario canceló
-  }
-    grupo.estatus = grupo.estatus === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
-    console.log('Cambiar estatus:', grupo);
+    // Mostrar alerta de confirmación antes de proceder
+    const confirmado = await this.alerta.mostrar(
+      `¿Estás seguro de ${nuevoEstatus === 'ACTIVO' ? 'activar' : 'desactivar'} el grupo ${grupo.nombre}?`
+    );
+
+    if (!confirmado) {
+      return; // El usuario canceló
+    }
+
+    console.log(`🔄 Cambiando estatus de ${grupo.nombre} de ${grupo.estatus} a ${nuevoEstatus}`);
+    this.loadingService.show();
+
+    // Crear objeto actualizado
+    const grupoActualizado: Grupos = {
+      ...grupo,
+      estatus: nuevoEstatus
+    };
+
+    if (grupo.id) {
+      this.Servicios.ActualizarGrupo(grupo.id, grupoActualizado).subscribe({
+        next: (mensaje) => {
+          console.log('✅ Estatus cambiado exitosamente:', mensaje);
+
+          // ✅ SOLO aquí se cambia el estatus en el modelo
+          grupo.estatus = nuevoEstatus;
+
+          // Actualizar en el array
+          const index = this.registros.findIndex(g => g.id === grupo.id);
+          if (index !== -1) {
+            this.registros[index].estatus = nuevoEstatus;
+          }
+
+          this.alertService.show(
+            `Grupo ${nuevoEstatus === 'ACTIVO' ? 'activado' : 'desactivado'} exitosamente`,
+            'success',
+            'Éxito'
+          );
+
+          this.loadingService.hide();
+        },
+        error: (err) => {
+          console.error('❌ Error al cambiar estatus:', err);
+          this.alertService.show(
+            'Error al cambiar el estatus del grupo',
+            'danger',
+            'Error'
+          );
+          this.loadingService.hide();
+        }
+      });
+    } else {
+      this.loadingService.hide();
+    }
   }
 
   cargarGrupos() {
@@ -104,10 +162,13 @@ export class GruposComponent implements OnInit {
     this.Servicios.ObtenerGrupos().subscribe({
       next: (res) => {
         this.registros = res;
-        console.log('Grupos cargados:', this.registros);
+        console.log('📚 Grupos cargados:', this.registros);
         this.loadingService.hide();
       },
-      error: (err) => console.error('Ya existe un grupo con ese nombre. Por favor, elige otro nombre.', err)
+      error: (err) => {
+        console.error('❌ Error al cargar grupos:', err);
+        this.loadingService.hide();
+      }
     });
   }
 }

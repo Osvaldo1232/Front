@@ -5,7 +5,6 @@ import { CampoFormativoModel } from '../../../../../../models/campo-formativo.mo
 import { ServiciosCampoFormativo } from '../../../../Services/servicios-director-campo-formativo/servicios-director-campo-formativo';
 import { AlertService } from '../../../../../../shared/alert-service'; 
 
-
 @Component({
   selector: 'app-campo-formativo-nuevo',
   standalone: true,
@@ -19,22 +18,41 @@ export class CampoFormativoNuevo {
 
   constructor(
     private Servicios: ServiciosCampoFormativo,
-    private alertService: AlertService // ⬅️ INYECTAR
+    private alertService: AlertService
   ) { }
 
   nombre: string = '';
   estatus: string = 'ACTIVO';
 
   guardar() {
+    // ✅ Validar que el campo no esté vacío
+    if (!this.nombre.trim()) {
+      this.alertService.show(
+        'El nombre del campo formativo es obligatorio',
+        'warning',
+        'Advertencia'
+      );
+      return;
+    }
+
+    // ✅ Validar que solo contenga letras
+    if (!this.validarTextoAlfabetico(this.nombre)) {
+      this.alertService.show(
+        'El nombre solo puede contener letras',
+        'warning',
+        'Advertencia'
+      );
+      return;
+    }
+
     const campo: CampoFormativoModel = { 
-      nombre: this.nombre, 
+      nombre: this.nombre.trim(), 
       estatus: this.estatus
     };
 
     this.Servicios.CrearCampoFormativo(campo).subscribe({
       next: (mensaje) => {
         console.log(mensaje);
-        // ⬇️ REEMPLAZAR alert() con tu servicio
         this.alertService.show(
           'Campo Formativo registrado exitosamente',
           'success',
@@ -42,7 +60,7 @@ export class CampoFormativoNuevo {
         );
         
         const nuevoCampo = { 
-          nombre: this.nombre,
+          nombre: this.nombre.trim(),
           estatus: this.estatus
         };
         
@@ -51,7 +69,6 @@ export class CampoFormativoNuevo {
       },
       error: (err) => {
         console.error('Error al crear Campo Formativo:', err);
-        // ⬇️ REEMPLAZAR alert() con tu servicio
         this.alertService.show(
           'Error al crear el campo formativo',
           'danger',
@@ -69,5 +86,53 @@ export class CampoFormativoNuevo {
   limpiarCampos() {
     this.nombre = '';
     this.estatus = 'ACTIVO';
+  }
+
+  // ===================================
+  // MÉTODOS DE VALIDACIÓN
+  // ===================================
+
+  // ✅ Validar que solo contenga letras y espacios (no al inicio)
+  validarTextoAlfabetico(texto: string): boolean {
+    if (!texto || texto.trim() === '') return false;
+    
+    // No permitir espacios al inicio
+    if (texto.startsWith(' ')) return false;
+    
+    // Solo letras, espacios, acentos y ñ
+    const regex = /^[a-záéíóúüñA-ZÁÉÍÓÚÜÑ\s]+$/;
+    return regex.test(texto.trim());
+  }
+
+  // ✅ Solo permitir letras y espacios en tiempo real
+  soloLetras(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    
+    // Permitir teclas especiales (backspace, tab, etc.)
+    if (charCode <= 31) return true;
+    
+    // Permitir espacio (32)
+    if (charCode === 32) return true;
+    
+    // Permitir letras (a-z, A-Z) y caracteres acentuados
+    const char = String.fromCharCode(charCode);
+    const regex = /^[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]$/;
+    
+    if (!regex.test(char)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // ✅ Eliminar espacios al inicio automáticamente
+  eliminarEspaciosInicio(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    
+    if (value.startsWith(' ')) {
+      input.value = value.trimStart();
+      this.nombre = input.value;
+    }
   }
 }

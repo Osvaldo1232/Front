@@ -6,4 +6,6 @@ export interface AsignacionDocente {
     idCiclo:string;
     estatus:string;
     fechaCreado?:string;
+    value?: string; 
+
 }

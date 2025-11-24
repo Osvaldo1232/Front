@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Alumnos, ResumenAlumnos } from '../../../../models/alumnos.model';
 import { Directivo } from '../../../../models/DirectivoPersonal';
+import { AlumnoGGC } from '../../../../models/alumnos.model';
 
 @Injectable({
   providedIn: 'root'
@@ -59,4 +60,9 @@ export class ServiciosDirectorAlumnos {
      obtenerGraficoAlumnos(idAsignacion : string): Observable<ResumenAlumnos> {
        return this.http.get<ResumenAlumnos>(`${this.apiUrlDirectivoId}/calificaciones-finales/asignacion/${idAsignacion}`);
      }
+
+     // ✅ NUEVO MÉTODO para obtener alumnos por asignación
+      obtenerAlumnosPorAsignacion(asignacionId: string): Observable<AlumnoGGC[]> {
+        return this.http.get<AlumnoGGC[]>(`${this.apiUrlDirectivoId}/inscripcion/asignacion/${asignacionId}`);
+      }
 }

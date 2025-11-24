@@ -1,21 +1,25 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">CAMPOS FORMATIVOS</h1>
-    <p class="header__subtitle">Materias</p>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">CAMPOS FORMATIVOS</h2>
+        <h5 class="titulo-h5">Gestión de Campos Formativos</h5>
+      </div>
+    </div>
+  </div>
 
-  <!-- Sección de búsqueda y botones -->
+<div class="container">
+
+  <!-- Sección de búsqueda y botón nuevo -->
   <div class="search-section">
     <input
       type="text"
       [(ngModel)]="searchTerm"
       (input)="onSearchChange()"
-      placeholder="Buscar..."
+      placeholder="Buscar campo formativo..."
       class="search-input"
     />
-    <button class="btn btn--search" (click)="buscar()">Buscar</button>
-    <button class="btn btn--clear" (click)="limpiar()">Limpiar</button>
-    <button class="btn btn--new" (click)="nuevo()">+ Nuevo</button>
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo Campo</button>
   </div>
 
   <!-- Mensaje cuando no hay campos -->
@@ -23,32 +27,32 @@
     <p>No hay campos formativos registrados.</p>
   </div>
 
- <!-- Grid de tarjetas -->
-<div class="cards-grid" *ngIf="alumnosPaginados.length > 0">
-  <div class="card" *ngFor="let campo of alumnosPaginados; let i = index">
-    <h2 class="card__title">{{ getNombreCampo(i) }}</h2>
-    <div class="card__divider"></div>
-    
-    <div class="card__content">
-      <p class="card__item">{{ campo.nombre }}</p>
-    </div>
-
-    <div class="card__footer">
-      <div class="card__status">
-        <span class="status-label">Estatus: {{ campo.estatus === 'ACTIVO' ? 'Inactivo' : 'Activo' }}</span>
-        <label class="toggle">
-          <input 
-            type="checkbox" 
-            [checked]="campo.estatus === 'ACTIVO'"
-            (change)="cambiarEstatus(campo)">
-          <span class="toggle__slider"></span>
-        </label>
-        <span class="status-label">{{ campo.estatus === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</span>
+  <!-- Grid de tarjetas -->
+  <div class="cards-grid" *ngIf="alumnosPaginados.length > 0">
+    <div class="card" *ngFor="let campo of alumnosPaginados; let i = index">
+      <div class="card__header">
+        <span class="card__badge">{{ getNombreCampo(i) }}</span>
       </div>
-      <button class="btn btn--edit" (click)="editar(campo)">EDITAR</button>
+      
+      <h2 class="card__title">{{ campo.nombre }}</h2>
+
+      <div class="card__footer">
+        <div class="card__status">
+          <span class="status-label">Inactivo</span>
+          <label class="toggle">
+            <input 
+              type="checkbox" 
+              [checked]="campo.estatus === 'ACTIVO'"
+              (click)="cambiarEstatus(campo, $event)"
+              [id]="'switch-' + campo.id">
+            <span class="toggle__slider"></span>
+          </label>
+          <span class="status-label">Activo</span>
+        </div>
+        <button class="btn btn--edit" (click)="editar(campo)">EDITAR</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- Paginación -->
   <div class="pagination" *ngIf="totalPaginas > 1">
@@ -67,12 +71,14 @@
 
 <!-- Modal Nuevo Campo -->
 <app-campo-formativo-nuevo
+  *ngIf="nuevom"
   [nuevo]="nuevom"
   (cerrar)="cerrarModal($event)">
 </app-campo-formativo-nuevo>
 
 <!-- Modal Editar Campo -->
 <app-campo-formativo-editar
+  *ngIf="editarm"
   [editar]="editarm"
   [campo]="CamposSeleccionado"
   (cerrar)="cerrarModalEditar($event)">

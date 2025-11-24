@@ -1,45 +1,31 @@
 $color-gris-texto: #495057; 
 $color-gris-secundario: #6c757d;
 $color-fondo-gris: #f4f4f4;
+$color-principal: #5C1F38;
 
 .header-section,
 .titulo-container {
-    background-color: $color-fondo-gris;
-    padding: 1rem 2rem;
-    margin-bottom: 0;
+  background-color: $color-fondo-gris;
+  padding: 1rem 2rem;
+  margin-bottom: 0;
 }
 
 .titulo-h2 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 700;
-    color: $color-gris-texto;
-    margin-top: 0 !important; 
-    margin-bottom: 0.1rem !important; 
-    font-size: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  color: $color-gris-texto;
+  margin-top: 0 !important; 
+  margin-bottom: 0.1rem !important; 
+  font-size: 2rem;
 } 
 
 .titulo-h5 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 400;
-    color: $color-gris-secundario;
-    margin-top: 0.1rem !important;
-    margin-bottom: 0 !important;
-    font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-    .header-section,
-    .titulo-container {
-        padding: 1rem 1.5rem;
-    }
-    
-    .titulo-h2 {
-        font-size: 1.5rem;
-    }
-    
-    .titulo-h5 {
-        font-size: 1rem;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  color: $color-gris-secundario;
+  margin-top: 0.1rem !important;
+  margin-bottom: 0 !important;
+  font-size: 1.1rem;
 }
 
 .container {
@@ -50,177 +36,106 @@ $color-fondo-gris: #f4f4f4;
   min-height: 100vh;
 }
 
-.header {
+// ✅ NUEVO DISEÑO PARA GRADOS
+.grados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
   margin-bottom: 2rem;
-  
-  &__title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0;
-    letter-spacing: 0.5px;
+  padding: 1rem 0;
+}
+
+.grado-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(92, 31, 56, 0.03) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease;
   }
-}
 
-.button-section {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-}
-
-.btn {
-  padding: 0.625rem 1.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-  
-  &--new {
-    background-color: #5C1F38;
-    color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    
-    &:hover {
-      background-color: #5C1F38;
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(92, 31, 56, 0.15);
+    border-color: $color-principal;
+
+    &::before {
+      transform: scale(1);
+    }
+
+    .grado-icon {
+      transform: scale(1.1) rotate(5deg);
+      color: $color-principal;
+    }
+
+    .grado-titulo {
+      color: $color-principal;
     }
   }
+}
+
+.grado-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(92, 31, 56, 0.1) 0%, rgba(92, 31, 56, 0.05) 100%);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: $color-gris-texto;
   
-  &--edit {
-    background-color: #5C1F38;
-    color: white;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.813rem;
-    
-    &:hover {
-      background-color: #5C1F38;
-    }
+  svg {
+    width: 48px;
+    height: 48px;
   }
+}
+
+.grado-titulo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
 }
 
 .no-data {
   background-color: white;
-  border-radius: 0.75rem;
-  padding: 3rem;
+  border-radius: 1rem;
+  padding: 4rem 2rem;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  svg {
+    color: $color-gris-secundario;
+    opacity: 0.5;
+    margin-bottom: 1rem;
+  }
   
   p {
-    color: #6b7280;
-    font-size: 1rem;
+    color: $color-gris-secundario;
+    font-size: 1.1rem;
     margin: 0;
+    font-weight: 500;
   }
 }
 
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.card {
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  &__title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0 0 1.5rem 0;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #f3f4f6;
-  }
-  
-  &__footer {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  &__status {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-}
-
-.status-label {
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.toggle {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 24px;
-  
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    
-    &:checked + .toggle__slider {
-      background-color: #5C1F38;
-    }
-    
-    &:checked + .toggle__slider:before {
-      transform: translateX(24px);
-    }
-    
-    &:focus + .toggle__slider {
-      box-shadow: 0 0 0 3px rgba(103, 1, 1, 0.2);
-    }
-  }
-  
-  &__slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #d1d5db;
-    transition: all 0.3s ease;
-    border-radius: 24px;
-    
-    &:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: all 0.3s ease;
-      border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-  }
-}
-
-/* ===== PAGINACIÓN ===== */
 .pagination {
   display: flex;
   justify-content: center;
@@ -253,13 +168,13 @@ $color-fondo-gris: #f4f4f4;
     }
     
     &--active {
-      background-color: #5C1F38;
+      background-color: $color-principal;
       color: white;
-      border-color: #5C1F38;
+      border-color: $color-principal;
       
       &:hover {
-        background-color: #5C1F38;
-        border-color: #5C1F38;
+        background-color: darken($color-principal, 5%);
+        border-color: darken($color-principal, 5%);
       }
     }
     
@@ -271,76 +186,156 @@ $color-fondo-gris: #f4f4f4;
   }
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
-
-/* Tablets grandes y pantallas pequeñas (2 columnas) */
-@media (max-width: 1200px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Tablets (2 columnas) */
-@media (max-width: 992px) {
-  .container {
-    padding: 1.5rem;
+// ===== ESTILOS COMENTADOS (para uso futuro) =====
+.btn {
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .header__title {
-    font-size: 1.75rem;
-  }
-  
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-}
-
-/* Móviles grandes (1 columna) */
-@media (max-width: 768px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .button-section {
-    justify-content: stretch;
+  &--new {
+    background-color: $color-principal;
+    color: white;
     
-    .btn--new {
-      width: 100%;
+    &:hover {
+      background-color: darken($color-principal, 5%);
     }
   }
   
-  .card__footer {
-    gap: 0.75rem;
+  &--edit {
+    background-color: $color-principal;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    
+    &:hover {
+      background-color: darken($color-principal, 5%);
+    }
   }
 }
 
-/* Móviles pequeños */
+.card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.card__status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.status-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .toggle__slider {
+      background-color: $color-principal;
+    }
+    
+    &:checked + .toggle__slider:before {
+      transform: translateX(24px);
+    }
+  }
+  
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: all 0.3s ease;
+    border-radius: 24px;
+    
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// ===== RESPONSIVE =====
+@media (max-width: 768px) {
+  .header-section,
+  .titulo-container {
+    padding: 1rem 1.5rem;
+  }
+  
+  .titulo-h2 {
+    font-size: 1.5rem;
+  }
+  
+  .titulo-h5 {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .grados-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .grado-card {
+    padding: 2.5rem 2rem;
+  }
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 1rem;
   }
-  
-  .header__title {
-    font-size: 1.5rem;
+
+  .grado-card {
+    padding: 2rem 1.5rem;
   }
-  
-  .card {
-    padding: 1.25rem;
-    
-    &__title {
-      font-size: 1.125rem;
+
+  .grado-icon {
+    width: 64px;
+    height: 64px;
+
+    svg {
+      width: 40px;
+      height: 40px;
     }
   }
-  
-  .pagination {
-    gap: 0.25rem;
-    
-    &__btn {
-      min-width: 36px;
-      height: 36px;
-      font-size: 0.813rem;
-    }
+
+  .grado-titulo {
+    font-size: 1.25rem;
   }
 }

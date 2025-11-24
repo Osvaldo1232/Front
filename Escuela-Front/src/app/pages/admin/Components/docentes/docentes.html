@@ -1,19 +1,30 @@
-<div class="container">
-  <header class="header">
-    <h1 class="header__title">DOCENTES</h1>
-    <p class="header__subtitle">Lista de Docentes</p>
-  </header>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">DOCENTES</h2>
+        <h5 class="titulo-h5">Gestión de Docentes</h5>
+      </div>
+    </div>
+  </div>
 
+<div class="container">
+
+  <!-- Sección de búsqueda -->
   <div class="search-section">
-    <input type="text" class="search-input" placeholder="Buscar docente..." [(ngModel)]="terminoBusqueda">
-    <button class="btn btn--secondary" (click)="buscar()">Buscar</button>
-    <button class="btn btn--secondary" (click)="limpiarBusqueda()">Limpiar</button>
-    <button class="btn btn--secondary" (click)="nuevo()">+Nuevo</button>
+    <input 
+      type="text" 
+      class="search-input" 
+      placeholder="Buscar docente..." 
+      [(ngModel)]="terminoBusqueda"
+      (input)="buscar()">
+    <button class="btn btn--clear" (click)="limpiarBusqueda()">Limpiar</button>
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo Docente</button>
   </div>
 
   <!-- Mensaje cuando no hay docentes -->
   <div *ngIf="registros.length === 0" class="no-data">
-    <p>No hay docentes registrados. Haz clic en "+Nuevo" para agregar uno.</p>
+    <p>No hay docentes registrados. Haz clic en "Nuevo Docente" para agregar uno.</p>
   </div>
 
   <!-- Mensaje cuando no hay resultados de búsqueda -->
@@ -21,26 +32,28 @@
     <p>No se encontraron docentes con el término "{{ terminoBusqueda }}"</p>
   </div>
 
-  <div class="cards-grid">
+  <!-- Grid de tarjetas -->
+  <div class="cards-grid" *ngIf="usuariosPaginados.length > 0">
     <div class="card" *ngFor="let docente of usuariosPaginados">
-      <!-- ✅ BOTÓN ASIGNAR GRUPO (NUEVO) -->
+      
+      <!-- Botón Asignar Grupo -->
       <button class="btn-asignar-grupo" (click)="abrirModalAsignacion(docente)" title="Asignar Grupo">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
           <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
         </svg>
       </button>
 
-      <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidoPaterno }} {{docente.apellidoMaterno}}</h2>
+      <h2 class="card__name">{{ docente.nombre }} {{ docente.apellidoPaterno }} {{ docente.apellidoMaterno }}</h2>
 
       <div class="card__divider"></div>
+      
       <div class="card__info">
-        <p class="card__detail">Clave Presupuestal: {{ docente.clavePresupuestal }}</p>
-        <p class="card__detail">RFC: {{ docente.rfc }}</p>
+        <p class="card__detail"><strong>Clave:</strong> {{ docente.clavePresupuestal }}</p>
+        <p class="card__detail"><strong>RFC:</strong> {{ docente.rfc }}</p>
+        <p class="card__detail"><strong>Teléfono:</strong> {{ docente.telefono }}</p>
+        <p class="card__detail"><strong>Especialidad:</strong> {{ docente.especialidad }}</p>
       </div>
-      <div class="card__info">
-        <p class="card__detail">Teléfono: {{ docente.telefono }}</p>
-        <p class="card__detail">Especialidad: {{ docente.especialidad }}</p>
-      </div>
+
       <div class="card__footer">
         <div class="card__status">
           <span class="status-label">Inactivo</span>
@@ -48,7 +61,8 @@
             <input 
               type="checkbox" 
               [checked]="docente.estatus === 'ACTIVO'"
-              (change)="cambiarEstatus(docente)">
+              (click)="cambiarEstatus(docente, $event)"
+              [id]="'switch-' + docente.id">
             <span class="toggle__slider"></span>
           </label>
           <span class="status-label">Activo</span>
@@ -58,6 +72,7 @@
     </div>
   </div> 
 
+  <!-- Paginación -->
   <div class="pagination" *ngIf="totalPaginas > 1">
     <button class="pagination__btn pagination__btn--prev" (click)="paginaAnterior()" [disabled]="paginaActual === 1">‹</button>
     
@@ -75,19 +90,22 @@
 
 <!-- Modal Nuevo Docente -->
 <app-nuevo-docente 
+  *ngIf="nuevom"
   [nuevo]="nuevom"
   (cerrar)="cerrarmodal($event)">
 </app-nuevo-docente>
 
 <!-- Modal Editar Docente -->
 <app-editar-docente 
+  *ngIf="editarm"
   [editar]="editarm"
   [docente]="docenteSeleccionado"
   (cerrar)="cerrarModalEditar($event)">
 </app-editar-docente>
 
-<!-- ✅ MODAL ASIGNAR GRUPO (NUEVO) -->
+<!-- Modal Asignar Grupo -->
 <app-asignar-grupo-docente
+  *ngIf="asignarGrupom"
   [mostrar]="asignarGrupom"
   [docente]="docenteParaAsignar"
   (cerrar)="cerrarModalAsignacion($event)">

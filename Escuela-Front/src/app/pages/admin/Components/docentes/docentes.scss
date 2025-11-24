@@ -1,305 +1,346 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+// ===================================
+// VARIABLES DE COLOR (UNIFICADAS)
+// ===================================
+$color-primary: #5C1F38;
+$color-primary-hover: #4A1A2E;
+$color-activo: #10B981;
+$color-inactivo: #6B7280;
+$color-gris-texto: #495057;
+$color-gris-secundario: #6c757d;
+$color-fondo-gris: #f4f4f4;
+$color-text: #1F2937;
+$color-text-light: #6B7280;
+$color-border: #E5E7EB;
+$color-bg: #F9FAFB;
+$color-white: #FFFFFF;
+
+// ===================================
+// HEADER
+// ===================================
+.header-section,
+.titulo-container {
+  background-color: $color-fondo-gris;
+  padding: 1rem 2rem;
+  margin-bottom: 0;
 }
 
-body {
-    font-family: 'Didot', 'Bodoni MT', 'Cochin', serif;
-    background-color: #FFFFFF;
-    padding: 40px;
+.titulo-h2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  color: $color-gris-texto;
+  margin-top: 0 !important;
+  margin-bottom: 0.1rem !important;
+  font-size: 2rem;
 }
 
-/* Container */
+.titulo-h5 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  color: $color-gris-secundario;
+  margin-top: 0.1rem !important;
+  margin-bottom: 0 !important;
+  font-size: 1.1rem;
+}
+
+// ===================================
+// CONTAINER
+// ===================================
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: $color-bg;
+  min-height: 100vh;
 }
 
-/* Header */
-.header {
-    margin-bottom: 30px;
-}
-
-.header__title {
-    font-size: 36px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    margin-bottom: 5px;
-}
-
-.header__subtitle {
-    font-size: 18px;
-    font-weight: 300;
-}
-
-/* Search Section */
+// ===================================
+// SECCIÓN DE BÚSQUEDA
+// ===================================
 .search-section {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-    align-items: center;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
 }
 
 .search-input {
-    flex: 1;
-    padding: 12px 20px;
-    background-color: #E8E8E8;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid $color-border;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 4px rgba($color-primary, 0.1);
+  }
+
+  &::placeholder {
+    color: $color-text-light;
+  }
 }
 
-.search-input::placeholder {
-    color: #999;
-}
-
-/* Buttons */
+// ===================================
+// BOTONES
+// ===================================
 .btn {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 
-.btn--primary {
-    background-color: #E8DCC4;
-    color: #000000;
-}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
 
-.btn--primary:hover {
-    background-color: #dccfb3;
-}
+  &:active {
+    transform: translateY(0);
+  }
 
-.btn--secondary {
-    background-color: #E8DCC4;
-    color: #000000;
-}
+  &--new {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-hover 100%);
+    color: white;
+    box-shadow: 0 4px 6px rgba(92, 31, 56, 0.3);
+    font-weight: 700;
 
-.btn--secondary:hover {
-    background-color: #dccfb3;
-}
+    &:hover {
+      background: linear-gradient(135deg, $color-primary-hover 0%, $color-primary 100%);
+      box-shadow: 0 8px 16px rgba(92, 31, 56, 0.4);
+    }
+  }
 
-.btn--edit {
-    background-color: #5C1F38;
-    color: #FFFFFF;
-    padding: 10px 25px;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
+  &--clear {
+    background: $color-inactivo;
+    color: white;
 
-.btn--edit:hover {
-    background-color: #491830;
-}
+    &:hover {
+      background: #4B5563;
+    }
+  }
 
-/* Cards Grid */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-bottom: 40px;
-}
-
-/* Card */
-.card {
-    background-color: #EFEBE3;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.card__name {
-    font-size: 20px;
-    font-weight: 400;
-    margin-bottom: 15px;
-}
-
-.card__divider {
+  &--edit {
+    background: $color-primary;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.813rem;
     width: 100%;
-    height: 1px;
-    background-color: #B8B8B8;
-    margin-bottom: 15px;
+    justify-content: center;
+
+    &:hover {
+      background: $color-primary-hover;
+      box-shadow: 0 4px 8px rgba(92, 31, 56, 0.3);
+    }
+  }
 }
 
-.card__info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+// ===================================
+// SIN DATOS
+// ===================================
+.no-data {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 2px dashed $color-border;
+
+  p {
+    color: $color-text-light;
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 500;
+  }
 }
 
-.card__detail {
-    font-size: 13px;
-    color: #000000;
-    flex: 1;
+// ===================================
+// GRID DE TARJETAS
+// ===================================
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.card__detail:first-child {
-    margin-right: 10px;
-}
+// ===================================
+// TARJETA
+// ===================================
+.card {
+  background: linear-gradient(135deg, $color-white 0%, #FAFAFA 100%);
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-.card__footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.card__status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Status Label */
-.status-label {
-    font-size: 12px;
-    color: #000000;
-}
-
-/* Toggle Switch */
-.toggle {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-}
-
-.toggle input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle input:checked + .toggle__slider {
-    background-color: #5C1F38;
-}
-
-.toggle input:checked + .toggle__slider:before {
-    transform: translateX(26px);
-}
-
-.toggle__slider {
+  &::before {
+    content: '';
     position: absolute;
-    cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background-color: #5C1F38;
-    transition: 0.4s;
-    border-radius: 24px;
-}
+    height: 4px;
+    background: linear-gradient(90deg, $color-primary 0%, $color-primary-hover 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
 
-.toggle__slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
+  &:hover {
+    border-color: rgba($color-primary, 0.2);
+    box-shadow: 0 12px 24px rgba(92, 31, 56, 0.15);
+    transform: translateY(-5px);
 
-/* Pagination */
-.pagination {
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .card__name {
+      color: $color-primary;
+    }
+  }
+
+  &__name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $color-text;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    text-align: center;
+    transition: color 0.3s ease;
+    letter-spacing: 0.5px;
+  }
+
+  &__divider {
+    height: 2px;
+    background: $color-border;
+    margin-bottom: 1rem;
+  }
+
+  &__info {
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+
+  &__detail {
+    font-size: 0.9rem;
+    color: $color-text;
+    margin: 0.5rem 0;
+    line-height: 1.6;
+
+    strong {
+      color: $color-text;
+      font-weight: 600;
+    }
+  }
+
+  &__footer {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  &__status {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: $color-bg;
+    border-radius: 0.75rem;
+  }
 }
 
-.pagination__btn {
-    min-width: 35px;
-    height: 35px;
-    padding: 8px 12px;
-    border: none;
-    background-color: transparent;
-    color: #000000;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+// ===================================
+// BOTÓN ASIGNAR GRUPO
+// ===================================
+.btn-asignar-grupo {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $color-primary;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(92, 31, 56, 0.3);
+  z-index: 2;
+
+  &:hover {
+    background: $color-primary-hover;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(92, 31, 56, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
-.pagination__btn:hover {
-    background-color: #E8E8E8;
+// ===================================
+// ETIQUETAS DE ESTATUS
+// ===================================
+.status-label {
+  font-size: 0.875rem;
+  color: $color-text;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
-.pagination__btn--active {
-    background-color: #5C1F38;
-    color: #FFFFFF;
-}
-
-.pagination__btn--active:hover {
-    background-color: #5C1F38;
-}
-
-.pagination__btn--prev,
-.pagination__btn--next {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.pagination__dots {
-    padding: 0 5px;
-    color: #000000;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .cards-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .search-section {
-        flex-wrap: wrap;
-    }
-    
-    .search-section .search-input {
-        width: 100%;
-    }
-}
-.no-data {
-  text-align: center;
-  padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
-}
+// ===================================
+// TOGGLE SWITCH
+// ===================================
 .toggle {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 56px;
+  height: 28px;
+  flex-shrink: 0;
 
   input {
     opacity: 0;
     width: 0;
     height: 0;
 
-    // ✅ CUANDO ESTÁ ACTIVO (checked) - Color morado
     &:checked + .toggle__slider {
-      background-color: #5D1F3C;
+      background: linear-gradient(135deg, $color-activo 0%, #059669 100%);
     }
 
     &:checked + .toggle__slider:before {
-      transform: translateX(26px);
+      transform: translateX(28px);
     }
 
-    // ✅ CUANDO ESTÁ INACTIVO (unchecked) - Color gris
-    &:not(:checked) + .toggle__slider {
-      background-color: #ccc;
+    &:focus + .toggle__slider {
+      box-shadow: 0 0 0 4px rgba(92, 31, 56, 0.15);
     }
   }
 
@@ -310,62 +351,187 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc; // ✅ Gris por defecto (inactivo)
-    transition: 0.4s;
-    border-radius: 24px;
+    background: linear-gradient(135deg, $color-inactivo 0%, #4B5563 100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 28px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &:before {
       position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
+      height: 22px;
+      width: 22px;
       left: 3px;
       bottom: 3px;
       background-color: white;
-      transition: 0.4s;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      box-shadow: 0 0 8px rgba(92, 31, 56, 0.3);
     }
   }
 }
 
-// ✅ ESTILOS PARA LOS LABELS
-.status-label {
-  font-size: 0.85rem;
-  color: #2c3e50;
-  font-weight: 500;
-}
-
-
-
-// ✅ NUEVO: Botón Asignar Grupo
-.btn-asignar-grupo {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  padding: 0;
+// ===================================
+// PAGINACIÓN
+// ===================================
+.pagination {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #D4AF37;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
 
-  svg {
-    fill: white;
-  }
+  &__btn {
+    min-width: 42px;
+    height: 42px;
+    padding: 0.5rem;
+    border: 2px solid $color-border;
+    background-color: white;
+    color: $color-text;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-  &:hover {
-    background: #C19B2E;
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+    &:hover:not(:disabled) {
+      background-color: $color-bg;
+      border-color: $color-primary;
+      color: $color-primary;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(92, 31, 56, 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-hover 100%);
+      color: white;
+      border-color: $color-primary;
+      box-shadow: 0 4px 8px rgba(92, 31, 56, 0.3);
+
+      &:hover {
+        background: linear-gradient(135deg, $color-primary-hover 0%, $color-primary 100%);
+        border-color: $color-primary;
+      }
+    }
+
+    &--prev,
+    &--next {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
   }
 }
 
-.card {
-  position: relative; 
+// ===================================
+// RESPONSIVE
+// ===================================
+@media (max-width: 768px) {
+  .header-section,
+  .titulo-container {
+    padding: 1rem 1.5rem;
+  }
+
+  .titulo-h2 {
+    font-size: 1.5rem;
+  }
+
+  .titulo-h5 {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .search-section {
+    flex-direction: column;
+
+    .search-input {
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+
+    &__name {
+      font-size: 1.15rem;
+    }
+
+    &__footer {
+      padding-top: 0.75rem;
+    }
+
+    &__status {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+  }
+
+  .btn-asignar-grupo {
+    width: 36px;
+    height: 36px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .pagination {
+    gap: 0.35rem;
+
+    &__btn {
+      min-width: 38px;
+      height: 38px;
+      font-size: 0.813rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+
+    &__name {
+      font-size: 1rem;
+    }
+  }
+
+  .pagination {
+    &__btn {
+      min-width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+@media (min-width: 1600px) {
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
 }

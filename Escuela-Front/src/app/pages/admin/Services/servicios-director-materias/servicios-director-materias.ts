@@ -12,9 +12,9 @@ export class ServiciosDirectorMaterias {
 
   private apiUrlMateriasListar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/mostrarmaterias';
   private apiUrlMateriasCrear = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/nueva';
-  private apiUrlMateriasEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/Actualizar';
+  private apiUrlMateriasEditar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/actualizar';
   private apiUrlAsignar = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/asignacion/guardar';
-  private apiUrlMateriasPorCampo = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/por-campo'; // ✅ NUEVO
+  private apiUrlMateriasPorCampo = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/materias/por-campo'; 
 
   constructor(private http: HttpClient) {}
   

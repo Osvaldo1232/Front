@@ -1,39 +1,43 @@
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
-      <h2 class="text-uppercase mb-1 titulo-h2">TUTORES REGISTRADOS</h2>
-      <h5 class="text-muted mb-4 titulo-h5">Lista de Tutores</h5>
+      <div class="header-section">
+        <h2 class="text-uppercase titulo-h2">TUTORES</h2>
+        <h5 class="titulo-h5">Gestión de Tutores Registrados</h5>
+      </div>
     </div>
   </div>
 
-  <div class="card p-4 shadow-lg table-card">
-    <!-- Barra de búsqueda y botones -->
-    <div class="d-flex justify-content-between mb-3 align-items-center">
-      <div class="search-container">
-        <input 
-          type="text" 
-          class="form-control search-input" 
-          placeholder="Buscar..." 
-          [(ngModel)]="terminoBusqueda"
-          (input)="buscar()">
-      </div>
+<div class="container">
 
-      <div class="button-group">
-        <button class="btn btn-search" (click)="buscar()">Buscar</button>
-        <button class="btn btn-clear" (click)="limpiarBusqueda()">Limpiar</button>
-        <button class="btn btn-new" (click)="nuevo()">+ Nuevo</button>
-      </div>
-    </div>
+  <!-- Barra de búsqueda y botones -->
+  <div class="search-section">
+    <input 
+      type="text" 
+      class="search-input" 
+      placeholder="Buscar tutor..." 
+      [(ngModel)]="terminoBusqueda"
+      (input)="buscar()">
+    
+    <button class="btn btn--clear" (click)="limpiarBusqueda()">Limpiar</button>
+    <button class="btn btn--new" (click)="nuevo()">+ Nuevo Tutor</button>
+  </div>
 
-    <!-- Mensaje cuando no hay tutores -->
-    <div *ngIf="registros.length === 0" class="no-data">
-      <p>No hay tutores registrados.</p>
-    </div>
+  <!-- Mensaje cuando no hay tutores -->
+  <div *ngIf="registros.length === 0" class="no-data">
+    <p>No hay tutores registrados. Haz clic en "Nuevo Tutor" para agregar uno.</p>
+  </div>
 
-    <!-- Tabla -->
-    <div class="table-responsive" *ngIf="tutoresPaginados.length > 0">
-      <table class="table table-striped table-hover align-middle">
-        <thead class="table-header">
+  <!-- Mensaje cuando no hay resultados de búsqueda -->
+  <div *ngIf="registros.length > 0 && tutoresFiltrados.length === 0" class="no-data">
+    <p>No se encontraron tutores con el término "{{ terminoBusqueda }}"</p>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-card" *ngIf="tutoresPaginados.length > 0">
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
           <tr>
             <th>NOMBRE</th>
             <th>APELLIDO PATERNO</th>
@@ -45,33 +49,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let tutor of tutoresPaginados">
+          <tr *ngFor="let tutor of tutoresPaginados; let i = index" [class.row-alt]="i % 2 !== 0">
             <td>{{ tutor.nombre }}</td>
             <td>{{ tutor.apellidoPaterno }}</td>
             <td>{{ tutor.apellidoMaterno }}</td>
             <td>{{ tutor.correo }}</td>
             <td>{{ tutor.telefono }}</td>
             <td>
-              <span class="badge" 
-                    [class.badge-activo]="tutor.estatus === 'ACTIVO'" 
-                    [class.badge-inactivo]="tutor.estatus === 'INACTIVO'">
-                {{ tutor.estatus }}
-              </span>
+              <div class="status-toggle">
+                <span class="status-label-small">Inactivo</span>
+                <label class="toggle">
+                  <input 
+                    type="checkbox" 
+                    [checked]="tutor.estatus === 'ACTIVO'"
+                    (click)="cambiarEstatus(tutor, $event)"
+                    [id]="'switch-' + tutor.id">
+                  <span class="toggle__slider"></span>
+                </label>
+                <span class="status-label-small">Activo</span>
+              </div>
             </td>
             <td>
-              <button class="btn btn-icon-edit" (click)="editar(tutor)" title="Editar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-pencil" viewBox="0 0 16 16">
+              <button class="btn-icon-edit" (click)="editar(tutor)" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.105l-5.313 1.77a.5.5 0 0 1-.606-.606l1.77-5.313a.5.5 0 0 1 .105-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5v-.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 .5-.5v-.5a.5.5 0 0 1 .176-.358z" />
                 </svg>
               </button>
-
-
             </td>
           </tr>
         </tbody>
       </table>
-    </div> <!-- ✅ cierre correcto de .table-responsive -->
+    </div>
 
     <!-- Paginación -->
     <div class="pagination-container" *ngIf="totalPaginas > 1">
@@ -88,9 +96,9 @@
           </li>
         </ul>
       </nav>
-    </div> <!-- ✅ cierre correcto de paginación -->
-  </div> <!-- ✅ cierre correcto de .card -->
-</div> <!-- ✅ cierre correcto de .container-fluid -->
+    </div>
+  </div>
+</div>
 
 <!-- Modal Nuevo Tutor -->
 <app-nuevo-tutor 
@@ -107,5 +115,4 @@
   (cerrar)="cerrarModalEditar($event)">
 </app-editar-tutor>
 
-<!-- Loading -->
 <app-loading></app-loading>

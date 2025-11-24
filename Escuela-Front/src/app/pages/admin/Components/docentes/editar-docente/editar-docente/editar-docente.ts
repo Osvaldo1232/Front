@@ -111,6 +111,17 @@ export class EditarDocente implements OnChanges {
       }
     });
   }
+  // ✅ Método para permitir solo números
+  soloNumeros(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    
+    // Solo permite números (0-9)
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
 
   cerrarModal() {
     this.cerrar.emit(false);

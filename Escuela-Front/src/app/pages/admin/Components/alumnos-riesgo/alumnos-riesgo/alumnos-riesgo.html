@@ -10,13 +10,13 @@
   <div class="card p-3 shadow-sm mb-4">
     <div class="row align-items-center">
       <div class="col-md-10">
-        <label class="form-label fw-bold mb-2">Seleccionar Grupo:</label>
+        <label class="form-label fw-bold mb-2">Seleccionar Asignación:</label>
         <select 
           class="form-select" 
           [(ngModel)]="asignacionSeleccionada" 
           (change)="onAsignacionChange()">
-          <option value="">-- Seleccionar --</option>
-          <option *ngFor="let asignacion of asignaciones" [value]="asignacion.id">
+<!--           <option value="">-- Seleccionar --</option>
+ -->          <option *ngFor="let asignacion of asignaciones" [value]="asignacion.id">
             {{ asignacion.value }}
           </option>
         </select>

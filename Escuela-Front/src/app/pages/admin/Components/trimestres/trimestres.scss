@@ -1,53 +1,266 @@
-$crema: #f7f3e8;
-$texto-negro: #2c2c2c;
+// ===================================
+// VARIABLES DE COLOR (UNIFICADAS)
+// ===================================
+$color-primary: #5C1F38;
+$color-primary-hover: #4A1A2E;
+$color-gris-texto: #495057;
+$color-gris-secundario: #6c757d;
+$color-fondo-gris: #f4f4f4;
+$color-text: #1F2937;
+$color-text-light: #6B7280;
+$color-border: #E5E7EB;
+$color-bg: #F9FAFB;
+$color-white: #FFFFFF;
 
+// ===================================
+// HEADER
+// ===================================
+.header-section {
+  background-color: $color-fondo-gris;
+  padding: 1rem 2rem;
+  margin-bottom: 0;
+}
+
+.titulo-h2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  color: $color-gris-texto;
+  margin-top: 0 !important;
+  margin-bottom: 0.1rem !important;
+  font-size: 2rem;
+}
+
+.titulo-h5 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+  color: $color-gris-secundario;
+  margin-top: 0.1rem !important;
+  margin-bottom: 0 !important;
+  font-size: 1.1rem;
+}
+
+// ===================================
+// CONTAINER
+// ===================================
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: $color-bg;
+  min-height: 100vh;
+}
+
+// ===================================
+// SIN DATOS
+// ===================================
+.no-data {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 2px dashed $color-border;
+
+  svg {
+    color: $color-text-light;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+
+  p {
+    color: $color-text-light;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    font-weight: 500;
+  }
+}
+
+// ===================================
+// GRID DE TARJETAS
+// ===================================
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding: 2rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
+// ===================================
+// TARJETAS DE TRIMESTRES
+// ===================================
 .trimestre-card {
-  background-color: $crema;
+  background: linear-gradient(135deg, $color-white 0%, #FAFAFA 100%);
+  border: 2px solid transparent;
+  border-radius: 1rem;
   padding: 2.5rem 1.5rem;
-  border-radius: 1.5rem;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
 
-  min-height: 180px;   
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $color-primary 0%, $color-primary-hover 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba($color-primary, 0.2);
+    box-shadow: 0 12px 24px rgba(92, 31, 56, 0.15);
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .trimestre-title {
+      color: $color-primary;
+    }
+
+    .trimestre-icon svg {
+      transform: scale(1.1);
+      color: $color-primary;
+    }
+
+    .trimestre-numero {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-hover 100%);
+      transform: scale(1.1);
+    }
+  }
 }
 
-.trimestre-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+// ===================================
+// ÍCONO DEL TRIMESTRE
+// ===================================
+.trimestre-icon {
+  margin-bottom: 1.5rem;
+
+  svg {
+    color: $color-primary;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
 }
 
+// ===================================
+// NÚMERO DEL TRIMESTRE
+// ===================================
+.trimestre-numero {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, $color-gris-texto 0%, $color-gris-secundario 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+// ===================================
+// TÍTULO DEL TRIMESTRE
+// ===================================
 .trimestre-title {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: $texto-negro;
-  letter-spacing: 1px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $color-text;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.25rem 0;
+  transition: color 0.3s ease;
 }
 
+// ===================================
+// LÍNEA DECORATIVA
+// ===================================
 .trimestre-line {
   width: 80%;
-  height: 1px;
-  background-color: #6f6f6f;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, $color-primary 50%, transparent 100%);
   margin: 0 auto;
 }
+
+// ===================================
+// RESPONSIVE
+// ===================================
 @media (max-width: 992px) {
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-section {
+    padding: 1rem 1.5rem;
+  }
+
+  .titulo-h2 {
+    font-size: 1.5rem;
+  }
+
+  .titulo-h5 {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trimestre-card {
+    min-height: 240px;
+    padding: 2rem 1.25rem;
+  }
+
+  .trimestre-title {
+    font-size: 1.25rem;
+  }
+
+  .trimestre-numero {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .trimestre-icon svg {
+    width: 40px;
+    height: 40px;
   }
 }
 
 @media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .trimestre-card {
+    min-height: 220px;
+  }
+}
+
+@media (min-width: 1600px) {
   .cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }
