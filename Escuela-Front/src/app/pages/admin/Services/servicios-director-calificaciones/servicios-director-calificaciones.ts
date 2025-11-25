@@ -10,7 +10,7 @@ import { AlumnoCalificaciones } from '../../../../models/calificaciones-asignaci
 export class ServiciosDirectorCalificaciones {
 
   private apiUrlReprobados = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/calificaciones-finales/reprobados';
-  private apiUrlAsignaciones = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/calificaciones-finales/asignaciones';
+  private apiUrlAsignaciones = 'https://unusual-sharyl-utsemintegradora-3bae85c1.koyeb.app/calificaciones-finales';
 
   constructor(private http: HttpClient) {}
 
