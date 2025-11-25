@@ -3,16 +3,16 @@
 
     <div class="modal-header">
       <h5 class="modal-title">Asignar Tutor</h5>
-      <button type="button" class="btn-close" (click)="cerrarModal()">X</button>
+      <button type="button" class="btn-close" (click)="cerrarModal()">×</button>
     </div>
 
     <div class="modal-body">
-      <form (ngSubmit)="guardar()">
+      <form (ngSubmit)="guardar()" #formulario="ngForm">
         
-       <!-- Alumno (solo lectura) -->
+        <!-- Alumno (solo lectura) -->
         <div class="mb-3">
-        <label class="form-label">Alumno</label>
-        <input 
+          <label class="form-label">Alumno</label>
+          <input 
             type="text" 
             class="form-control" 
             [value]="nombreAlumno" 
@@ -21,34 +21,61 @@
 
         <!-- Tutor (combo) -->
         <div class="mb-3">
-          <label class="form-label">Tutor:</label>
-          <select class="form-select" [(ngModel)]="tutorId" name="tutor" required>
-            <option value="">Seleccionar...</option>
-            <option *ngFor="let tutor of tutores" [value]="tutor.id">{{ tutor.nombre }}</option>
+          <label class="form-label">Tutor: <span class="text-danger">*</span></label>
+          <select 
+            class="form-select" 
+            [(ngModel)]="tutorId" 
+            name="tutor"
+            #tutorInput="ngModel"
+            required>
+            <option value="">Seleccionar tutor...</option>
+            <option *ngFor="let tutor of tutores" [value]="tutor.id">
+              {{ tutor.nombre }}
+            </option>
           </select>
+          <small *ngIf="tutorInput.invalid && tutorInput.touched" class="text-danger">
+            Selecciona un tutor
+          </small>
         </div>
 
-       <!-- Ciclo -->
+        <!-- Ciclo -->
         <div class="mb-3">
-        <label class="form-label">Ciclo:</label>
-        <select class="form-select" [(ngModel)]="cicloId" name="ciclo" required>
-            <option value="">Seleccionar...</option>
+          <label class="form-label">Ciclo Escolar: <span class="text-danger">*</span></label>
+          <select 
+            class="form-select" 
+            [(ngModel)]="cicloId" 
+            name="ciclo"
+            #cicloInput="ngModel"
+            required>
+            <option value="">Seleccionar ciclo...</option>
             <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-            {{ ciclo.anioInicio }}-{{ ciclo.anioFin }}
+              {{ ciclo.nombre }}
             </option>
-        </select>
+          </select>
+          <small *ngIf="cicloInput.invalid && cicloInput.touched" class="text-danger">
+            Selecciona un ciclo escolar
+          </small>
+          
+          <!-- ✅ Mensaje cuando no hay ciclos disponibles -->
+          <small *ngIf="ciclos.length === 0 && alumnoId" class="text-info d-block mt-2">
+            ℹ️ Este alumno ya tiene tutor asignado en todos los ciclos escolares
+          </small>
         </div>
 
         <!-- Parentesco -->
         <div class="mb-3">
-          <label class="form-label">Parentesco:</label>
+          <label class="form-label">Parentesco: <span class="text-danger">*</span></label>
           <input 
             type="text" 
             class="form-control" 
             [(ngModel)]="parentesco" 
             name="parentesco" 
-            placeholder="Ej: Padre, Madre, Tutor Legal..." 
+            placeholder="Ej: Padre, Madre, Tutor Legal..."
+            #parentescoInput="ngModel"
             required>
+          <small *ngIf="parentescoInput.invalid && parentescoInput.touched" class="text-danger">
+            El parentesco es obligatorio
+          </small>
         </div>
 
         <!-- Mensaje de error -->
@@ -57,8 +84,13 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-          <button type="submit" class="btn btn-editar" [disabled]="guardando">
+          <button type="button" class="btn btn-cancelar" (click)="cerrarModal()">
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-editar" 
+            [disabled]="guardando || !formulario.valid || ciclos.length === 0">
             {{ guardando ? 'Guardando...' : 'Guardar' }}
           </button>
         </div>

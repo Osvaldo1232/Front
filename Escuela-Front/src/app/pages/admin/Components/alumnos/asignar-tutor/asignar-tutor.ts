@@ -33,7 +33,7 @@ export class AsignarTutor implements OnInit, OnChanges {
   parentesco: string = '';
 
   tutores: TutorCombo[] = [];
-  ciclos: Ciclos[] = [];
+  ciclos: TutorCombo[] = []; // ✅ Cambiado a TutorCombo[] (viene del servicio ciclosescolares/sin-tutor)
 
   guardando: boolean = false;
   errorMensaje: string = '';
@@ -45,26 +45,59 @@ export class AsignarTutor implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['alumnoId'] && this.alumnoId) {
       console.log('👨‍🎓 Alumno ID seleccionado:', this.alumnoId);
+      // ✅ Recargar ciclos cuando cambia el alumnoId
+      this.cargarCiclosSinTutor();
     }
   }
 
   cargarDatos() {
-    // Cargar tutores
+    // ✅ Cargar tutores
     this.serviciosTutores.ObtenerTutoresCombo().subscribe({
       next: (res) => {
         this.tutores = res;
         console.log('👥 Tutores cargados:', this.tutores);
       },
-      error: (err) => console.error('Error al cargar tutores:', err)
+      error: (err) => {
+        console.error('Error al cargar tutores:', err);
+        this.alertService.show(
+          'Error al cargar tutores',
+          'danger',
+          'Error'
+        );
+      }
     });
 
-    // Cargar ciclos
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
+    // ✅ Cargar ciclos sin tutor
+    this.cargarCiclosSinTutor();
+  }
+
+  // ✅ NUEVO MÉTODO: Cargar solo ciclos donde el alumno NO tiene tutor
+  cargarCiclosSinTutor() {
+    if (!this.alumnoId) {
+      console.warn('⚠️ No hay alumnoId disponible para cargar ciclos');
+      this.ciclos = [];
+      return;
+    }
+
+    this.serviciosTutores.ObtenerCiclosSinTutor(this.alumnoId).subscribe({
       next: (res) => {
         this.ciclos = res;
-        console.log('📅 Ciclos cargados:', this.ciclos);
+        console.log('📅 Ciclos sin tutor cargados:', this.ciclos);
+        
+        // ✅ Validar si hay ciclos disponibles
+        if (this.ciclos.length === 0) {
+          console.log('ℹ️ Este alumno ya tiene tutor asignado en todos los ciclos');
+        }
       },
-      error: (err) => console.error('Error al cargar ciclos:', err)
+      error: (err) => {
+        console.error('❌ Error al cargar ciclos sin tutor:', err);
+        this.ciclos = [];
+        this.alertService.show(
+          'Error al cargar ciclos escolares',
+          'danger',
+          'Error'
+        );
+      }
     });
   }
 
@@ -80,11 +113,21 @@ export class AsignarTutor implements OnInit, OnChanges {
 
   guardar() {
     if (!this.validarFormulario()) {
+      this.alertService.show(
+        this.errorMensaje,
+        'warning',
+        'Advertencia'
+      );
       return;
     }
 
-    if (!this.alumnoId) {  // ✅ Validar el ID
+    if (!this.alumnoId) {
       this.errorMensaje = 'Error: No se encontró el ID del alumno';
+      this.alertService.show(
+        this.errorMensaje,
+        'danger',
+        'Error'
+      );
       return;
     }
 
@@ -92,7 +135,7 @@ export class AsignarTutor implements OnInit, OnChanges {
     this.errorMensaje = '';
 
     const asignacion: AlumnoTutor = {
-      alumnoId: this.alumnoId,  // ✅ Usar el ID directo
+      alumnoId: this.alumnoId,
       tutorId: this.tutorId,
       cicloId: this.cicloId,
       parentesco: this.parentesco
@@ -123,6 +166,8 @@ export class AsignarTutor implements OnInit, OnChanges {
           'danger',
           'Error'
         );
+        
+        this.guardando = false;
       },
       complete: () => {
         this.guardando = false;

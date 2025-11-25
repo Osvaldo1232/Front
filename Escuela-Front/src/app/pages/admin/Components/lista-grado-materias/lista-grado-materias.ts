@@ -70,7 +70,7 @@ export class ListaGradoMaterias implements OnInit {
     }
 
     // Si ninguno tiene materias después de unos segundos, ocultamos el loader
-    setTimeout(() => {
+    /* setTimeout(() => {
       if (!encontrado) {
         this.loadingService.hide();
         this.AlertService.show(
@@ -79,7 +79,7 @@ export class ListaGradoMaterias implements OnInit {
           'Aviso'
         );
       }
-    }, 2000);
+    }, 2000); */
   }
 
   buscar(): void {

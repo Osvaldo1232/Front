@@ -215,11 +215,11 @@ export class AlumnosComponent implements OnInit {
       error: (err) => {
         console.error('❌ Error al cargar alumnos de asignación:', err);
         this.registrosGGC = [];
-        this.alertService.show(
+       /*  this.alertService.show(
           'Error al cargar alumnos',
           'danger',
           'Error'
-        );
+        ); */
       }
     });
 }
@@ -363,14 +363,20 @@ export class AlumnosComponent implements OnInit {
   }
 
   cerrarModalAsignarTutor(guardado: boolean) {
-    this.asignarTutorm = false;
-    this.alumnoIdParaTutor = null;
-    this.nombreAlumnoParaTutor = '';
+  this.asignarTutorm = false;
+  this.alumnoIdParaTutor = null;
+  this.nombreAlumnoParaTutor = '';
+  
+  if (guardado) {
+    console.log('✅ Tutor asignado exitosamente');
     
-    if (guardado) {
-      console.log('✅ Tutor asignado exitosamente');
+    // ✅ Recargar la lista de alumnos para actualizar los botones
+    if (this.asignacionSeleccionada) {
+      console.log('🔄 Recargando alumnos para actualizar botones...');
+      this.onAsignacionChange();
     }
   }
+}
 
   // ✅ Cambiar estatus del alumno con confirmación
   async cambiarEstatus(alumno: AlumnoGGC, event: Event) {

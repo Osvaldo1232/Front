@@ -505,4 +505,53 @@ $color-table-alt: #FAFAFA;
   .container {
     padding: 1rem;
   }
+  // ===================================
+// COLUMNA DE TUTOR
+// ===================================
+.tutor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tutor-nombre {
+  color: $color-text;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  svg {
+    color: $color-primary;
+    flex-shrink: 0;
+  }
+}
+
+.tutor-telefono {
+  color: $color-text-light;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  svg {
+    color: $color-gris-secundario;
+    flex-shrink: 0;
+  }
+}
+
+.sin-tutor {
+  color: $color-text-light;
+  font-style: italic;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  svg {
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+}
 }
