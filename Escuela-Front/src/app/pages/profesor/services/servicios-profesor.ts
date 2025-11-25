@@ -43,8 +43,8 @@ export class ServiciosProfesor {
     return this.http.get<InscripcionDTO[]>(`${this.apiUrlBase}/inscripcion/filtrarAlumnos?`, { params });
   }
 
-  filtrarInscripciones1(cicloId: string): Observable<AlumnoCiclo[]> {
-    return this.http.get<AlumnoCiclo[]>(`${this.apiUrlBase}/inscripcion/alumnos/${cicloId}`);
+  filtrarInscripciones1(cicloId: string, docenteId: string): Observable<AlumnoCiclo[]> {
+    return this.http.get<[AlumnoCiclo]>(`${this.apiUrlBase}/inscripcion/alumnos/${cicloId}/docente/${docenteId}`);
   }
 
   filtrarInscripciones2(cicloId: string, docenteId: string): Observable<RegistroHistorial[]> {

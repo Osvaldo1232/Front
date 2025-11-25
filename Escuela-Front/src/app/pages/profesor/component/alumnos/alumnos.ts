@@ -96,7 +96,7 @@ export class Alumnos implements OnInit {
       this.loadingService.show();
     }
 
-    this.servicioDirectorAsignacion.filtrarInscripciones1(this.cicloEscolar).pipe(
+    this.servicioDirectorAsignacion.filtrarInscripciones1(this.cicloEscolar,  this.idUsuario).pipe(
       finalize(() => this.loadingService.hide())
     ).subscribe({
       next: (inscripciones) => {
