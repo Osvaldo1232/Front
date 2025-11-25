@@ -11,7 +11,6 @@
             <div class="col-md-4 col-sm-6">
                 <label for="ciclo" class="form-label required-label">Ciclo:*</label>
                 <select id="ciclo" class="form-select" [(ngModel)]="cicloEscolar" (change)="buscar()">
-                    <option value="">Seleccione un ciclo</option>
                     <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
                         {{ ciclo.nombre }}
                     </option>
@@ -50,7 +49,6 @@
             </table>
         </div>
 
-        <!-- Paginación -->
         <div class="d-flex justify-content-center mt-4 gap-3" *ngIf="inscripcionesFiltradas.length > 0">
             <nav aria-label="Paginación de registros">
                 <ul class="pagination pagination-vino shadow-sm">
