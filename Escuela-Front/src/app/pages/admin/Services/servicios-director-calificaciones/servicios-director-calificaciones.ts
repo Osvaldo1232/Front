@@ -21,6 +21,6 @@ export class ServiciosDirectorCalificaciones {
 
   // ✅ NUEVO: Obtener calificaciones de todos los alumnos de una asignación
   ObtenerCalificacionesPorAsignacion(idAsignacion: string): Observable<AlumnoCalificaciones[]> {
-    return this.http.get<AlumnoCalificaciones[]>(`${this.apiUrlAsignaciones}/${idAsignacion}`);
+    return this.http.get<AlumnoCalificaciones[]>(`${this.apiUrlAsignaciones}/${idAsignacion}/alumnos-materias`);
   }
 }
