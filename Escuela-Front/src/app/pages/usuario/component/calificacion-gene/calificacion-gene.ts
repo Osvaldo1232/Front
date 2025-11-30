@@ -113,4 +113,44 @@ export class CalificacionGene implements OnInit  {
         }
       });
   }
+  convertirCalificacion(valor: number | null | undefined): string {
+  if (valor === null || valor === undefined) return '-';
+
+  const numStr = String(valor); // lo convertimos a texto
+  const partes = numStr.split('.'); // separamos entero y decimal
+
+  const nombres: any = {
+    0: 'Cero',
+    1: 'Uno',
+    2: 'Dos',
+    3: 'Tres',
+    4: 'Cuatro',
+    5: 'Cinco',
+    6: 'Seis',
+    7: 'Siete',
+    8: 'Ocho',
+    9: 'Nueve',
+    10: 'Diez'
+  };
+
+  let texto = '';
+
+  // parte entera
+  const entero = Number(partes[0]);
+  texto = nombres[entero] ?? entero;
+
+  // parte decimal (si existe)
+  if (partes.length > 1) {
+    const decimal = partes[1]
+      .split('')
+      .map(d => nombres[Number(d)])
+      .join(' ');
+
+    texto += ` punto ${decimal}`;
+  }
+
+  return `${valor} / ${texto}`;
+}
+
+
 }

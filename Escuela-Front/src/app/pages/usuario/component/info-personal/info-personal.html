@@ -2,6 +2,7 @@
   <!-- Tarjeta Información Personal -->
   <div *ngIf="alumno; else cargando" class="info-personal-card card">
     <div class="card-content">
+      
       <div class="profile-icon" role="img" aria-label="Foto del alumno"></div>
       <div class="info-text">
         <h2>Información Personal</h2>
@@ -15,7 +16,7 @@
 
         <div *ngIf="inscripcion">
           <hr>
-          <h3>Datos de Inscripción</h3>
+          <h2>Datos de Inscripción</h2>
           <p><strong>Ciclo Escolar:</strong> {{ inscripcion.ciclo }}</p>
           <p><strong>Grado:</strong> {{ inscripcion.nombreGrado }}</p>
           <p><strong>Grupo:</strong> {{ inscripcion.nombreGrupo }}</p>

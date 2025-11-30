@@ -13,10 +13,14 @@ import { Loading } from '../../../../shared/loading/loading';
   styleUrls: ['./historial.scss'],
 })
 export class Historial implements OnInit {
+  
   calificaciones!: CalificacionesAlumno;
-  cargando: boolean = false;  // variable para el HTML
+  cargando: boolean = false;
   usuario: any;
   errorMessage = '';
+
+  // 👉 NUEVO: controla si el botón debe mostrarse
+  hayCalificaciones: boolean = false;
 
   constructor(
     private alumnoService: AlumnoService,
@@ -40,8 +44,15 @@ export class Historial implements OnInit {
     this.alumnoService.obtenerCalificaciones(usu).subscribe({
       next: (data: CalificacionesAlumno) => {
         this.calificaciones = data;
+
+        // 👉 VALIDAR SI TRAE CALIFICACIONES
+        if (data && data.calificacionesPorGrado?.length > 0) {
+          this.hayCalificaciones = true;
+        } else {
+          this.hayCalificaciones = false;
+        }
       },
-      error: () => {},
+
       complete: () => {
         this.cargando = false;
         this.loadingService.hide();
@@ -65,9 +76,7 @@ export class Historial implements OnInit {
         a.click();
         window.URL.revokeObjectURL(url);
       },
-      error: (err) => {
-        console.error('Error al descargar PDF', err);
-      },
+
       complete: () => {
         this.cargando = false;
         this.loadingService.hide();

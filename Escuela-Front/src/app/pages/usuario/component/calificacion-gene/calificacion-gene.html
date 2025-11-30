@@ -44,10 +44,11 @@
             [class.row-alternate]="i % 2 === 1"
           >
             <td>{{ item.nombreAlumno }}</td>
-            <td>{{ item.trimestre1 ?? '-' }}</td>
-            <td>{{ item.trimestre2 ?? '-' }}</td>
-            <td>{{ item.trimestre3 ?? '-' }}</td>
-            <td class="fw-bold">{{ item.promedioFinal ?? '-' }}</td>
+            <td>{{ convertirCalificacion(item.trimestre1) }}</td>
+<td>{{ convertirCalificacion(item.trimestre2) }}</td>
+<td>{{ convertirCalificacion(item.trimestre3) }}</td>
+<td class="fw-bold">{{ convertirCalificacion(item.promedioFinal) }}</td>
+
           </tr>
         </tbody>
 
