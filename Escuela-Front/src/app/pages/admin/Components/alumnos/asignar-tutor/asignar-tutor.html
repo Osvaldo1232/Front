@@ -28,7 +28,7 @@
             name="tutor"
             #tutorInput="ngModel"
             required>
-            <option value="">Seleccionar tutor...</option>
+<!--             <option value="">Seleccionar tutor...</option> -->
             <option *ngFor="let tutor of tutores" [value]="tutor.id">
               {{ tutor.nombre }}
             </option>
@@ -47,7 +47,7 @@
             name="ciclo"
             #cicloInput="ngModel"
             required>
-            <option value="">Seleccionar ciclo...</option>
+<!--             <option value="">Seleccionar ciclo...</option> -->
             <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
               {{ ciclo.nombre }}
             </option>

@@ -15,7 +15,7 @@
           class="form-select" 
           [(ngModel)]="asignacionSeleccionada" 
           (change)="onAsignacionChange()">
-          <option value="">-- Seleccionar --</option>
+<!--           <option value="">-- Seleccionar --</option> -->
           <option *ngFor="let asignacion of asignaciones" [value]="asignacion.id">
             {{ asignacion.value }}
           </option>
