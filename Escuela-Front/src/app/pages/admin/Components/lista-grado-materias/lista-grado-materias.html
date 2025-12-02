@@ -13,9 +13,7 @@
       <div class="col-md-4 col-sm-6">
         <label for="grado" class="form-label required-label">Grado:*</label>
 
-        <!-- ✅ Ajuste menor:
-             - Se agregó name="grado" (recomendado para ngModel)
-             - El resto está perfecto -->
+       
         <select
           id="grado"
           name="grado"
@@ -39,6 +37,8 @@
             <th class="col-th">NOMBRE GRADO</th>
             <th class="col-th">MATERIA</th>
             <th class="col-th">CAMPO FORMATIVO</th>
+            <th class="col-th">Estatus de la Materia</th>
+
           </tr>
         </thead>
         <tbody>
@@ -49,6 +49,8 @@
             <td>{{ alumno.nombreGrado }}</td>
             <td>{{ alumno.nombreMateria }}</td>
             <td>{{ alumno.nombreCampoFormativo }}</td>
+            <td>{{ alumno.estatusMateria }}</td>
+
           </tr>
         </tbody>
       </table>

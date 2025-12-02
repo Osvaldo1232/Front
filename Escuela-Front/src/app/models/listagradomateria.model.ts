@@ -5,4 +5,5 @@ idMateria:any;
 nombreMateria:any;
 idCampoFormativo:any;
 nombreCampoFormativo:any;
+estatusMateria:String
 }

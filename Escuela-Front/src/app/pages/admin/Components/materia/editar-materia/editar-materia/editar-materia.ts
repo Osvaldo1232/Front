@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Materia } from '../../../../../../models/materia.model';
-import { CampoFormativoModel } from '../../../../../../models/campo-formativo.model';
+import { CampoFormativoModel, Combo } from '../../../../../../models/campo-formativo.model';
 import { ServiciosDirectorMaterias } from '../../../../Services/servicios-director-materias/servicios-director-materias';
 import { ServiciosCampoFormativo } from '../../../../Services/servicios-director-campo-formativo/servicios-director-campo-formativo';
 import { AlertService } from '../../../../../../shared/alert-service';
@@ -31,7 +31,7 @@ export class EditarMateria implements OnInit, OnChanges {
   estatus: string = 'ACTIVO';
 
   // Lista de campos formativos
-  camposFormativos: CampoFormativoModel[] = [];
+  camposFormativos: Combo[] = [];
 
   ngOnInit() {
     this.cargarCamposFormativos();
@@ -44,7 +44,7 @@ export class EditarMateria implements OnInit, OnChanges {
   }
 
   cargarCamposFormativos() {
-    this.serviciosCamposFormativos.ObtenerCampoFormativo().subscribe({
+    this.serviciosCamposFormativos.ObtenerCampoFormativoA().subscribe({
       next: (res) => {
         this.camposFormativos = res;
         console.log('📋 Campos Formativos cargados:', this.camposFormativos);

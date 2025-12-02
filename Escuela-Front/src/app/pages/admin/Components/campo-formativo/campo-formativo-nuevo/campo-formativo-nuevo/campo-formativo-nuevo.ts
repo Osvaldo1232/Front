@@ -25,7 +25,6 @@ export class CampoFormativoNuevo {
   estatus: string = 'ACTIVO';
 
   guardar() {
-    // ✅ Validar que el campo no esté vacío
     if (!this.nombre.trim()) {
       this.alertService.show(
         'El nombre del campo formativo es obligatorio',
@@ -35,7 +34,6 @@ export class CampoFormativoNuevo {
       return;
     }
 
-    // ✅ Validar que solo contenga letras
     if (!this.validarTextoAlfabetico(this.nombre)) {
       this.alertService.show(
         'El nombre solo puede contener letras',
@@ -88,33 +86,24 @@ export class CampoFormativoNuevo {
     this.estatus = 'ACTIVO';
   }
 
-  // ===================================
-  // MÉTODOS DE VALIDACIÓN
-  // ===================================
+  
 
-  // ✅ Validar que solo contenga letras y espacios (no al inicio)
   validarTextoAlfabetico(texto: string): boolean {
     if (!texto || texto.trim() === '') return false;
     
-    // No permitir espacios al inicio
     if (texto.startsWith(' ')) return false;
     
-    // Solo letras, espacios, acentos y ñ
     const regex = /^[a-záéíóúüñA-ZÁÉÍÓÚÜÑ\s]+$/;
     return regex.test(texto.trim());
   }
 
-  // ✅ Solo permitir letras y espacios en tiempo real
   soloLetras(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
     
-    // Permitir teclas especiales (backspace, tab, etc.)
     if (charCode <= 31) return true;
     
-    // Permitir espacio (32)
     if (charCode === 32) return true;
     
-    // Permitir letras (a-z, A-Z) y caracteres acentuados
     const char = String.fromCharCode(charCode);
     const regex = /^[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]$/;
     
@@ -125,7 +114,6 @@ export class CampoFormativoNuevo {
     return true;
   }
 
-  // ✅ Eliminar espacios al inicio automáticamente
   eliminarEspaciosInicio(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = input.value;

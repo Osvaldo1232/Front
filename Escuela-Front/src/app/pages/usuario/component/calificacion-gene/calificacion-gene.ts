@@ -39,7 +39,6 @@ export class CalificacionGene implements OnInit  {
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.show();
     this.usuario = this.loginService.Usuario();
 
     this.obtenerParametrosNavegacion();

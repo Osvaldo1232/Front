@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Materia } from '../../../../../../../models/materia.model';
-import { CampoFormativoModel } from '../../../../../../../models/campo-formativo.model';
+import { CampoFormativoModel, Combo } from '../../../../../../../models/campo-formativo.model';
 import { Grados } from '../../../../../../../models/grado.models';
 import { AsignacionMateriaGrado } from '../../../../../../../models/asignacion-materia-grado.model';
 import { ServiciosDirectorMaterias } from '../../../../../Services/servicios-director-materias/servicios-director-materias';
@@ -30,14 +30,12 @@ export class NuevaMateria implements OnInit {
     private alertService: AlertService
   ) { }
 
-  // Datos de la materia
   nombre: string = '';
   campoFormativoId: string = '';
   gradoId: string = ''; // ✅ Solo un grado
   estatus: string = 'ACTIVO';
 
-  // Listas para los selects
-  camposFormativos: CampoFormativoModel[] = [];
+  camposFormativos: Combo[] = [];
   grados: Grados[] = [];
   
   guardando: boolean = false;
@@ -48,7 +46,7 @@ export class NuevaMateria implements OnInit {
   }
 
   cargarCamposFormativos() {
-    this.serviciosCampoFormativo.ObtenerCampoFormativo().subscribe({
+    this.serviciosCampoFormativo.ObtenerCampoFormativoA().subscribe({
       next: (res) => {
         this.camposFormativos = res;
         console.log('📋 Campos Formativos cargados:', this.camposFormativos);

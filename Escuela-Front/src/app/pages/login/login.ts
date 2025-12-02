@@ -48,14 +48,26 @@ export class Login {
           this.router.navigate(['/']);
         }
         this.loadingService.hide(); 
+        console.log("hio")
       },
-      error: () => {
+      error: (err) => {
+
         this.loadingService.hide(); 
-    this.alertService.show(
-  'Usuario o contraseña incorrectos. Verifica tus datos.',
-  'danger',
-  'Error de autenticación'
-);
+        let mensaje = "Ocurrió un error inesperado.";
+
+   if (err.status === 401) {
+        mensaje = err.error?.error || "Usuario o contraseña incorrectos.";
+      }
+
+      else if (err.status === 403) {
+        mensaje = err.error?.error || "Acceso denegado.";
+      }
+
+      this.alertService.show(
+        mensaje,
+        'danger',
+        'Error de autenticación'
+      );
       }
     });
   }

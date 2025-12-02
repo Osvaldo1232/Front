@@ -33,7 +33,7 @@ export class CiclosEscolaresComponent implements OnInit {
   editarm: boolean = false;
   cicloSeleccionado: Ciclos | null = null;
 
-  registrosPorPagina = 6;
+  registrosPorPagina = 8;
   paginaActual = 1;
 
   constructor(
@@ -46,16 +46,13 @@ export class CiclosEscolaresComponent implements OnInit {
     this.cargarCiclos();
   }
 
-  // ✅ MÉTODO PARA EXTRAER Y FORMATEAR EL AÑO
   extraerAnio(fecha: any): string {
     if (!fecha) return '';
     
-    // Si es string con formato YYYY-MM-DD
     if (typeof fecha === 'string') {
       return fecha.split('-')[0];
     }
     
-    // Si es número, convertir a string
     if (typeof fecha === 'number') {
       return fecha.toString();
     }
@@ -153,11 +150,9 @@ export class CiclosEscolaresComponent implements OnInit {
     this.Servicios.ObtenerCiclo().subscribe({
       next: (res) => {
         this.registros = res;
-        console.log('📥 Ciclos cargados:', this.registros);
             this.loadingService.hide(); 
       },
       error: (err) =>{
-         console.error('Error al cargar Ciclos:', err);
                  this.loadingService.hide();
       }
     });

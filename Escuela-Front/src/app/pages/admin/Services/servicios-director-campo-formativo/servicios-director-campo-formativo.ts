@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CampoFormativoModel } from '../../../../models/campo-formativo.model';
+import { CampoFormativoModel, Combo } from '../../../../models/campo-formativo.model';
 
 
 @Injectable({
@@ -27,6 +27,9 @@ private apiUrlCampoFormativoListar = 'https://unusual-sharyl-utsemintegradora-3b
     return this.http.get<CampoFormativoModel[]>(this.apiUrlCampoFormativoListar);
   }
 
+   ObtenerCampoFormativoA(): Observable<Combo[]> {
+    return this.http.get<Combo[]>(`${this.apiUrlCampoFormativoListar}/combo`);
+  }
   ActualizarCampoFormativo(id: string, campoformativo: CampoFormativoModel): Observable<any> {
     return this.http.put(`${this.apiUrlCampoFormativoEditar}/${id}`, campoformativo, {
       responseType: 'text' as 'json'
