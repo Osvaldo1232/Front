@@ -5,3 +5,8 @@ export interface Ciclos{
     estatus: string;
     fechaCreado?: string;
 }
+
+export interface ComboC{
+    id:String;
+    value:String
+}

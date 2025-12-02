@@ -68,7 +68,7 @@
       <tbody>
         <tr *ngFor="let alumno of registrosGGC; let i = index" [class.row-alt]="i % 2 !== 0">
           <td>{{ alumno.matricula }}</td>
-          <td>{{ alumno.nombre }} {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
+          <td> {{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }} {{ alumno.nombre }}</td>
           <td>{{ alumno.curp }}</td>
           <td>{{ alumno.gradoNombre }}</td>
           <td>{{ alumno.grupoNombre }}</td>

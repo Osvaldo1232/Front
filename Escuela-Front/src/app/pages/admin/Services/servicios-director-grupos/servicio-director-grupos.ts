@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Grupos } from '../../../../models/grupos.models';
 import { AsignacionGradoGrupo } from '../../../../models/Materia';
+import { ComboC } from '../../../../models/ciclos.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class ServiciosDirectorGrupos {
 
   ObtenerGrupos(): Observable<Grupos[]> {
     return this.http.get<Grupos[]>(this.apiUrlGruposListar);
+  }
+
+  
+  ObtenerGruposA(): Observable<ComboC[]> {
+    return this.http.get<ComboC[]>(`${this.apiUrlGruposListar}/Activos`);
   }
 
   ActualizarGrupo(id: string, grupos: Grupos): Observable<any> {

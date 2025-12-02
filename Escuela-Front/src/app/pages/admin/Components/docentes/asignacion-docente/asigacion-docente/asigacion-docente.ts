@@ -5,7 +5,7 @@ import { Maestros } from '../../../../../../models/maestros.model';
 import { AsignacionDocente } from '../../../../../../models/asignacion-docente.model';
 import { Grados } from '../../../../../../models/grado.models';
 import { Grupos } from '../../../../../../models/grupos.models';
-import { Ciclos } from '../../../../../../models/ciclos.model';
+import { Ciclos, ComboC } from '../../../../../../models/ciclos.model';
 import { ServiciosDirector } from '../../../../Services/servicios-director';
 import { ServiciosDirectorGrupos } from '../../../../Services/servicios-director-grupos/servicio-director-grupos';
 import { ServiciosDirectorCiclos } from '../../../../Services/servicios-director-ciclos/servicios-director-ciclos';
@@ -40,8 +40,8 @@ export class AsignarGrupoDocente implements OnInit, OnChanges {
 
   // Listas para los selects
   grados: Grados[] = [];
-  grupos: Grupos[] = [];
-  ciclos: Ciclos[] = [];
+  grupos: ComboC[] = [];
+  ciclos: ComboC[] = [];
 
   guardando: boolean = false;
   errorMensaje: string = '';
@@ -72,7 +72,7 @@ export class AsignarGrupoDocente implements OnInit, OnChanges {
     });
 
     // Cargar grupos
-    this.serviciosGrupos.ObtenerGrupos().subscribe({
+    this.serviciosGrupos.ObtenerGruposA().subscribe({
       next: (res) => {
         this.grupos = res;
         console.log('👥 Grupos cargados:', this.grupos);
@@ -81,7 +81,7 @@ export class AsignarGrupoDocente implements OnInit, OnChanges {
     });
 
     // Cargar ciclos
-    this.serviciosCiclos.ObtenerCiclo().subscribe({
+    this.serviciosCiclos.ObtenerCicloA().subscribe({
       next: (res) => {
         this.ciclos = res;
         console.log('📅 Ciclos cargados:', this.ciclos);

@@ -25,7 +25,7 @@
           <select class="form-select" [(ngModel)]="idCiclo" name="ciclo" required>
 <!--             <option value="">Seleccionar...</option> -->
             <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
-              {{ ciclo.anioInicio }} - {{ ciclo.anioFin }}
+              {{ ciclo.value }} 
             </option>
           </select>
         </div>
@@ -44,7 +44,7 @@
           <label class="form-label">Grupo</label>
           <select class="form-select" [(ngModel)]="idGrupo" name="grupo" required>
 <!--             <option value="">Seleccionar...</option> -->
-            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.value }}</option>
           </select>
         </div>
 

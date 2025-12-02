@@ -115,6 +115,21 @@ export class CalificacionesComponent implements OnInit {
         this.ordenarYAsignarTrimestres();
 
         this.alumnos = resultado.inscripciones;
+
+        // Si no hay alumnos → no seguir cargando
+if (!this.alumnos || this.alumnos.length === 0) {
+  this.loadingService.hide();
+  this.cargando = false;
+
+  this.alertService.show(
+    'No hay alumnos inscritos en este grupo.',
+    'warning',
+    'Sin alumnos'
+  );
+
+  return;
+}
+
         this.inicializarCalificaciones();
 
         setTimeout(() => {
@@ -496,7 +511,7 @@ export class CalificacionesComponent implements OnInit {
     if (calificaciones.length === 0) {
       this.loadingService.hide();
       this.alertService.show(
-        'No hay calificaciones para guardar.',
+        'vcalificaciones para guardar.',
         'warning',
         'Validación'
       );

@@ -24,9 +24,10 @@
             <table class="table table-striped table-hover grid-table align-middle">
                 <thead class="grid-header text-whit">
                     <tr>
-                        <th class="col-th">NOMBRE</th>
+                       
                         <th class="col-th">APELLIDO PATERNO</th>
                         <th class="col-th">APELLIDO MATERNO</th>
+                         <th class="col-th">NOMBRE</th>
                         <th class="col-th">MATRÍCULA</th>
                         <th class="col-th">CURP</th>
                         <th class="col-th">GRADO</th>
@@ -48,9 +49,10 @@
 
                     <tr *ngFor="let alumno of inscripcionesPaginadas; let i = index"
                         [class.row-alternate]="i % 2 === 1">
-                        <td>{{ alumno?.nombre }}</td>
                         <td>{{ alumno?.apellidoPaterno }}</td>
                         <td>{{ alumno?.apellidoMaterno }}</td>
+                        <td>{{ alumno?.nombre }}</td>
+
                         <td>{{ alumno?.matricula }}</td>
                         <td>{{ alumno?.curp }}</td>
                         <td>{{ alumno?.grado }}</td>

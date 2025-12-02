@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ciclos } from '../../../../models/ciclos.model';
+import { Ciclos, ComboC } from '../../../../models/ciclos.model';
 import { AlumnoGGC } from '../../../../models/alumnos.model';
 
 @Injectable({
@@ -27,6 +27,12 @@ export class ServiciosDirectorCiclos {
   ObtenerCiclo(): Observable<Ciclos[]> {
     return this.http.get<Ciclos[]>(this.apiUrlCicloListar);
   }
+
+    ObtenerCicloA(): Observable<ComboC[]> {
+    return this.http.get<ComboC[]>(`${this.apiUrlCicloListar}/Activos`);
+  }
+
+
   obtenerCicloPorId(id: any): Observable<Ciclos> {
     return this.http.get<Ciclos>(`${this.apiUrlCicloId}${id}`);
   }
