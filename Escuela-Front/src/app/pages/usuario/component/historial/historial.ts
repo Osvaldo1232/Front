@@ -83,4 +83,47 @@ export class Historial implements OnInit {
       }
     });
   }
+  formatearCalificacion(valor: any): string {
+  if (valor === null || valor === undefined || valor === "") 
+    return "Sin calificar";
+
+  // Convertir cadena o número a número real
+  const num = Number(valor);
+
+  // Mantener siempre un decimal: 9 → 9.0
+  const numeroFormateado = num.toFixed(1);
+
+  // Diccionario en letra
+  const nombres: any = {
+    0: 'Cero',
+    1: 'Uno',
+    2: 'Dos',
+    3: 'Tres',
+    4: 'Cuatro',
+    5: 'Cinco',
+    6: 'Seis',
+    7: 'Siete',
+    8: 'Ocho',
+    9: 'Nueve',
+    10: 'Diez'
+  };
+
+  // Separar entero y decimal
+  const partes = numeroFormateado.split('.'); // ["9", "0"]
+  const entero = Number(partes[0]);           // 9
+  const decimales = partes[1];                // "0"
+
+  let texto = nombres[entero] ?? entero;
+
+  // Convertir cada dígito del decimal a letra ("0" → "Cero")
+  const decTexto = decimales
+    .split('')
+    .map(d => nombres[Number(d)])
+    .join(' ');
+
+  texto += ` punto ${decTexto}`;
+
+  return `${numeroFormateado} / ${texto}`;
+}
+
 }

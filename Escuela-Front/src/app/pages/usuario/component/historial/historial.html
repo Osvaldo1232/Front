@@ -50,11 +50,12 @@
                 <tr *ngFor="let materia of grado.materias; let i = index"
                     [class.row-alternate]="i % 2 === 1">
                   <td>{{ materia.nombreMateria }}</td>
-                  <td>{{ materia.promedio | number : '1.2-2' }}</td>
+                  <td>{{ formatearCalificacion(materia.promedio) }}</td>
+
                 </tr>
                 <tr class="table-warning fw-bold">
                   <td class="text-end">Promedio Final:</td>
-                  <td>{{ grado.promedioFinalGrado | number : '1.2-2' }}</td>
+                 <td>{{ formatearCalificacion(grado.promedioFinalGrado) }}</td>
                 </tr>
               </tbody>
             </table>

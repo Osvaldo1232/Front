@@ -31,9 +31,12 @@
 
             <p class="card-text mb-1">
               <strong>Calificación:</strong>
-              <span *ngIf="mat.calificacionActual !== null; else sinCalif">
-                {{ mat.calificacionActual }}
-              </span>
+<span *ngIf="mat.calificacionActual !== null; else sinCalif">
+  {{ mat.calificacionActual.toFixed(1) }}
+</span>
+
+
+
               <ng-template #sinCalif>Sin calificar</ng-template>
             </p>
             <p class="card-text mb-1">

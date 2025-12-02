@@ -116,8 +116,10 @@ export class CalificacionGene implements OnInit  {
   convertirCalificacion(valor: number | null | undefined): string {
   if (valor === null || valor === undefined) return '-';
 
-  const numStr = String(valor); // lo convertimos a texto
-  const partes = numStr.split('.'); // separamos entero y decimal
+  // Forzar siempre un decimal, ejemplo: 10 -> 10.0
+  const valorFormateado = valor.toFixed(1);
+
+  const partes = valorFormateado.split('.');
 
   const nombres: any = {
     0: 'Cero',
@@ -139,17 +141,15 @@ export class CalificacionGene implements OnInit  {
   const entero = Number(partes[0]);
   texto = nombres[entero] ?? entero;
 
-  // parte decimal (si existe)
-  if (partes.length > 1) {
-    const decimal = partes[1]
-      .split('')
-      .map(d => nombres[Number(d)])
-      .join(' ');
+  // parte decimal
+  const decimal = partes[1]
+    .split('')
+    .map(d => nombres[Number(d)])
+    .join(' ');
 
-    texto += ` punto ${decimal}`;
-  }
+  texto += ` punto ${decimal}`;
 
-  return `${valor} / ${texto}`;
+  return `${valorFormateado} / ${texto}`;
 }
 
 
