@@ -16,7 +16,8 @@ $color-estandar-azul: #007bff;
 
 .titulo-h5 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 400;
+    font-weight: 600;
+    font-size: 28px;
     color: $color-gris-secundario;
     margin-top: 0.1rem !important; 
 }
@@ -67,14 +68,10 @@ $color-estandar-azul: #007bff;
             font-weight: 700;
             text-transform: uppercase;
             vertical-align: middle;
-            // Se restaura el borde inferior para separar el encabezado del filtro
             border-bottom: 2px solid $color-vino;
         }
     }
-
-    // Fila de filtros
     .filter-row {
-        // Se corrige el color a blanco
         background-color: white; 
         
         td {
@@ -89,18 +86,12 @@ $color-estandar-azul: #007bff;
             }
         }
     }
-    
-    // Cuerpo de la tabla
     tbody {
         td {
-            // Se sobrescribe la variable de color de texto de Bootstrap
             color: $color-gris-texto; 
         }
     }
 }
-
-
-// --- ESTILOS DE ACCIÓN POR FILA (CÍRCULOS ESTANDARIZADOS) ---
 
 .btn-icon-circular {
     background-color: $color-gris-secundario; 

@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-3">
                 <strong>Promedio General:</strong> 
-                <span class="badge fs-6" style="background-color: #5B1F3D;">{{ historialAlumno.promedioGeneral | number:'1.2-2' }}</span>
+                <span class="badge fs-6" style="background-color: #5B1F3D;">{{ convertirCalificacionALetras(historialAlumno.promedioGeneral) }}</span>
             </div>
         </div>
     </div>
@@ -62,10 +62,10 @@
                 <tbody>
                     <tr *ngFor="let campo of historialAlumno.camposFormativos; let i = index" [class.row-alternate]="i % 2 === 1">
                         <td>{{ campo.nombreCampoFormativo }}</td>
-                        <td>{{ campo.promedioTrimestre1 | number:'1.2-2' }}</td>
-                        <td>{{ campo.promedioTrimestre2 | number:'1.2-2' }}</td>
-                        <td>{{ campo.promedioTrimestre3 | number:'1.2-2' }}</td>
-                        <td><strong>{{ campo.promedioFinal | number:'1.2-2' }}</strong></td>
+                        <td>{{ convertirCalificacionALetras(campo.promedioTrimestre1) }}</td>
+                        <td>{{ convertirCalificacionALetras(campo.promedioTrimestre2) }}</td>
+                        <td>{{ convertirCalificacionALetras(campo.promedioTrimestre3) }}</td>
+                        <td><strong>{{ convertirCalificacionALetras(campo.promedioFinal) }}</strong></td>
                     </tr>
                 </tbody>
             </table>

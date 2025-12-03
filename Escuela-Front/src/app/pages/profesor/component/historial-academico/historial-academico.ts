@@ -138,4 +138,38 @@ export class HistorialAcademico implements OnInit {
     this.paginaActual = 1;
     this.totalPaginas = 1;
   }
+  convertirCalificacionALetras(calificacion: number | null | undefined): string {
+    if (calificacion === null || calificacion === undefined) {
+      return 'N/A';
+    }
+
+    const numerosALetras: { [key: string]: string } = {
+      '0': 'Cero',
+      '1': 'Uno',
+      '2': 'Dos',
+      '3': 'Tres',
+      '4': 'Cuatro',
+      '5': 'Cinco',
+      '6': 'Seis',
+      '7': 'Siete',
+      '8': 'Ocho',
+      '9': 'Nueve'
+    };
+    const calificacionFormateada = Number(calificacion).toFixed(1);
+    const partes = calificacionFormateada.split('.');
+    
+    let resultado = calificacionFormateada + ' / ';
+    const parteEntera = partes[0];
+    if (parteEntera === '10') {
+      resultado += 'Diez';
+    } else {
+      resultado += numerosALetras[parteEntera];
+    }
+    resultado += ' punto';
+    for (let digito of partes[1]) {
+      resultado += ' ' + numerosALetras[digito];
+    }
+    
+    return resultado;
+  }
 }

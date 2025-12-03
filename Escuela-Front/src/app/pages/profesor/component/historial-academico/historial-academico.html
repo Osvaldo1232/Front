@@ -43,7 +43,7 @@
                         <td>{{ alumno?.nombreAlumno || 'No disponible' }}</td>
                         <td>{{ alumno?.grado || 'N/A' }}</td>
                         <td>{{ alumno?.grupo || 'N/A' }}</td>
-                        <td>{{ alumno?.calificacionTotal ? (alumno.calificacionTotal | number:'1.2-2') : 'N/A' }}</td>
+                        <td>{{ alumno?.calificacionTotal ? convertirCalificacionALetras(alumno.calificacionTotal) : 'N/A' }}</td>
                     </tr>
                 </tbody>
             </table>

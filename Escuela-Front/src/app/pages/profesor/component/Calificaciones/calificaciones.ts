@@ -231,7 +231,6 @@ if (!this.alumnos || this.alumnos.length === 0) {
       valor = partes[0] + '.' + partes.slice(1).join('');
     }
 
-    // Limitar a 1 decimal
     if (partes.length === 2 && partes[1].length > 1) {
       valor = partes[0] + '.' + partes[1].substring(0, 1);
     }
@@ -258,65 +257,67 @@ if (!this.alumnos || this.alumnos.length === 0) {
     this.onCalificacionChange(alumno);
   }
 
-  convertirCalificacionALetras(calificacion: number | null): string {
-    if (calificacion === null || calificacion === undefined) return '';
-    
-    const parteEntera = Math.floor(calificacion);
-    const parteDecimal = Math.round((calificacion - parteEntera) * 10);
-
-    const numerosALetras: { [key: number]: string } = {
-      0: 'Cero',
-      1: 'Uno',
-      2: 'Dos',
-      3: 'Tres',
-      4: 'Cuatro',
-      5: 'Cinco',
-      6: 'Seis',
-      7: 'Siete',
-      8: 'Ocho',
-      9: 'Nueve',
-      10: 'Diez'
-    };
-
-    let resultado = numerosALetras[parteEntera] || calificacion.toString();
-    
-    if (parteDecimal > 0) {
-      resultado += ` punto ${numerosALetras[parteDecimal] || ''}`;
-    }
-    
-    return resultado;
+convertirCalificacionALetras(calificacion: number | null): string {
+  if (calificacion === null || calificacion === undefined) return '';
+  
+  const numerosALetras: { [key: string]: string } = {
+    '0': 'Cero',
+    '1': 'Uno',
+    '2': 'Dos',
+    '3': 'Tres',
+    '4': 'Cuatro',
+    '5': 'Cinco',
+    '6': 'Seis',
+    '7': 'Siete',
+    '8': 'Ocho',
+    '9': 'Nueve'
+  };
+  const calificacionFormateada = Number(calificacion).toFixed(1);
+  const partes = calificacionFormateada.split('.');
+  
+  let resultado = numerosALetras[partes[0]] || partes[0];
+  
+  if (partes[0] === '10') {
+    resultado = 'Diez';
   }
-
-  convertirPromedioALetras(promedio: number | null): string {
-    if (promedio === null || promedio === undefined) return '';
-    
-    const promedioRedondeado = Math.round(promedio * 10) / 10;
-    
-    const parteEntera = Math.floor(promedioRedondeado);
-    const parteDecimal = Math.round((promedioRedondeado - parteEntera) * 10);
-    
-    const numerosALetras: { [key: number]: string } = {
-      0: 'cero',
-      1: 'uno',
-      2: 'dos',
-      3: 'tres',
-      4: 'cuatro',
-      5: 'cinco',
-      6: 'seis',
-      7: 'siete',
-      8: 'ocho',
-      9: 'nueve',
-      10: 'diez'
-    };
-    
-    let resultado = numerosALetras[parteEntera] || '';
-    
-    if (parteDecimal > 0) {
-      resultado += ` punto ${numerosALetras[parteDecimal] || ''}`;
-    }
-    
-    return resultado.charAt(0).toUpperCase() + resultado.slice(1);
+  resultado += ' punto';
+  for (let digito of partes[1]) {
+    resultado += ' ' + numerosALetras[digito];
   }
+  
+  return resultado;
+}
+
+convertirPromedioALetras(promedio: number | null): string {
+  if (promedio === null || promedio === undefined) return '';
+  
+  const promedioRedondeado = Math.round(promedio * 10) / 10;
+  
+  const numerosALetras: { [key: string]: string } = {
+    '0': 'cero',
+    '1': 'uno',
+    '2': 'dos',
+    '3': 'tres',
+    '4': 'cuatro',
+    '5': 'cinco',
+    '6': 'seis',
+    '7': 'siete',
+    '8': 'ocho',
+    '9': 'nueve'
+  };
+
+  const promedioFormateado = promedioRedondeado.toFixed(1);
+  const partes = promedioFormateado.split('.');
+  let resultado = numerosALetras[partes[0]] || partes[0];
+  if (partes[0] === '10') {
+    resultado = 'diez';
+  }
+  resultado += ' punto';
+  for (let digito of partes[1]) {
+    resultado += ' ' + numerosALetras[digito];
+  }
+  return resultado.charAt(0).toUpperCase() + resultado.slice(1);
+}
 
   calcularPromedioFinal(alumno: AlumnoCalificacion): number | null {
     const calificaciones = [
@@ -329,8 +330,6 @@ if (!this.alumnos || this.alumnos.length === 0) {
 
     const suma = calificaciones.reduce((acc, cal) => acc + cal, 0);
     const promedio = suma / calificaciones.length;
-    
-    // Redondear a 1 decimal
     return Math.round(promedio * 10) / 10;
   }
 
